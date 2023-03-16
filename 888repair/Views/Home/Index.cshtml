@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>
+        888报修系统 888 repair system
+    </title>
+    <link rel="stylesheet" href="../src/css/layui.css">
+    <script src="../Scripts/jquery-3.3.1.min.js"></script>
+    <script src="../src/language/index.js"></script>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!-- 头部区域（可配合layui 已有的水平导航） -->
+            <ul class="layui-nav" lay-filter="layadmin-layout-right">
+
+                <li class="layui-nav-item layui-btn-warm" lay-unselect style="margin-left:1300px">
+                    <a href="javascript:;">
+                        <cite id="languageStatus">中文</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd onclick="changeLanguage('ch')"><a>中文</a></dd>
+                        <dd onclick="changeLanguage('en')"><a>English</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-left">
+                <!-- 移动端显示 -->
+                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
+                    <i class="layui-icon layui-icon-spread-left"></i>
+                </li>
+                <li class="layui-logo layui-hide-xs layui-bg-black" style="font-family:'Agency FB';font-size:x-large;" language="sysname"><a>888报修系统</a></li>
+            </ul>
+
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+                    <a href="javascript:;">
+                        <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
+                        tester
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">Sign out</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree Menu" lay-filter="test" id="Menu">
+                    <li class="layui-nav-item current" data-id="fill"><a class="layui-nav-item " language="fill">填写问题</a></li>
+                    <li class="layui-nav-item" data-id="area"><a class="layui-nav-item " language="statusfix">状态维护</a></li>
+                    <li class="layui-nav-item"><a href="javascript:;">click menu item</a></li>
+                    <li class="layui-nav-item"><a href="">the links</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-body" style="margin-bottom:100px">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;" id="content">
+                <blockquote class="layui-elem-quote layui-text">
+                    <ul>
+                        <li>
+                            你也可以单独打开管理界面大布局的演示页面：
+                            <a class="layui-btn layui-btn-normal" href="layuiAdmin.html" target="_blank">单独打开</a>
+                        </li>
+                        <li>
+                            该页面只是简单的管理系统的界面基础布局示例，并不是一整套界面布局方案，您可以关注基于 layui 的通用型管理系统界面模板解决方案：
+                            <a href="/layuiadmin/" target="_blank" class="layui-btn">layuiAdmin</a>
+                        </li>
+                        <li>
+                            layui 之所以赢得如此多人的青睐，更多是在于它“前后界面兼备”的能力。既可编织出绚丽的前台页面，又可满足繁杂的管理系统的界面需求。
+                            <br>layui 管理基本布局， 致力于让每一位开发者都能轻松搭建自己的管理系统模板。
+                        </li>
+                    </ul>
+                </blockquote>
+
+                <a href="/doc/element/layout.html#admin" target="_blank" class="layui-btn">查看该布局代码</a>
+                <br><br><br>
+
+                <div class="layui-card layui-panel">
+                    <div class="layui-card-header">
+                        下面是充数内容，为的是出现滚动条
+                    </div>
+                    <div class="layui-card-body">
+                        充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>充数内容<br>你还真滑到了底部呀
+                    </div>
+                </div>
+                <br><br>
+            </div>
+        </div>
+        <div class="layui-footer">
+            <p style="margin-left:300px">&copy; @DateTime.Now.Year - 888报修系统  若对报修系统有疑虑或系统发生错误，请洽资讯组 分机5509</p>
+        </div>
+    </div>
+</body>
+<script src="../src/layui.js"></script>
+<script>
+    //JS
+    layui.use(['element', 'layer', 'util'], function () {
+        var element = layui.element
+            , layer = layui.layer
+            , util = layui.util
+            , $ = layui.$;
+    });
+
+    var language = localStorage.getItem('language');
+    for (let key in languageMap) {
+        if (key === language) {
+            document.querySelector('#languageStatus').innerText = languageMap[key].description;
+            break;
+        }
+    }
+    setLanguage();
+    setTimeout(() => {setLanguage();}, 300)
+
+    $(function () {
+        $(".Menu").on("click", "li", function () {
+            var sId = $(this).data("id");//获取data-id的值
+            window.location.hash = sId;
+            loacdInner(sId);
+        });
+
+        function loacdInner(sId) {
+            var sId = window.location.hash;
+            var pathn, i;
+
+            switch (sId) {
+                 case "#fill":
+                    pathn = "@(Url.Action("GroupIndex", "Group"))",
+                        i = 0;
+                    break;
+                case "#area":
+                    pathn = "@(Url.Action("StateIndex", "State"))",
+                        i = 0;
+                    break;
+                default:
+                    pathn = "@(Url.Action("GroupIndex", "Group"))",
+                        i = 0;
+                    break;
+            }
+            $("#content").load(pathn);//加载相应内容
+            $(".Menu li").eq(i).addClass("current").siblings().removeClass("current");//当前列表高亮
+            }
+        var sId = window.location.hash;
+        loacdInner(sId);
+    });
+</script>
