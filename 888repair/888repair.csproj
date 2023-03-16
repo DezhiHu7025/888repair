@@ -128,6 +128,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AreaController.cs" />
+    <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StateController.cs" />
@@ -136,6 +138,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Area\AreaModel.cs" />
+    <Compile Include="Models\Director\DirectorModel.cs" />
+    <Compile Include="Models\Director\UserModel.cs" />
     <Compile Include="Models\FlagTips.cs" />
     <Compile Include="Models\State\StateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -178,6 +183,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Group\GroupIndex.cshtml" />
     <Content Include="Views\State\StateIndex.cshtml" />
+    <Content Include="Views\Director\DirectorIndex.cshtml" />
+    <Content Include="Views\Area\AreaIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

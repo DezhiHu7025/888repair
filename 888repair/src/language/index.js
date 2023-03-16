@@ -12,6 +12,7 @@ const languageMap = {
 		sysname:'888报修系统',
 		statusfix:'状态维护',
 		status:'状态',
+		chargefix:'负责人维护',
 	},
 	en: {
 		description: 'EN',
@@ -20,7 +21,8 @@ const languageMap = {
 		fill:'Fill In the problem',
 		sysname:'888 repair system',
 		statusfix:'Status maintenance',
-		status:'status'
+		status:'status',
+		chargefix:'Responsible for maintenance'
 	}
 }
 

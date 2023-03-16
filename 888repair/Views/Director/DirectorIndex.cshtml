@@ -1,11 +1,12 @@
 ﻿
 @{
-    ViewBag.Title = "StateIndex";
+    ViewBag.Title = "DirectorIndex";
 }
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>状态维护</title>
+    <title>负责人维护</title>
     <style>
         body {
             padding: 32px; /*overflow-y: scroll;*/
@@ -18,38 +19,39 @@
         <div class="layui-col-md3">
             <div class="layui-input-group">
                 <div class="layui-input-split layui-input-prefix">
-                    状态
+                    姓名
                 </div>
-                <input type="text" name="status" id="status" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+                <input type="text" name="FullName" id="FullName" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
-    <div class="layui-btn-group" style="margin-left:1100px">
+    <div class="layui-btn-group" style="margin-left:1200px">
         <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_add"><i class="layui-icon">新增&nbsp;&#xe654;</i></button>
-        <button class="layui-btn layui-btn-sm" id="btn_edit"><i class="layui-icon">修改&nbsp;&#xe642;</i></button>
+        @*<button class="layui-btn layui-btn-sm" id="btn_edit"><i class="layui-icon">修改&nbsp;&#xe642;</i></button>*@
         <button class="layui-btn layui-btn-sm" id="btn_del"><i class="layui-icon">删除&nbsp;&#xe640;</i></button>
     </div>
     <br />
-    <table class="layui-hide" lay-filter="user" id="test"></table>
+    <table class="layui-hide" lay-filter="user" id="DirectorTable"></table>
 
 </body>
 
-<div class="layui-form" style="display:none"  id="window">
-    <br/><br /><br /><br />
+<div class="layui-form" style="display:none" id="addDirectorWidow">
+    <br />
+    <p class="ayui-input-block" style="color:red;font-size:large;margin-left:80px">正确输入员工编号后，回车带出姓名</p>
+    <br /><br /><br />
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <input type="hidden" class="form-control" disabled="disabled" id="addID">
 
-            <label class="layui-form-label">状态</label>
+        <div class="layui-inline">
+            <label class="layui-form-label">员工编号</label>
             <div class="layui-input-block">
-                <input type="text" name="addStatus" id="addStatus" autocomplete="off" class="layui-input">
+                <input type="text" name="addEmpNo" id="addEmpNo" autocomplete="off" class="layui-input" lay-verify="required">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">权限</label>
+            <label class="layui-form-label">姓名</label>
             <div class="layui-input-inline">
-                <input type="text" name="addPermissiom" id="addPermissiom" autocomplete="off" class="layui-input" disabled="disabled">
+                <input type="text" name="addFullName" id="addFullName" autocomplete="off" class="layui-input" disabled="disabled" lay-verify="required">
             </div>
         </div>
     </div>
@@ -60,9 +62,9 @@
 
         var $ = layui.$;
         var table = layui.table;
-        
+
         $.ajax({
-            url: "@(Url.Action("getStateList", "State"))",  // 要提交的URL路径
+            url: "@(Url.Action("getDirectorList", "Director"))",  // 要提交的URL路径
             type: "post",    // 发送请求的方式
             dataType: "JSON",     // 指定传输的数据格式
             beforeSend: function () {     //请求之前的方法
@@ -77,10 +79,10 @@
                         var layer = layui.layer;
 
                         table.render({
-                            elem: '#test',
+                            elem: '#DirectorTable',
                             type: "post",
                             data: d.data,
-                            id: "statustable",
+                            id: "chargeTable",
                             contentType: 'application/json', // 参数为 json 格式传递
                             page: !0 || { //详细参数可参考 laypage 组件文档
                                 curr: 5,
@@ -96,10 +98,10 @@
                             , toolbar: true
                             , cols: [[
                                 { type: 'checkbox', LAY_CHECKED: false},
-                                { field: 'ID', title: 'ID' },
-                                { field: 'Status', title: '状态', },
-                                { field: 'Permissiom', title: '权限' }
-                                ,
+                                //{ field: 'charge_id', title: 'charge_id' },
+                                { field: 'EmpNo', title: '员工编号', },
+                                { field: 'FullName', title: '姓名' },
+                                { field: 'Permissiom', title: '权限' },
                             ]]
                         });
                     });
@@ -113,17 +115,17 @@
                 alert(result.Msg);
             }
         });
-
+        
         function reloadDate() {
             $.ajax({
-                url: "@(Url.Action("getStateList", "State"))",  // 要提交的URL路径
+                url: "@(Url.Action("getDirectorList", "Director"))",  // 要提交的URL路径
                 type: "post",    // 发送请求的方式
-                data: { status: $('#status').val() },
+                data: { FullName: $('#FullName').val() },
                 dataType: "JSON",     // 指定传输的数据格式
                 success: function (result) {
                     if (result.IsSuccess) {
                         let d = result;
-                        table.reload('statustable', {
+                        table.reload('chargeTable', {
                         data: d.data,
                         page: { curr: 1 },
                         });
@@ -145,43 +147,47 @@
 
         $('#btn_add').click(function () {
             $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
-            $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
+           // $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
-            $("#addPermissiom").val("資訊");
+            $("#addFullName").val("");
+            $("#addEmpNo").val("");
             layer.open({
-                title: '新增状态',
+                title: '新增负责人',
                 area: ['40%','30%'],
-                content: $("#window"),
+                content: $("#addDirectorWidow"),
                 shade: 0.0,
                 type: 1,
                 btn: ['确定', '重置'],
                 btn1: function (index, layero) {
                     var model = {
-                        "ID": $("#addID").val(),
-                        "Status": $("#addStatus").val(),
-                        "Permissiom": $("#addPermissiom").val(),
+                        "EmpNo": $("#addEmpNo").val(),
+                        "FullName": $("#addFullName").val(),
                     };
+                    if (model.FullName == null  || model.FullName == null | model.EmpNo == '' || model.FullName == '') {
+                        alert("请输入正确的员工编号并带出姓名");
+                        return false;
+                    }
                    console.log(model);
                    $.ajax({
                        type: 'post',
-                       url: "@(Url.Action("editStatus", "State"))",
+                       url: "@(Url.Action("editDirector", "Director"))",
                        data: JSON.stringify(model),
                        async: false,
                        dataType: "json",
                        // 告诉jQuery不要去处理发送的数据
                        processData: false,
                        // 告诉jQuery不要去设置Content-Type请求头
-                       contentType: 'application/json', 
+                       contentType: 'application/json',
                        beforeSend: function () {
                            // 禁用按钮防止重复提交
                            $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
                        },
                        success: function (result) {
                            if (result.IsSuccess) {
-                               alert("新增状态成功");
+                               alert("新增负责人成功");
                                $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
+                              // $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
                                $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
                                $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
                                reloadDate();
@@ -194,109 +200,36 @@
                    });
                 },
                 btn2: function (index, layero) {
-                    $("#addStatus").val("");
+                    $("#addFullName").val("");
+                    $("#addEmpNo").val("");
                     return false;
                 },
                 cancel: function (layero, index) {
                     $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
-                    $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
+                   // $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
                     $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
                     $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
                     layer.closeAll();
                 }
             });
         });
-
-        $('#btn_edit').click(function () {
-          
-            var selectData = layui.table.checkStatus('statustable').data;
-            console.log(selectData);
-            var arrays = new Array();
-            if (selectData.length != 1) {
-                alert("请选择一条数据修改");
-                return false;
-            } 
-
-            $("#addID").val(selectData[0].ID);
-            $("#addStatus").val(selectData[0].Status);
-            $("#addPermissiom").val(selectData[0].Permissiom);
-
-            $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
-            $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
-            $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
-            $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
-
-
-            layer.open({
-                title: '修改状态',
-                area: ['40%','30%'],
-                content: $("#window"),
-                shade: 0.0,
-                type:1,
-                btn: ['确定'],
-                btn1: function (index, layero) {
-                    var model = {
-                        "ID": $("#addID").val(),
-                        "Status": $("#addStatus").val(),
-                        "Permissiom": $("#addPermissiom").val(),
-                    };
-                   console.log(model);
-                   $.ajax({
-                       type: 'post',
-                       url: "@(Url.Action("editStatus", "State"))",
-                       data: JSON.stringify(model),
-                       async: false,
-                       dataType: "json",
-                       // 告诉jQuery不要去处理发送的数据
-                       processData: false,
-                       // 告诉jQuery不要去设置Content-Type请求头
-                       contentType: 'application/json', 
-                       beforeSend: function () {
-                           // 禁用按钮防止重复提交
-                           $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
-                       },
-                       success: function (result) {
-                           if (result.IsSuccess) {
-                               alert("修改状态成功");
-                               $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
-                               reloadDate();
-                               layer.closeAll();
-                           }
-                           else {
-                               alert(result.Msg);
-                           }
-                       }
-                   });
-                },
-                cancel: function (layero, index) {
-                    $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
-                    $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
-                    $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
-                    $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
-                    layer.closeAll();
-                }
-            });
-        });
-
+        
         $('#btn_del').click(function (obj) {
-            var selectData = layui.table.checkStatus('statustable').data;
+            var selectData = layui.table.checkStatus('chargeTable').data;
             console.log(selectData);
             var arrays = new Array();
             $(selectData).each(function () {
                 var newArr = {};
-                newArr.ID = this.ID;
-                newArr.Status = this.Status;
-                newArr.Permissiom = this.Permissiom;
+                newArr.charge_id = this.charge_id;
+                newArr.EmpNo = this.EmpNo;
+                newArr.FullName = this.FullName;
                 arrays.push(newArr)
             });
             if (selectData.length ==0 ) {
                 alert("请选择数据");
             } else {
                 $.ajax({
-                    url: "@(Url.Action("DeleteState", "State"))",
+                    url: "@(Url.Action("deleteDirector", "Director"))",
                     type: "post",
                     dataType: "json",
                     contentType: "application/json;charset=UTF-8",
@@ -313,6 +246,27 @@
                     },
                     error: function (result) {
                         alert("删除失败")
+                    }
+                });
+            }
+        });
+
+        $('#addEmpNo').on('keyup', function (e) {
+            $("#addFullName").val('');
+            if (e.keyCode == 13) {
+                var EmpNo = document.getElementById("addEmpNo").value;
+                $.ajax({
+                    url: "@(Url.Action("getEmpInfo", "Director"))",
+                    type: "post",
+                    dataType: "json",
+                    data: { EmpNo},
+                    success: function (result) {
+                        if (result.IsSuccess == false) {
+                            alert(result.Msg);
+                        } else{
+                            $("#addFullName").val(result.fullname);
+                        }
+                        
                     }
                 });
             }
