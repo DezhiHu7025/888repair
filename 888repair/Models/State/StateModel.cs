@@ -11,15 +11,14 @@ namespace _888repair.Models.State
         /// id
         /// </summary>
         public string ID { get; set; }
+        
+        public string StatusValue { get; set; }
 
-        /// <summary>
-        /// 狀態
-        /// </summary>
-        public string Status { get; set; }
+        public string StatusText { get; set; }
 
-        /// <summary>
-        /// 權限
-        /// </summary>
-        public string Permissiom { get; set; }
+        public string UpdateUser { get; set; }
+
+
+        public DateTime? UpdateTime { get; set; }
     }
 }

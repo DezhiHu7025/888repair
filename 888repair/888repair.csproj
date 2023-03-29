@@ -132,6 +132,7 @@
     <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KindController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Db\IDbOperation.cs" />
     <Compile Include="Db\RepairDb.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Models\Director\DirectorModel.cs" />
     <Compile Include="Models\Director\UserModel.cs" />
     <Compile Include="Models\FlagTips.cs" />
+    <Compile Include="Models\Kind\KindModel.cs" />
     <Compile Include="Models\State\StateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -168,7 +170,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -186,6 +190,7 @@
     <Content Include="Views\State\StateIndex.cshtml" />
     <Content Include="Views\Director\DirectorIndex.cshtml" />
     <Content Include="Views\Area\AreaIndex.cshtml" />
+    <Content Include="Views\Kind\KindIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

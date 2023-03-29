@@ -14,16 +14,14 @@
 </head>
 <body>
     <hr>
-    <div class="layui-row layui-col-space16">
-        <div class="layui-col-md3">
-            <div class="layui-input-group">
-                <div class="layui-input-split layui-input-prefix">
-                    状态
-                </div>
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态名称</label>
+            <div class="layui-input-inline">
                 <input type="text" name="status" id="status" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
             </div>
         </div>
-    </div>
+    </form>
     <div class="layui-btn-group" style="margin-left:1100px">
         <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_add"><i class="layui-icon">新增&nbsp;&#xe654;</i></button>
@@ -35,32 +33,72 @@
 
 </body>
 
-<div class="layui-form" style="display:none"  id="window">
-    <br/><br /><br /><br />
-    <div class="layui-form-item">
+<div class="layui-form" style="display:none" id="window">
+    <br /><br /><br /><br />
+    <form class="layui-form-item">
         <div class="layui-inline">
             <input type="hidden" class="form-control" disabled="disabled" id="addID">
 
-            <label class="layui-form-label">状态</label>
+            <label class="layui-form-label">状态代码&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-block">
-                <input type="text" name="addStatus" id="addStatus" autocomplete="off" class="layui-input">
+                <input type="text" name="addStatusValue" id="addStatusValue" lay-verify="required" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">权限</label>
+            <label class="layui-form-label">状态名称&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-inline">
-                <input type="text" name="addPermissiom" id="addPermissiom" autocomplete="off" class="layui-input" disabled="disabled">
+                <input type="text" name="addStatusText" id="addStatusText" lay-verify="required" autocomplete="off" class="layui-input">
             </div>
         </div>
-    </div>
+        <button class="layui-layer-btn0" id="btn_submit" style="display:none" lay-submit lay-filter="demo1"></button>
+    </form>
 </div>
 <script>
-
-    layui.use(['table','dropdown'], function () {
+   
+    layui.use(['table','dropdown','form'], function () {
 
         var $ = layui.$;
         var table = layui.table;
-        
+        var form = layui.form;
+
+        form.on('submit(demo1)', function (data) {
+            var model = {
+                "ID": $("#addID").val(),
+                "StatusValue": $("#addStatusValue").val(),
+                "StatusText": $("#addStatusText").val(),
+            };
+            $.ajax({
+                type: 'post',
+                url: "@(Url.Action("editStatus", "State"))",
+                data: JSON.stringify(model),
+                async: false,
+                dataType: "json",
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: 'application/json',
+                beforeSend: function () {
+                    // 禁用按钮防止重复提交
+                    $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        alert("新增/修改状态成功");
+                        $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
+                        reloadDate();
+                        layer.closeAll();
+                    }
+                    else {
+                        alert(result.Msg);
+                    }
+                }
+            });
+            return false;
+        });
+
         $.ajax({
             url: "@(Url.Action("getStateList", "State"))",  // 要提交的URL路径
             type: "post",    // 发送请求的方式
@@ -96,10 +134,14 @@
                             , toolbar: true
                             , cols: [[
                                 { type: 'checkbox', LAY_CHECKED: false},
-                                { field: 'ID', title: 'ID' },
-                                { field: 'Status', title: '状态', },
-                                { field: 'Permissiom', title: '权限' }
-                                ,
+                                //{ field: 'ID', title: 'ID' },
+                                { field: 'StatusValue', title: '状态代码', sort: true},
+                                { field: 'StatusText', title: '状态名称',sort:true},
+                                { field: 'UpdateUser', title: '操作人', sort: true},
+                                {
+                                    field: 'UpdateTime', title: '操作时间', sort: true,
+                                    templet: "<div>{{ formatDate(d.UpdateTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+                                }
                             ]]
                         });
                     });
@@ -118,7 +160,7 @@
             $.ajax({
                 url: "@(Url.Action("getStateList", "State"))",  // 要提交的URL路径
                 type: "post",    // 发送请求的方式
-                data: { status: $('#status').val() },
+                data: { StatusText: $('#status').val() },
                 dataType: "JSON",     // 指定传输的数据格式
                 success: function (result) {
                     if (result.IsSuccess) {
@@ -148,7 +190,8 @@
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
-            $("#addPermissiom").val("資訊");
+            $("#addStatusValue").val("");
+            $("#addStatusText").val("");
             layer.open({
                 title: '新增状态',
                 area: ['40%','30%'],
@@ -157,44 +200,13 @@
                 type: 1,
                 btn: ['确定', '重置'],
                 btn1: function (index, layero) {
-                    var model = {
-                        "ID": $("#addID").val(),
-                        "Status": $("#addStatus").val(),
-                        "Permissiom": $("#addPermissiom").val(),
-                    };
-                   console.log(model);
-                   $.ajax({
-                       type: 'post',
-                       url: "@(Url.Action("editStatus", "State"))",
-                       data: JSON.stringify(model),
-                       async: false,
-                       dataType: "json",
-                       // 告诉jQuery不要去处理发送的数据
-                       processData: false,
-                       // 告诉jQuery不要去设置Content-Type请求头
-                       contentType: 'application/json', 
-                       beforeSend: function () {
-                           // 禁用按钮防止重复提交
-                           $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
-                       },
-                       success: function (result) {
-                           if (result.IsSuccess) {
-                               alert("新增状态成功");
-                               $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
-                               reloadDate();
-                               layer.closeAll();
-                           }
-                           else {
-                               alert(result.Msg);
-                           }
-                       }
-                   });
+                    var formSubmit = $("#window");
+                    var submited = formSubmit.find('button')[0];
+                    submited.click();
                 },
                 btn2: function (index, layero) {
-                    $("#addStatus").val("");
+                    $("#addStatusValue").val("");
+                    $("#addStatusText").val("");
                     return false;
                 },
                 cancel: function (layero, index) {
@@ -208,18 +220,18 @@
         });
 
         $('#btn_edit').click(function () {
-          
+
             var selectData = layui.table.checkStatus('statustable').data;
             console.log(selectData);
             var arrays = new Array();
             if (selectData.length != 1) {
                 alert("请选择一条数据修改");
                 return false;
-            } 
+            }
 
             $("#addID").val(selectData[0].ID);
-            $("#addStatus").val(selectData[0].Status);
-            $("#addPermissiom").val(selectData[0].Permissiom);
+            $("#addStatusValue").val(selectData[0].StatusValue);
+            $("#addStatusText").val(selectData[0].StatusText);
 
             $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
@@ -235,41 +247,9 @@
                 type:1,
                 btn: ['确定'],
                 btn1: function (index, layero) {
-                    var model = {
-                        "ID": $("#addID").val(),
-                        "Status": $("#addStatus").val(),
-                        "Permissiom": $("#addPermissiom").val(),
-                    };
-                   console.log(model);
-                   $.ajax({
-                       type: 'post',
-                       url: "@(Url.Action("editStatus", "State"))",
-                       data: JSON.stringify(model),
-                       async: false,
-                       dataType: "json",
-                       // 告诉jQuery不要去处理发送的数据
-                       processData: false,
-                       // 告诉jQuery不要去设置Content-Type请求头
-                       contentType: 'application/json', 
-                       beforeSend: function () {
-                           // 禁用按钮防止重复提交
-                           $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
-                       },
-                       success: function (result) {
-                           if (result.IsSuccess) {
-                               alert("修改状态成功");
-                               $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
-                               reloadDate();
-                               layer.closeAll();
-                           }
-                           else {
-                               alert(result.Msg);
-                           }
-                       }
-                   });
+                    var formSubmit = $("#window");
+                    var submited = formSubmit.find('button')[0];
+                    submited.click();
                 },
                 cancel: function (layero, index) {
                     $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
@@ -288,8 +268,8 @@
             $(selectData).each(function () {
                 var newArr = {};
                 newArr.ID = this.ID;
-                newArr.Status = this.Status;
-                newArr.Permissiom = this.Permissiom;
+                newArr.StatusValue = this.StatusValue;
+                newArr.StatusText = this.StatusText;
                 arrays.push(newArr)
             });
             if (selectData.length ==0 ) {

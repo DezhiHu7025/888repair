@@ -27,14 +27,9 @@ namespace _888repair.Models.Area
         /// </summary>
         public string Location { get; set; }
 
-        /// <summary>
-        /// 权限
-        /// </summary>
-        public string Permission { get; set; }
+        public string UpdateUser { get; set; }
 
-        /// <summary>
-        /// OU
-        /// </summary>
-        public string OU { get; set; }
+
+        public DateTime? UpdateTime { get; set; }
     }
 }

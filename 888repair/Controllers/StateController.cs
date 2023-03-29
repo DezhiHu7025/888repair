@@ -30,11 +30,11 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@"SELECT state_id ID,狀態 Status,權限 Permissiom FROM [888_north].[dbo].[state]
-                                                where 1=1 and  權限 = '資訊' ");
-                    if (!string.IsNullOrEmpty(model.Status))
+                    string sql = string.Format(@"SELECT state_id ID,StatusValue,StatusText,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[state]
+                                                where 1=1");
+                    if (!string.IsNullOrEmpty(model.StatusText))
                     {
-                        sql += " and 狀態 like '%" + model.Status + "%'";
+                        sql += " and StatusText like '%" + model.StatusText + "%'";
                     }
                     sql += " ORDER BY ID asc";
 
@@ -55,13 +55,15 @@ namespace _888repair.Controllers
                 string sql = "";
                 using (RepairDb db = new RepairDb())
                 {
+                    model.UpdateUser = "dezhi_hu";
+                    model.UpdateTime = DateTime.Now;
                     if (string.IsNullOrEmpty(model.ID))
                     {
-                        sql = string.Format(@" INSERT INTO  [888_north].[dbo].[state] (狀態,權限)VALUES(@Status,'資訊')");
+                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[state] (StatusValue,StatusText,UpdateUser,UpdateTime)VALUES(@StatusValue,@StatusText,@UpdateUser,@UpdateTime)");
                     }
                     else
                     {
-                        sql = string.Format(@" update [888_north].[dbo].[state] set 狀態 = @Status where state_id = @ID and 權限 = '資訊' ");
+                        sql = string.Format(@" update [888_KsNorth].[dbo].[state] set StatusValue = @StatusValue,StatusText=@StatusText,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where state_id = @ID");
                     }
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
@@ -86,9 +88,9 @@ namespace _888repair.Controllers
                     {
                         var deleteModel = new StateModel();
                         deleteModel.ID = model.ID;
-                        deleteModel.Status = model.Status;
+                        deleteModel.StatusValue = model.StatusValue;
 
-                        string sql = string.Format(@" DELETE FROM [888_north].[dbo].[state]  WHERE state_id = @ID AND 狀態 = @Status AND  權限 = '資訊' ");
+                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[state]  WHERE state_id = @ID AND StatusValue = @StatusValue");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);

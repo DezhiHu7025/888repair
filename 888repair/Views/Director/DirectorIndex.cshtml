@@ -43,19 +43,22 @@
     <div class="layui-form-item">
 
         <div class="layui-inline">
-            <label class="layui-form-label">员工编号</label>
+            <label class="layui-form-label">员工编号&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-block">
                 <input type="text" name="addEmpNo" id="addEmpNo" autocomplete="off" class="layui-input" lay-verify="required">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">姓名</label>
+            <label class="layui-form-label">姓名&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-inline">
                 <input type="text" name="addFullName" id="addFullName" autocomplete="off" class="layui-input" disabled="disabled" lay-verify="required">
             </div>
         </div>
     </div>
 </div>
+@*<script src="~/src/date.js">
+    {{formatDate(d.UpdateTime)}}
+</script>*@
 <script>
 
     layui.use(['table','dropdown'], function () {
@@ -101,7 +104,11 @@
                                 //{ field: 'charge_id', title: 'charge_id' },
                                 { field: 'EmpNo', title: '员工编号', },
                                 { field: 'FullName', title: '姓名' },
-                                { field: 'Permissiom', title: '权限' },
+                                { field: 'UpdateUser', title: '操作人' },
+                                {
+                                    field: 'UpdateTime', title: '操作时间',
+                                    templet: "<div>{{ formatDate(d.UpdateTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+                                }
                             ]]
                         });
                     });

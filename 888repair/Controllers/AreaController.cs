@@ -24,20 +24,20 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@"SELECT area_id AreaId,系統類別 SystemCategory,大樓別 Buliding,位置 Location,
-                                                  權限 Permission,OU OU  FROM [888_north].[dbo].[area]
-                                                where 1=1 and  權限 = '資訊' ");
+                    string sql = string.Format(@"SELECT area_id AreaId,SystemCategory,Buliding,Location,
+                                                  UpdateUser,UpdateTime  FROM [888_KsNorth].[dbo].[area]
+                                                where 1=1");
                     if (!string.IsNullOrEmpty(model.SystemCategory))
                     {
-                        sql += " and 系統類別 = @SystemCategory ";
+                        sql += " and SystemCategory = @SystemCategory ";
                     }
                     if (!string.IsNullOrEmpty(model.Buliding))
                     {
-                        sql += " and 大樓別 = @Buliding ";
+                        sql += " and Buliding like '%" + model.Buliding + "%'";
                     }
                     if (!string.IsNullOrEmpty(model.Location))
                     {
-                        sql += " and 位置 = @Location ";
+                        sql += " and Location like '%" + model.Location + "%'";
                     }
                     sql += " ORDER BY area_id asc";
 
@@ -60,11 +60,11 @@ namespace _888repair.Controllers
                 {
                     if (string.IsNullOrEmpty(model.AreaId))
                     {
-                        sql = string.Format(@" INSERT INTO  [888_north].[dbo].[area] (系統類別,大樓別,位置,權限)VALUES(@SystemCategory,@Buliding,@Location,'資訊')");
+                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[area] (SystemCategory,Buliding,Location)VALUES(@SystemCategory,@Buliding,@Location)");
                     }
                     else
                     {
-                        sql = string.Format(@" update [888_north].[dbo].[area] set 系統類別 = @SystemCategory,大樓別 = @Buliding,位置=@Location where area_id = @AreaId and 權限 = '資訊' ");
+                        sql = string.Format(@" update [888_KsNorth].[dbo].[area] set SystemCategory = @SystemCategory,Buliding = @Buliding,Location=@Location where area_id = @AreaId ");
                     }
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
@@ -91,7 +91,7 @@ namespace _888repair.Controllers
                         deleteModel.AreaId = model.AreaId;
                         deleteModel.SystemCategory = model.SystemCategory;
                         deleteModel.Buliding = model.Buliding;
-                        string sql = string.Format(@" DELETE FROM [888_north].[dbo].[area]  WHERE area_id = @AreaId AND 系統類別 = @SystemCategory AND 大樓別 = @Buliding AND  權限 = '資訊' ");
+                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[area]  WHERE area_id = @AreaId ");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);

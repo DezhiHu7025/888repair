@@ -14,16 +14,28 @@
 </head>
 <body>
     <hr>
-    <div class="layui-row layui-col-space16">
-        <div class="layui-col-md3">
-            <div class="layui-input-group">
-                <div class="layui-input-split layui-input-prefix">
-                    系统类别
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">系统类别</label>
+                <div class="layui-input-block">
+                    <input type="text" name="SystemCategory" id="SystemCategory" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
-                <input type="text" name="SystemCategory" id="SystemCategory" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">大楼别</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="Buliding" id="Buliding" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">位置</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="Location" id="Location" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
             </div>
         </div>
-    </div>
+    </form>
     <div class="layui-btn-group" style="margin-left:1100px">
         <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_add"><i class="layui-icon">新增&nbsp;&#xe654;</i></button>
@@ -37,41 +49,77 @@
 
 <div class="layui-form" style="display:none" id="editAreaWidow">
     <br /><br />
-    <div class="layui-form-item">
+    <form class="layui-form-item">
         <input type="hidden" class="form-control" disabled="disabled" id="AreaId">
         <div class="layui-inline">
-            <label class="layui-form-label">系统类别</label>
+            <label class="layui-form-label">系统类别&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-block">
-                <input type="text" name="addSystemCategory" id="addSystemCategory" autocomplete="off" class="layui-input">
+                <input type="text" name="addSystemCategory" id="addSystemCategory" lay-verify="required" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">大楼别</label>
+            <label class="layui-form-label">大楼别&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-inline">
-                <input type="text" name="addBuliding" id="addBuliding" autocomplete="off" class="layui-input">
+                <input type="text" name="addBuliding" id="addBuliding" lay-verify="required" autocomplete="off" class="layui-input">
             </div>
         </div>
 
         <div class="layui-inline">
-            <label class="layui-form-label">位置</label>
+            <label class="layui-form-label">位置&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-block">
-                <input type="text" name="addLocation" id="addLocation" autocomplete="off" class="layui-input">
+                <input type="text" name="addLocation" id="addLocation" lay-verify="required" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">权限</label>
-            <div class="layui-input-inline">
-                <input type="text" name="addPermission" id="addPermission" autocomplete="off" class="layui-input" disabled="disabled">
-            </div>
-        </div>
-    </div>
+        <button class="layui-layer-btn0" id="btn_submit" style="display:none" lay-submit lay-filter="demo1"></button>
+    </form>
 </div>
 <script>
 
-    layui.use(['table','dropdown'], function () {
+    layui.use(['table', 'dropdown', 'form'], function () {
 
         var $ = layui.$;
         var table = layui.table;
+        var form = layui.form;
+
+        form.on('submit(demo1)', function (data) {
+            var model = {
+                        "SystemCategory": $("#addSystemCategory").val(),
+                        "Buliding": $("#addBuliding").val(),
+                        "Location": $("#addLocation").val(),
+                        "Permission": $("#addPermission").val(),
+
+            };
+            $.ajax({
+                type: 'post',
+                url: "@(Url.Action("editArea", "Area"))",
+                data: JSON.stringify(model),
+                async: false,
+                dataType: "json",
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: 'application/json',
+                beforeSend: function () {
+                    // 禁用按钮防止重复提交
+                    $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        alert("新增/修改辖区成功");
+                        $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
+                        reloadDate();
+                        layer.closeAll();
+                    }
+                    else {
+                        alert(result.Msg);
+                    }
+                }
+            });
+            return false;
+        });
 
         $.ajax({
             url: "@(Url.Action("getAreaList", "Area"))",  // 要提交的URL路径
@@ -109,10 +157,14 @@
                             , cols: [[
                                 { type: 'checkbox', LAY_CHECKED: false},
                                // { field: 'AreaId', title: 'AreaId' },
-                                { field: 'SystemCategory', title: '系统类别', },
-                                { field: 'Buliding', title: '大楼别' },
-                                { field: 'Location', title: '位置' },
-                                { field: 'Permission', title: '权限' },
+                                { field: 'SystemCategory', title: '系统类别', width: 200 },
+                                { field: 'Buliding', title: '大楼别', width: 400 },
+                                { field: 'Location', title: '位置', width: 400},
+                                { field: 'UpdateUser', title: '操作人', width: 200 },
+                                {
+                                    field: 'UpdateTime', title: '操作时间', width: 200,
+                                    templet: "<div>{{ formatDate(d.UpdateTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+                                }
                             ]]
                         });
                     });
@@ -130,11 +182,13 @@
         function reloadDate() {
             var model = {
                 SystemCategory: $('#SystemCategory').val(),
+                Buliding: $('#Buliding').val(),
+                Location: $('#Location').val(),
             }
             $.ajax({
                 url: "@(Url.Action("getAreaList", "Area"))",   // 要提交的URL路径
                 type: "post",    // 发送请求的方式
-                data: JSON.stringify(model),
+                data: model,
                 dataType: "JSON",     // 指定传输的数据格式
                 success: function (result) {
                     if (result.IsSuccess) {
@@ -176,42 +230,9 @@
                 type: 1,
                 btn: ['确定', '重置'],
                 btn1: function (index, layero) {
-                    var model = {
-                        "SystemCategory": $("#addSystemCategory").val(),
-                        "Buliding": $("#addBuliding").val(),
-                        "Location": $("#addLocation").val(),
-                        "Permission": $("#addPermission").val(),
-                    };
-                   console.log(model);
-                   $.ajax({
-                       type: 'post',
-                       url: "@(Url.Action("editArea", "Area"))",
-                       data: JSON.stringify(model),
-                       async: false,
-                       dataType: "json",
-                       // 告诉jQuery不要去处理发送的数据
-                       processData: false,
-                       // 告诉jQuery不要去设置Content-Type请求头
-                       contentType: 'application/json',
-                       beforeSend: function () {
-                           // 禁用按钮防止重复提交
-                           $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
-                       },
-                       success: function (result) {
-                           if (result.IsSuccess) {
-                               alert("新增辖区成功");
-                               $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
-                               $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
-                               reloadDate();
-                               layer.closeAll();
-                           }
-                           else {
-                               alert(result.Msg);
-                           }
-                       }
-                   });
+                    var formSubmit = $("#editAreaWidow");
+                    var submited = formSubmit.find('button')[0];
+                    submited.click();
                 },
                 btn2: function (index, layero) {
                     $("#addSystemCategory").val("");

@@ -24,15 +24,15 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@"SELECT charge_id,員工編號 EmpNo,姓名 FullName,權限 Permissiom FROM [888_north].[dbo].[charge]
-                                                where 1=1 and  權限 = '資訊' ");
+                    string sql = string.Format(@"SELECT charge_id, EmpNo, FullName ,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[charge]
+                                                where 1=1  ");
                     if (!string.IsNullOrEmpty(model.EmpNo))
                     {
-                        sql += " and 員工編號 = @EmpNo ";
+                        sql += " and EmpNo = @EmpNo ";
                     }
                     if (!string.IsNullOrEmpty(model.FullName))
                     {
-                        sql += " and 姓名 like '%" + model.FullName + "%'";
+                        sql += " and FullName like '%" + model.FullName + "%'";
                     }
                     sql += " ORDER BY charge_id asc";
 
@@ -50,9 +50,11 @@ namespace _888repair.Controllers
         {
             try
             {
+                model.UpdateUser = "dezhi_hu";
+                model.UpdateTime = DateTime.Now;
                 using (RepairDb db = new RepairDb())
                 {
-                    string checkSql = @"select * from [888_north].[dbo].[charge] where 員工編號 = @EmpNo and 權限 = '資訊' ";
+                    string checkSql = @"select * from [888_KsNorth].[dbo].[charge] where EmpNo = @EmpNo ";
                     var list = db.Query<DirectorModel>(checkSql, model).ToList();
                     if(list.Count() != 0)
                     {
@@ -60,7 +62,7 @@ namespace _888repair.Controllers
                     }
                     else
                     {
-                        string sql = string.Format(@" INSERT INTO  [888_north].[dbo].[charge] (員工編號,姓名,權限)VALUES(@EmpNo,@FullName,'資訊')");
+                        string sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[charge] (EmpNo,FullName,UpdateUser,UpdateTime)VALUES(@EmpNo,@FullName,@UpdateUser,@UpdateTime)");
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, model);
                         db.DoExtremeSpeedTransaction(trans);
@@ -86,7 +88,7 @@ namespace _888repair.Controllers
                         var deleteModel = new DirectorModel();
                         deleteModel.charge_id = model.charge_id;
                         deleteModel.EmpNo = model.EmpNo;
-                        string sql = string.Format(@" DELETE FROM [888_north].[dbo].[charge]  WHERE charge_id = @charge_id AND 員工編號 = @EmpNo AND  權限 = '資訊' ");
+                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[charge]  WHERE charge_id = @charge_id AND EmpNo = @EmpNo");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);

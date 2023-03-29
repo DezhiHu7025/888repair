@@ -22,9 +22,9 @@ namespace _888repair.Models
         /// </summary>
         public string FullName { get; set; }
 
-        /// <summary>
-        /// 权限
-        /// </summary>
-        public string Permissiom { get; set; }
+        public string UpdateUser { get; set; }
+
+
+        public DateTime? UpdateTime { get; set; }
     }
 }
