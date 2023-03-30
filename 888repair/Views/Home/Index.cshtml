@@ -54,6 +54,7 @@
                 <ul class="layui-nav layui-nav-tree Menu" lay-filter="test" id="Menu">
                     <li class="layui-nav-item current" data-id="fill"><a class="layui-nav-item " language="fill">填写问题</a></li>
                     <li class="layui-nav-item" data-id="areaMatch"><a class="layui-nav-item ">辖区配对维护</a></li>
+                    <li class="layui-nav-item" data-id="kindMatch"><a class="layui-nav-item ">业管配对维护</a></li>
                     <li class="layui-nav-item">
                         <a href="javascript:;">基础数据维护</a>
                         <dl class="layui-nav-child" id="MenuChild">
@@ -156,6 +157,10 @@
                     break;
                 case "#areaMatch":
                     pathn = "@(Url.Action("AreaMatchIndex", "Area"))",
+                        i = 0;
+                    break;
+                case "#kindMatch":
+                    pathn = "@(Url.Action("KindMatchIndex", "Kind"))",
                         i = 0;
                     break;
                 default:

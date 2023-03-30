@@ -1,0 +1,446 @@
+﻿
+@{
+    ViewBag.Title = "KindMatchIndex";
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>业管配对维护</title>
+    <style>
+        body {
+            padding: 32px; /*overflow-y: scroll;*/
+        }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
+    </style>
+</head>
+<body>
+    <hr>
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类别</label>
+                <div class="layui-input-inline" style="height:38px;width:300px">
+                    <select ID="OpKindCategory" name="OpKindCategory">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <select ID="OpEmpNo" name="OpEmpNo" lay-verify="required">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="layui-btn-group" style="margin-left:1100px">
+        <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
+        <button class="layui-btn layui-btn-sm" id="btn_add"><i class="layui-icon">新增&nbsp;&#xe654;</i></button>
+        <button class="layui-btn layui-btn-sm" id="btn_edit"><i class="layui-icon">修改&nbsp;&#xe642;</i></button>
+        <button class="layui-btn layui-btn-sm" id="btn_del"><i class="layui-icon">删除&nbsp;&#xe640;</i></button>
+    </div>
+    <br />
+    <table class="layui-hide" lay-filter="user" id="KindMatchTable"></table>
+
+</body>
+
+<div class="layui-form" style="display:none" id="editKindMatchWidow">
+    <br /><br />
+    <form class="layui-form-item">
+        <input type="hidden" class="form-control" disabled="disabled" id="MatchId">
+        <div class="layui-inline">
+            <label class="layui-form-label">类别&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline" style="width:300px">
+                <select ID="addKindCategory" name="addKindCategory" lay-filter="addKindCategory" lay-verify="required">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">备注&nbsp;&nbsp;</label>
+            <div class="layui-input-inline">
+                <input type="text" name="addRemark" id="addRemark" autocomplete="off" class="layui-form-pane" style="height:38px;width:300px" disabled="disabled">
+            </div>
+        </div>
+        <br>
+        <div class="layui-inline">
+            <label class="layui-form-label">姓名&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline" style="width:300px">
+                <select ID="addOpEmpNo" name="addOpEmpNo" lay-filter="addOpEmpNofilter" lay-verify="required">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">顺位&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline">
+                <input type="text" name="addSort" id="addSort" autocomplete="off" class="layui-input" style="height:38px;width:300px" placeholder="请输入数字" lay-verify="required|number">
+            </div>
+        </div>
+        <button class="layui-layer-btn0" id="btn_submit" style="display:none" lay-submit lay-filter="demo1"></button>
+    </form>
+</div>
+<script>
+
+    layui.use(['table', 'dropdown', 'form'], function () {
+
+        var $ = layui.$;
+        var table = layui.table;
+        var form = layui.form;
+
+        form.on('submit(demo1)', function (data) {
+
+            var model = {
+                "MatchId": "",
+                "AreaId": "",
+                "EmpNo": "",
+                "Sort": "",
+            };
+
+            var selectData = layui.table.checkStatus('kindMatchTableID').data;
+            if (selectData.length == 1) {
+                model.MatchId = $("#MatchId").val();
+            }
+
+            model.AreaId = $("#addKindCategory").val();
+            model.EmpNo = $("#addOpEmpNo").val();
+            model.Sort = $("#addSort").val();
+
+            $.ajax({
+                type: 'post',
+                url: "@(Url.Action("editKindMatch", "Kind"))",
+                data: JSON.stringify(model),
+                async: false,
+                dataType: "json",
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: 'application/json',
+                beforeSend: function () {
+                    // 禁用按钮防止重复提交
+                    $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        alert("新增/修改业管配对成功");
+                        $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
+                        $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
+                        reloadDate();
+                        layer.closeAll();
+                    }
+                    else {
+                        alert(result.Msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $.ajax({
+            url: "@(Url.Action("getKindMatchList", "Kind"))",  // 要提交的URL路径
+            type: "post",    // 发送请求的方式
+            dataType: "JSON",     // 指定传输的数据格式
+            beforeSend: function () {     //请求之前的方法
+            },
+            success: function (result) {
+                if (result.IsSuccess) {
+                    let d = result;
+                    layui.use(['form', 'jquery', 'table', 'layer'], function () {
+                        var form = layui.form;
+                        var $ = layui.jquery;
+                        var table = layui.table;
+                        var layer = layui.layer;
+
+                        table.render({
+                            elem: '#KindMatchTable',
+                            type: "post",
+                            data: d.data,
+                            id: "kindMatchTableID",
+                            contentType: 'application/json', // 参数为 json 格式传递
+                            page: !0 || { //详细参数可参考 laypage 组件文档
+                                curr: 5,
+                                groups: 1,
+                                first: false,
+                                last: false,
+                                layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                            }
+                            ,height: 523
+                            , cellMinWidth: 80
+                            //,skin: 'line'
+                            //,size: 'lg'
+                            , toolbar: true
+                            , cols: [[
+                                { type: 'checkbox', LAY_CHECKED: false},
+                               // { field: 'AreaId', title: 'AreaId' },
+                                { field: 'KindCategory', title: '类别', width: 397 },
+                                { field: 'Remark', title: '备注', width: 395 },
+                                { field: 'EmpNo', title: '员工编号', width: 200 },
+                                { field: 'FullName', title: '姓名', width: 200 },
+                                { field: 'Sort', title: '顺位', width: 200 },
+                                //{ field: 'UpdateUser', title: '操作人', width: 192 },
+                                //{
+                                //    field: 'UpdateTime', title: '操作时间', width: 200,
+                                //    templet: "<div>{{ formatDate(d.UpdateTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+                                //}
+                            ]]
+                        });
+                    });
+                } else {
+                    alert(result.Msg);
+                }
+            },
+            error: function () {
+                // 请求失败后要执行的代码
+                console.log("失败");
+                alert(result.Msg);
+            }
+        });
+
+        function reloadDate() {
+            var model = {
+                KindCategory: $('#OpKindCategory').val(),
+                EmpNo: $('#OpEmpNo').val(),
+            }
+            $.ajax({
+                url: "@(Url.Action("getKindMatchList", "Kind"))",   // 要提交的URL路径
+                type: "post",    // 发送请求的方式
+                data: model,
+                dataType: "JSON",     // 指定传输的数据格式
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        let d = result;
+                        table.reload('kindMatchTableID', {
+                        data: d.data,
+                        page: { curr: 1 },
+                        });
+                    } else {
+                        alert(result.Msg);
+                    }
+                },
+                error: function () {
+                    // 请求失败后要执行的代码
+                    console.log("失败");
+                    alert(result.Msg);
+                }
+            });
+        }
+
+        $('#btn_search').click(function () {
+            reloadDate();
+        });
+
+        $('#btn_add').click(function () {
+
+            var selectData = layui.table.checkStatus('kindMatchTableID').data;
+            if (selectData.length != 0) {
+                alert("新增时请勿选择数据");
+                return false;
+            }
+
+            $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#addKindCategory').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+            $('select[name=addOpEmpNo]').val("");
+            $('select[name=addKindCategory]').val("");
+            $("#addRemark").val("");
+            $("#addSort").val("");
+            render();
+            layer.open({
+                title: '新增业管配对',
+                area: ['55%','30%'],
+                content: $("#editKindMatchWidow"),
+                shade: 0.0,
+                type: 1,
+                btn: ['确定', '重置'],
+                btn1: function (index, layero) {
+                    var formSubmit = $("#editKindMatchWidow");
+                    var submited = formSubmit.find('button')[0];
+                    submited.click();
+                },
+                btn2: function (index, layero) {
+                    $('select[name=addOpEmpNo]').val("");
+                    $('select[name=addKindCategory]').val("");
+                    $("#addRemark").val("");
+                    $("#addSort").val("");
+                    render();
+                    return false;
+                },
+                cancel: function (layero, index) {
+                    $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
+                    $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
+                    $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
+                    $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
+                    layer.closeAll();
+                }
+            });
+        });
+
+        $('#btn_edit').click(function () {
+
+            var selectData = layui.table.checkStatus('kindMatchTableID').data;
+            console.log(selectData);
+            var arrays = new Array();
+            if (selectData.length != 1) {
+                alert("请选择一条数据修改");
+                return false;
+            }
+
+            $("#MatchId").val(selectData[0].MatchId);
+            $('select[name=addOpEmpNo]').val(selectData[0].EmpNo);
+            $('select[name=addKindCategory]').val(selectData[0].AreaId);
+            $("#addRemark").val(selectData[0].Remark);
+            $("#addOpEmpNo").val(selectData[0].EmpNo);
+            $("#addSort").val(selectData[0].Sort);
+            $('#addKindCategory').addClass("layui-disabled").attr("disabled", "disabled");
+            render();
+
+            $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#btn_search').addClass("layui-btn-disabled").attr("disabled", false);
+
+
+            layer.open({
+                title: '修改业管配对信息',
+                area: ['55%', '30%'],
+                content: $("#editKindMatchWidow"),
+                shade: 0.0,
+                type:1,
+                btn: ['确定'],
+                btn1: function (index, layero) {
+                    var formSubmit = $("#editKindMatchWidow");
+                    var submited = formSubmit.find('button')[0];
+                    submited.click();
+                },
+                cancel: function (layero, index) {
+                    $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
+                    $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
+                    $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
+                    $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
+                    layer.closeAll();
+                }
+            });
+        });
+
+        $('#btn_del').click(function (obj) {
+            var selectData = layui.table.checkStatus('kindMatchTableID').data;
+            console.log(selectData);
+            var arrays = new Array();
+            $(selectData).each(function () {
+                var newArr = {};
+                newArr.MatchId = this.MatchId;
+                arrays.push(newArr)
+            });
+            if (selectData.length ==0 ) {
+                alert("请选择数据");
+            } else {
+                $.ajax({
+                    url: "@(Url.Action("deleteKindMatch", "Kind"))",
+                    type: "post",
+                    dataType: "json",
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify(arrays),
+                    traditional: true,
+                    success: function (result) {
+                        if (result.IsSuccess) {
+                            alert('删除成功');
+                            reloadDate();
+                        }
+                            else {
+                            alert(result.Msg);
+                        }
+                    },
+                    error: function (result) {
+                        alert("删除失败")
+                    }
+                });
+            }
+        });
+
+        $(document).ready(
+            function () {
+                $("#OpKindCategory").empty();
+                $("#addKindCategory").empty(); //清空下拉列表
+                $.ajax({
+                    url: "@(Url.Action("getKind", "DDL"))",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#OpKindCategory').append(new Option());
+                        $('#addKindCategory').append(new Option());
+                        console.log(result)
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
+                            $("#addKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
+                        }
+                        //进行渲染
+                        layui.use('form', function () {
+                            var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+                            form.render();
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                });
+
+                $("#addOpEmpNo").empty();
+                $.ajax({
+                    url: "@(Url.Action("getChargePerson", "DDL"))",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#addOpEmpNo').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                            $("#addOpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                        }
+                        //进行渲染
+                        layui.use('form', function () {
+                            var form = layui.form;
+                            form.render();
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                });
+            });
+        
+        form.on('select(addKindCategory)', function (data) {
+            console.log(data);
+            var Building = data.value;
+            $.ajax({
+                type: "post",
+                url:  "@(Url.Action("getKind", "DDL"))",
+                data: { "keyWord": Building },
+                dataType: "json",
+                success: function (d) {
+                    $("#addRemark").val(d[0].Remark);
+                }, error: function () {
+                    layer.alert('请求失败');
+                }
+            });
+        })
+
+        function render() {
+            // 封装函数-表单更新渲染
+            layui.use('form', function () {
+                var form = layui.form;
+                form.render('select');
+            })
+        }
+    });
+</script>
+

@@ -111,7 +111,7 @@ namespace _888repair.Controllers
             return Json(new FlagTips { IsSuccess = true });
         }
 
-        //AreaMatchI: 辖区配对维护
+        //AreaMatch: 辖区配对维护
         public ActionResult AreaMatchIndex()
         {
             return View();
@@ -172,7 +172,7 @@ namespace _888repair.Controllers
                     model.UpdateTime = DateTime.Now;
                     if (string.IsNullOrEmpty(model.MatchId))
                     {
-                        string checkSql = @"select * from [888_KsNorth].[dbo].[match] where area_id = @AreaId and charge_emp = @EmpNo ";
+                        string checkSql = @"select * from [888_KsNorth].[dbo].[match] where area_id = @AreaId and charge_emp = @EmpNo and match_type = 'AreaMatch'";
                         var list = db.Query<AreaMatchModel>(checkSql, model).ToList();
                         if (list.Count() != 0)
                         {
@@ -184,7 +184,7 @@ namespace _888repair.Controllers
                     }
                     else
                     {
-                        sql = string.Format(@" update [888_KsNorth].[dbo].[match] set area_id = @AreaId,charge_emp=@EmpNo,Sort=@Sort,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where area_id = @AreaId ");
+                        sql = string.Format(@" update [888_KsNorth].[dbo].[match] set area_id = @AreaId,charge_emp=@EmpNo,Sort=@Sort,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where area_id = @AreaId  and match_type = 'AreaMatch'");
                     }
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
@@ -209,9 +209,7 @@ namespace _888repair.Controllers
                     {
                         var deleteModel = new AreaMatchModel();
                         deleteModel.AreaId = model.AreaId;
-                        deleteModel.MatchId = model.MatchId;
-                        deleteModel.MatchType = model.MatchType;
-                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[match]  WHERE match_id = @MatchId ");
+                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[match]  WHERE match_id = @MatchId and match_type = 'AreaMatch' ");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);

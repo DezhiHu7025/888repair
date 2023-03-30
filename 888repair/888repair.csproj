@@ -145,6 +145,7 @@
     <Compile Include="Models\Director\DirectorModel.cs" />
     <Compile Include="Models\Director\UserModel.cs" />
     <Compile Include="Models\FlagTips.cs" />
+    <Compile Include="Models\Kind\KindMatchModel.cs" />
     <Compile Include="Models\Kind\KindModel.cs" />
     <Compile Include="Models\State\StateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -194,6 +195,7 @@
     <Content Include="Views\Area\AreaIndex.cshtml" />
     <Content Include="Views\Kind\KindIndex.cshtml" />
     <Content Include="Views\Area\AreaMatchIndex.cshtml" />
+    <Content Include="Views\Kind\KindMatchIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
