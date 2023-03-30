@@ -1,11 +1,11 @@
 ﻿
 @{
-    ViewBag.Title = "AreaIndex";
+    ViewBag.Title = "KindIndex";
 }
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>辖区维护</title>
+    <title>业管维护</title>
     <style>
         body {
             padding: 32px; /*overflow-y: scroll;*/
@@ -23,51 +23,51 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">分类1</label>
+                <label class="layui-form-label">业管类型</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="Buliding" id="Buliding" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">分类2</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="Location" id="Location" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+                    <input type="text" name="KindCategory" id="KindCategory" placeholder="此查询框为模糊查询……" lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
         </div>
     </form>
     <div class="layui-btn-group" style="margin-left:1100px">
         <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
-        <button class="layui-btn layui-btn-sm" id="btn_add"><i class="layui-icon">新增&nbsp;&#xe654;</i></button>
+        <button class="layui-btn layui-btn-sm" lay-filter="demo1" id="btn_add"><i class="layui-icon">新增&nbsp;&#xe654;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_edit"><i class="layui-icon">修改&nbsp;&#xe642;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_del"><i class="layui-icon">删除&nbsp;&#xe640;</i></button>
     </div>
     <br />
-    <table class="layui-hide" lay-filter="user" id="AreaTable"></table>
+    <table class="layui-hide" lay-filter="user" id="KindTable"></table>
 
 </body>
 
-<div class="layui-form" style="display:none" id="editAreaWidow">
+<div class="layui-form" style="display:none" id="editKindWindow">
     <br /><br />
-    <form class="layui-form-item">
-        <input type="hidden" class="form-control" disabled="disabled" id="AreaId">
+    <form class="layui-form-item layui-form" action="" lay-filter="">
+        <input type="hidden" class="form-control" disabled="disabled" id="KindID">
         <div class="layui-inline">
             <label class="layui-form-label">系统类别&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-block">
-                <input type="text" name="addSystemCategory" id="addSystemCategory" lay-verify="required" autocomplete="off" class="layui-input" style="height:38px;width:300px">
+                <input type="text" name="addSystemCategory" id="addSystemCategory" style="height:38px;width:300px" autocomplete="off" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">分类1&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <label class="layui-form-label">业管类别&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-inline">
-                <input type="text" name="addBuliding" id="addBuliding" lay-verify="required" autocomplete="off" class="layui-input" style="height:38px;width:300px">
+                <input type="text" name="addKindCategory" id="addKindCategory" style="height:38px;width:300px" autocomplete="off" lay-verify="required"  class="layui-input">
             </div>
         </div>
 
         <div class="layui-inline">
-            <label class="layui-form-label">分类2&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <label class="layui-form-label">备注</label>
             <div class="layui-input-block">
-                <input type="text" name="addLocation" id="addLocation" lay-verify="required" autocomplete="off" class="layui-input" style="height:38px;width:300px">
+                <input type="text" name="addRemark" id="addRemark"  style="height:38px;width:300px" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">排序&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline">
+                <input type="text" name="addSort" id="addSort" placeholder="请输入数字" style="height:38px;width:300px" autocomplete="off"  lay-verify="required|checkSort"  class="layui-input">
             </div>
         </div>
         <button class="layui-layer-btn0" id="btn_submit" style="display:none" lay-submit lay-filter="demo1"></button>
@@ -75,34 +75,51 @@
 </div>
 <script>
 
-    layui.use(['table', 'dropdown', 'form'], function () {
+    layui.use(['table','dropdown','form'], function () {
 
         var $ = layui.$;
         var table = layui.table;
         var form = layui.form;
-
+        
+        //自定义验证规则
+        form.verify({
+            checkSystemCategory: function (value) {
+                if (value.length == 0) {
+                    //return '系统类别不能为空';
+                    return false;
+                }
+                return false;
+            },
+            checkSort: [
+                /^[0-9]*$/, '排序必须填数字'
+            ]
+        });
+        
+        //提交事件
         form.on('submit(demo1)', function (data) {
 
             var model = {
-                "AreaId": "",
+                "KindID": "",
                 "SystemCategory": "",
-                "Buliding": "",
-                "Location": "",
-                "Permission": "",
+                "KindCategory": "",
+                "Sort": "",
+                "Remark": "",
             };
 
-            var selectData = layui.table.checkStatus('areaTableID').data;
+            var selectData = layui.table.checkStatus('kindTableID').data;
             if (selectData.length == 1) {
-                model.AreaId = $("#AreaId").val();
+                model.KindID = $("#KindID").val();
             }
 
             model.SystemCategory = $("#addSystemCategory").val();
-            model.Buliding = $("#addBuliding").val();
-            model.Location = $("#addLocation").val();
-
+            model.KindCategory = $("#addKindCategory").val();
+            model.KindCategory = $("#addKindCategory").val();
+            model.Sort = $("#addSort").val();
+            model.Remark = $("#addRemark").val();
+            
             $.ajax({
                 type: 'post',
-                url: "@(Url.Action("editArea", "Area"))",
+                url: "@(Url.Action("editKind", "Kind"))",
                 data: JSON.stringify(model),
                 async: false,
                 dataType: "json",
@@ -111,12 +128,12 @@
                 // 告诉jQuery不要去设置Content-Type请求头
                 contentType: 'application/json',
                 beforeSend: function () {
-                    // 禁用按钮防止重复提交
+                    // 禁用按钮防止重复提交                 
                     $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
                 },
                 success: function (result) {
                     if (result.IsSuccess) {
-                        alert("新增/修改辖区成功");
+                        alert("新增/修改业管类别成功");
                         $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
                         $('#btn_edit').removeClass("layui-btn-disabled").attr("disabled", false);
                         $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
@@ -132,8 +149,12 @@
             return false;
         });
 
+        form.on("submit(submit_button)", function (data) {
+            return false;
+        });
+
         $.ajax({
-            url: "@(Url.Action("getAreaList", "Area"))",  // 要提交的URL路径
+            url: "@(Url.Action("getKindList", "Kind"))",  // 要提交的URL路径
             type: "post",    // 发送请求的方式
             dataType: "JSON",     // 指定传输的数据格式
             beforeSend: function () {     //请求之前的方法
@@ -148,10 +169,10 @@
                         var layer = layui.layer;
 
                         table.render({
-                            elem: '#AreaTable',
+                            elem: '#KindTable',
                             type: "post",
                             data: d.data,
-                            id: "areaTableID",
+                            id: "kindTableID",
                             contentType: 'application/json', // 参数为 json 格式传递
                             page: !0 || { //详细参数可参考 laypage 组件文档
                                 curr: 5,
@@ -160,7 +181,7 @@
                                 last: false,
                                 layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
                             }
-                            ,height: 523
+                            , height: 523
                             , cellMinWidth: 80
                             //,skin: 'line'
                             //,size: 'lg'
@@ -168,12 +189,13 @@
                             , cols: [[
                                 { type: 'checkbox', LAY_CHECKED: false},
                                // { field: 'AreaId', title: 'AreaId' },
-                                { field: 'SystemCategory', title: '系统类别', width: 200 },
-                                { field: 'Buliding', title: '分类1', width: 400 },
-                                { field: 'Location', title: '分类2', width: 400},
-                                { field: 'UpdateUser', title: '操作人', width: 192 },
+                                { field: 'SystemCategory', title: '系统类别',width:200},
+                                { field: 'KindCategory', title: '业管类别', width: 340 },
+                                { field: 'Remark', title: '备注' ,width: 400 },
+                                { field: 'Sort', title: '排序', width: 100 },
+                                { field: 'UpdateUser', title: '操作人', width: 170 },
                                 {
-                                    field: 'UpdateTime', title: '操作时间', width: 200,
+                                    field: 'UpdateTime', title: '操作时间', width: 180,
                                     templet: "<div>{{ formatDate(d.UpdateTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
                                 }
                             ]]
@@ -193,18 +215,17 @@
         function reloadDate() {
             var model = {
                 SystemCategory: $('#SystemCategory').val(),
-                Buliding: $('#Buliding').val(),
-                Location: $('#Location').val(),
+                KindCategory: $('#KindCategory').val(),
             }
             $.ajax({
-                url: "@(Url.Action("getAreaList", "Area"))",   // 要提交的URL路径
+                url: "@(Url.Action("getKindList", "Kind"))",   // 要提交的URL路径
                 type: "post",    // 发送请求的方式
                 data: model,
                 dataType: "JSON",     // 指定传输的数据格式
                 success: function (result) {
                     if (result.IsSuccess) {
                         let d = result;
-                        table.reload('areaTableID', {
+                        table.reload('kindTableID', {
                         data: d.data,
                         page: { curr: 1 },
                         });
@@ -225,35 +246,42 @@
         });
 
         $('#btn_add').click(function () {
-            var selectData = layui.table.checkStatus('areaTableID').data;
+
+            var selectData = layui.table.checkStatus('kindTableID').data;
+            var arrays = new Array();
             if (selectData.length != 0) {
                 alert("新增时请勿选择数据");
                 return false;
-            } 
+            }
 
             $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
             $("#addSystemCategory").val("");
-            $("#addBuliding").val("");
-            $("#addLocation").val("");
+            $("#addKindCategory").val("");
+            $("#addRemark").val("");
+            $("#addSort").val("");
             layer.open({
-                title: '新增辖区',
-                area: ['55%','30%'],
-                content: $("#editAreaWidow"),
-                shade: 0.0,
+                title: '新增业管类别',
+                area: ['55%', '30%'],
+                content: $("#editKindWindow"),
+                shade: 0,
                 type: 1,
                 btn: ['确定', '重置'],
                 btn1: function (index, layero) {
-                    var formSubmit = $("#editAreaWidow");
+                    // 获取弹出层中的form表单元素
+                    var formSubmit=$("#editKindWindow");
+                    // 获取表单中的提交按钮（在我的表单里第一个button按钮就是提交按钮，使用find方法寻找即可）
                     var submited = formSubmit.find('button')[0];
+                    // 触发点击事件，会对表单进行验证，验证成功则提交表单，失败则返回错误信息
                     submited.click();
                 },
                 btn2: function (index, layero) {
                     $("#addSystemCategory").val("");
-                    $("#addBuliding").val("");
-                    $("#addLocation").val("");
+                    $("#addKindCategory").val("");
+                    $("#addRemark").val("");
+                    $("#addSort").val("");
                     return false;
                 },
                 cancel: function (layero, index) {
@@ -267,19 +295,20 @@
         });
 
         $('#btn_edit').click(function () {
-          
-            var selectData = layui.table.checkStatus('areaTableID').data;
-            console.log(selectData[0]);
+
+            var selectData = layui.table.checkStatus('kindTableID').data;
+            console.log(selectData);
+            var arrays = new Array();
             if (selectData.length != 1) {
                 alert("请选择一条数据修改");
                 return false;
-            } 
+            }
 
-            $("#AreaId").val(selectData[0].AreaId);
+            $("#KindID").val(selectData[0].KindID);
             $("#addSystemCategory").val(selectData[0].SystemCategory);
-            $("#addBuliding").val(selectData[0].Buliding);
-            $("#addLocation").val(selectData[0].Location);
-            $("#addPermission").val(selectData[0].Permission);
+            $("#addKindCategory").val(selectData[0].KindCategory);
+            $("#addRemark").val(selectData[0].Remark);
+            $("#addSort").val(selectData[0].Sort);
 
             $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
@@ -288,14 +317,21 @@
 
 
             layer.open({
-                title: '修改辖区信息',
-                area: ['55%','30%'],
-                content: $("#editAreaWidow"),
+                title: '修改业管类别信息',
+                area: ['55%', '30%'],
+                content: $("#editKindWindow"),
                 shade: 0.0,
                 type:1,
                 btn: ['确定'],
                 btn1: function (index, layero) {
-                    var formSubmit = $("#editAreaWidow");
+                    var model = {
+                        "KindID": $("#KindID").val(),
+                        "SystemCategory": $("#addSystemCategory").val(),
+                        "KindCategory": $("#addKindCategory").val(),
+                        "Sort": $("#addSort").val(),
+                        "Remark": $("#addRemark").val(),
+                    };
+                    var formSubmit = $("#editKindWindow");
                     var submited = formSubmit.find('button')[0];
                     submited.click();
                 },
@@ -310,21 +346,21 @@
         });
 
         $('#btn_del').click(function (obj) {
-            var selectData = layui.table.checkStatus('areaTableID').data;
+            var selectData = layui.table.checkStatus('kindTableID').data;
             console.log(selectData);
             var arrays = new Array();
             $(selectData).each(function () {
                 var newArr = {};
-                newArr.AreaId = this.AreaId;
+                newArr.KindID = this.KindID;
                 newArr.SystemCategory = this.SystemCategory;
-                newArr.Buliding = this.Buliding;
+                newArr.KindCategory = this.KindCategory;
                 arrays.push(newArr)
             });
             if (selectData.length ==0 ) {
                 alert("请选择数据");
             } else {
                 $.ajax({
-                    url: "@(Url.Action("deleteArea", "Area"))",
+                    url: "@(Url.Action("deleteKind", "Kind"))",
                     type: "post",
                     dataType: "json",
                     contentType: "application/json;charset=UTF-8",
@@ -345,6 +381,6 @@
                 });
             }
         });
+        
     });
 </script>
-

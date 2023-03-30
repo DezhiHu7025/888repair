@@ -15,16 +15,14 @@
 </head>
 <body>
     <hr>
-    <div class="layui-row layui-col-space16">
-        <div class="layui-col-md3">
-            <div class="layui-input-group">
-                <div class="layui-input-split layui-input-prefix">
-                    姓名
-                </div>
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
                 <input type="text" name="FullName" id="FullName" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
             </div>
         </div>
-    </div>
+    </form>
     <div class="layui-btn-group" style="margin-left:1200px">
         <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_add"><i class="layui-icon">新增&nbsp;&#xe654;</i></button>
@@ -44,21 +42,18 @@
 
         <div class="layui-inline">
             <label class="layui-form-label">员工编号&nbsp;&nbsp;<label style="color:red">*</label></label>
-            <div class="layui-input-block">
+            <div class="layui-input-inline">
                 <input type="text" name="addEmpNo" id="addEmpNo" autocomplete="off" class="layui-input" lay-verify="required">
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">姓名&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-inline">
-                <input type="text" name="addFullName" id="addFullName" autocomplete="off" class="layui-input" disabled="disabled" lay-verify="required">
+                <input type="text" name="addFullName" id="addFullName" autocomplete="off" class="layui-form-pane" style="height:38px" disabled="disabled" lay-verify="required">
             </div>
         </div>
     </div>
 </div>
-@*<script src="~/src/date.js">
-    {{formatDate(d.UpdateTime)}}
-</script>*@
 <script>
 
     layui.use(['table','dropdown'], function () {

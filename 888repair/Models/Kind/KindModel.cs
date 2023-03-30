@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace _888repair.Models.Area
+namespace _888repair.Models.Kind
 {
-    public class AreaModel
+    public class KindModel
     {
-        /// <summary>
-        /// 辖区ID
-        /// </summary>
-        public string AreaId { get; set; }
+        public string KindID { get; set; }
 
         /// <summary>
         /// 系统类别
@@ -18,20 +15,23 @@ namespace _888repair.Models.Area
         public string SystemCategory { get; set; }
 
         /// <summary>
-        /// 大楼别
+        /// 类别
         /// </summary>
-        public string Buliding { get; set; }
+        public string KindCategory { get; set; }
 
         /// <summary>
-        /// 位置
+        /// 备注
         /// </summary>
-        public string Location { get; set; }
+        public string Remark { get; set; }
+        
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public string Sort { get; set; }
 
         public string UpdateUser { get; set; }
 
 
         public DateTime? UpdateTime { get; set; }
-
-        public Int32 SortNo { get; set; }
     }
 }

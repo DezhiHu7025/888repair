@@ -129,6 +129,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AreaController.cs" />
+    <Compile Include="Controllers\DDLController.cs" />
     <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Area\AreaMatchModel.cs" />
     <Compile Include="Models\Area\AreaModel.cs" />
     <Compile Include="Models\Director\DirectorModel.cs" />
     <Compile Include="Models\Director\UserModel.cs" />
@@ -191,9 +193,11 @@
     <Content Include="Views\Director\DirectorIndex.cshtml" />
     <Content Include="Views\Area\AreaIndex.cshtml" />
     <Content Include="Views\Kind\KindIndex.cshtml" />
+    <Content Include="Views\Area\AreaMatchIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\DDL\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
