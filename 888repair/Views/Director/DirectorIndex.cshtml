@@ -17,9 +17,23 @@
     <hr>
     <form class="layui-form layui-form-pane" action="">
         <div class="layui-form-item">
-            <label class="layui-form-label">姓名</label>
-            <div class="layui-input-inline">
-                <input type="text" name="FullName" id="FullName" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+            <div class="layui-inline">
+                <label class="layui-form-label">系统类别</label>
+                <div class="layui-input-inline">
+                    <select ID="SystemCategory" name="SystemCategory">
+                        <option value=""></option>
+                        <option value="IT(资讯类)">IT(资讯类)</option>
+                        <option value="Logistics(总务后勤类)">
+                            Logistics(总务后勤类)
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="FullName" id="FullName" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
             </div>
         </div>
     </form>
@@ -39,7 +53,16 @@
     <p class="ayui-input-block" style="color:red;font-size:large;margin-left:80px">正确输入员工编号后，回车带出姓名</p>
     <br /><br /><br />
     <div class="layui-form-item">
-
+        <label class="layui-form-label">系统类别&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline">
+                <select ID="addSystemCategory" name="addSystemCategory" lay-filter="addSystemCategory" lay-verify="required">
+                    <option value=""></option>
+                    <option value="IT(资讯类)">IT(资讯类)</option>
+                    <option value="Logistics(总务后勤类)">
+                        Logistics(总务后勤类)
+                    </option>
+                </select>
+            </div>
         <div class="layui-inline">
             <label class="layui-form-label">员工编号&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-inline">
@@ -60,6 +83,8 @@
 
         var $ = layui.$;
         var table = layui.table;
+
+        render();
 
         $.ajax({
             url: "@(Url.Action("getDirectorList", "Director"))",  // 要提交的URL路径
@@ -97,6 +122,7 @@
                             , cols: [[
                                 { type: 'checkbox', LAY_CHECKED: false},
                                 //{ field: 'charge_id', title: 'charge_id' },
+                                { field: 'SystemCategory', title: '系统类别', },
                                 { field: 'EmpNo', title: '员工编号', },
                                 { field: 'FullName', title: '姓名' },
                                 { field: 'UpdateUser', title: '操作人' },
@@ -119,10 +145,14 @@
         });
         
         function reloadDate() {
+            var model = {
+                FullName: $('#FullName').val(),
+                SystemCategory: $('#SystemCategory').val(),
+            }
             $.ajax({
                 url: "@(Url.Action("getDirectorList", "Director"))",  // 要提交的URL路径
                 type: "post",    // 发送请求的方式
-                data: { FullName: $('#FullName').val() },
+                data: model,
                 dataType: "JSON",     // 指定传输的数据格式
                 success: function (result) {
                     if (result.IsSuccess) {
@@ -154,9 +184,11 @@
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
             $("#addFullName").val("");
             $("#addEmpNo").val("");
+            $('select[name=addSystemCategory]').val("");
+            render();
             layer.open({
                 title: '新增负责人',
-                area: ['40%','30%'],
+                area: ['60%','30%'],
                 content: $("#addDirectorWidow"),
                 shade: 0.0,
                 type: 1,
@@ -165,12 +197,16 @@
                     var model = {
                         "EmpNo": $("#addEmpNo").val(),
                         "FullName": $("#addFullName").val(),
+                        "SystemCategory": $("#addSystemCategory").val(),
                     };
+                    if (model.SystemCategory == null || model.SystemCategory == '') {
+                        alert("请选择系统类别");
+                        return false;
+                    }
                     if (model.FullName == null  || model.FullName == null | model.EmpNo == '' || model.FullName == '') {
                         alert("请输入正确的员工编号并带出姓名");
                         return false;
                     }
-                   console.log(model);
                    $.ajax({
                        type: 'post',
                        url: "@(Url.Action("editDirector", "Director"))",
@@ -218,13 +254,13 @@
         
         $('#btn_del').click(function (obj) {
             var selectData = layui.table.checkStatus('chargeTable').data;
-            console.log(selectData);
             var arrays = new Array();
             $(selectData).each(function () {
                 var newArr = {};
                 newArr.charge_id = this.charge_id;
                 newArr.EmpNo = this.EmpNo;
                 newArr.FullName = this.FullName;
+                newArr.SystemCategory = this.SystemCategory;
                 arrays.push(newArr)
             });
             if (selectData.length ==0 ) {
@@ -273,6 +309,14 @@
                 });
             }
         });
+
+        function render() {
+            // 封装函数-表单更新渲染
+            layui.use('form', function () {
+                var form = layui.form;
+                form.render('select');
+            })
+        }
     });
 </script>
 

@@ -26,5 +26,7 @@ namespace _888repair.Models
 
 
         public DateTime? UpdateTime { get; set; }
+
+        public string SystemCategory { get; set; }
     }
 }

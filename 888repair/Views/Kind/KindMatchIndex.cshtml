@@ -22,6 +22,18 @@
     <form class="layui-form layui-form-pane" action="">
         <div class="layui-form-item">
             <div class="layui-inline">
+                <label class="layui-form-label">系统类别</label>
+                <div class="layui-input-inline">
+                    <select ID="OpSystemCategory" name="OpSystemCategory" lay-filter="OpSystemCategory">
+                        <option value=""></option>
+                        <option value="IT(资讯类)">IT(资讯类)</option>
+                        <option value="Logistics(总务后勤类)">
+                            Logistics(总务后勤类)
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
                 <label class="layui-form-label">类别</label>
                 <div class="layui-input-inline" style="height:38px;width:300px">
                     <select ID="OpKindCategory" name="OpKindCategory">
@@ -55,23 +67,29 @@
     <form class="layui-form-item">
         <input type="hidden" class="form-control" disabled="disabled" id="MatchId">
         <div class="layui-inline">
+            <label class="layui-form-label">系统类别&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-block" style="height:38px;width:300px">
+                <select ID="addSystemCategory" name="addSystemCategory" lay-filter="addSystemCategory" lay-verify="required">
+                    <option value=""></option>
+                    <option value="IT(资讯类)">IT(资讯类)</option>
+                    <option value="Logistics(总务后勤类)">
+                        Logistics(总务后勤类)
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
             <label class="layui-form-label">类别&nbsp;&nbsp;<label style="color:red">*</label></label>
-            <div class="layui-input-inline" style="width:300px">
+            <div class="layui-input-inline" style="width:300px" id="checkSC">
                 <select ID="addKindCategory" name="addKindCategory" lay-filter="addKindCategory" lay-verify="required">
                     <option value=""></option>
                 </select>
             </div>
         </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">备注&nbsp;&nbsp;</label>
-            <div class="layui-input-inline">
-                <input type="text" name="addRemark" id="addRemark" autocomplete="off" class="layui-form-pane" style="height:38px;width:300px" disabled="disabled">
-            </div>
-        </div>
         <br>
         <div class="layui-inline">
             <label class="layui-form-label">姓名&nbsp;&nbsp;<label style="color:red">*</label></label>
-            <div class="layui-input-inline" style="width:300px">
+            <div class="layui-input-block" style="width:300px" id="checkSC2">
                 <select ID="addOpEmpNo" name="addOpEmpNo" lay-filter="addOpEmpNofilter" lay-verify="required">
                     <option value=""></option>
                 </select>
@@ -95,9 +113,12 @@
         var table = layui.table;
         var form = layui.form;
 
+        render();
+
         form.on('submit(demo1)', function (data) {
 
             var model = {
+                "SystemCategory":"",
                 "MatchId": "",
                 "AreaId": "",
                 "EmpNo": "",
@@ -109,6 +130,7 @@
                 model.MatchId = $("#MatchId").val();
             }
 
+            model.SystemCategory = $("#addSystemCategory").val();
             model.AreaId = $("#addKindCategory").val();
             model.EmpNo = $("#addOpEmpNo").val();
             model.Sort = $("#addSort").val();
@@ -181,11 +203,12 @@
                             , cols: [[
                                 { type: 'checkbox', LAY_CHECKED: false},
                                // { field: 'AreaId', title: 'AreaId' },
+                                { field: 'SystemCategory', title: '系统类别', width: 200 },
                                 { field: 'KindCategory', title: '类别', width: 397 },
-                                { field: 'Remark', title: '备注', width: 395 },
-                                { field: 'EmpNo', title: '员工编号', width: 200 },
+                                { field: 'Remark', title: '备注', width: 375 },
+                                { field: 'EmpNo', title: '员工编号', width: 120 },
                                 { field: 'FullName', title: '姓名', width: 200 },
-                                { field: 'Sort', title: '顺位', width: 200 },
+                                { field: 'Sort', title: '顺位', width: 100 },
                                 //{ field: 'UpdateUser', title: '操作人', width: 192 },
                                 //{
                                 //    field: 'UpdateTime', title: '操作时间', width: 200,
@@ -207,6 +230,7 @@
 
         function reloadDate() {
             var model = {
+                SystemCategory: $('#OpSystemCategory').val(),
                 KindCategory: $('#OpKindCategory').val(),
                 EmpNo: $('#OpEmpNo').val(),
             }
@@ -253,7 +277,7 @@
             $('#addKindCategory').removeClass("layui-disabled").removeAttr("disabled", "disabled");
             $('select[name=addOpEmpNo]').val("");
             $('select[name=addKindCategory]').val("");
-            $("#addRemark").val("");
+            $('select[name=addSystemCategory]').val("");
             $("#addSort").val("");
             render();
             layer.open({
@@ -289,7 +313,6 @@
         $('#btn_edit').click(function () {
 
             var selectData = layui.table.checkStatus('kindMatchTableID').data;
-            console.log(selectData);
             var arrays = new Array();
             if (selectData.length != 1) {
                 alert("请选择一条数据修改");
@@ -299,9 +322,9 @@
             $("#MatchId").val(selectData[0].MatchId);
             $('select[name=addOpEmpNo]').val(selectData[0].EmpNo);
             $('select[name=addKindCategory]').val(selectData[0].AreaId);
-            $("#addRemark").val(selectData[0].Remark);
             $("#addOpEmpNo").val(selectData[0].EmpNo);
             $("#addSort").val(selectData[0].Sort);
+            $("#addSystemCategory").val(selectData[0].SystemCategory);
             $('#addKindCategory').addClass("layui-disabled").attr("disabled", "disabled");
             render();
 
@@ -335,11 +358,11 @@
 
         $('#btn_del').click(function (obj) {
             var selectData = layui.table.checkStatus('kindMatchTableID').data;
-            console.log(selectData);
             var arrays = new Array();
             $(selectData).each(function () {
                 var newArr = {};
                 newArr.MatchId = this.MatchId;
+                newArr.SystemCategory = this.SystemCategory;
                 arrays.push(newArr)
             });
             if (selectData.length ==0 ) {
@@ -371,18 +394,14 @@
         $(document).ready(
             function () {
                 $("#OpKindCategory").empty();
-                $("#addKindCategory").empty(); //清空下拉列表
                 $.ajax({
                     url: "@(Url.Action("getKind", "DDL"))",
                     type: "POST",
                     dataType: 'json',
                     success: function (result) {
                         $('#OpKindCategory').append(new Option());
-                        $('#addKindCategory').append(new Option());
-                        console.log(result)
                         for (let i = 0, len = result.length; i < len; i++) {
                             $("#OpKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
-                            $("#addKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
                         }
                         //进行渲染
                         layui.use('form', function () {
@@ -395,16 +414,15 @@
                     }
                 });
 
-                $("#addOpEmpNo").empty();
+                $("#OpEmpNo").empty();
                 $.ajax({
                     url: "@(Url.Action("getChargePerson", "DDL"))",
                     type: "POST",
                     dataType: 'json',
                     success: function (result) {
-                        $('#addOpEmpNo').append(new Option());
+                        $('#OpEmpNo').append(new Option());
                         for (let i = 0, len = result.length; i < len; i++) {
                             $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
-                            $("#addOpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
                         }
                         //进行渲染
                         layui.use('form', function () {
@@ -417,21 +435,147 @@
                     }
                 });
             });
-        
-        form.on('select(addKindCategory)', function (data) {
-            console.log(data);
-            var Building = data.value;
-            $.ajax({
-                type: "post",
-                url:  "@(Url.Action("getKind", "DDL"))",
-                data: { "keyWord": Building },
-                dataType: "json",
-                success: function (d) {
-                    $("#addRemark").val(d[0].Remark);
-                }, error: function () {
-                    layer.alert('请求失败');
-                }
-            });
+
+
+        $("#checkSC").on('click', function () {
+            if ($("#addSystemCategory").val() == null || $("#addSystemCategory").val() == "") {
+                $("#addKindCategory").empty();
+                form.render();
+                alert("请先选择系统类别");
+            }
+        });
+
+        $("#checkSC2").on('click', function () {
+            if ($("#addSystemCategory").val() == null || $("#addSystemCategory").val() == "") {
+                $("#addKindCategory").empty();
+                form.render();
+                alert("请先选择系统类别");
+            }
+        });
+
+        form.on('select(addSystemCategory)', function (data) {
+            $("#addKindCategory").empty();
+            $("#addOpEmpNo").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+                $("#addKindCategory").empty();
+                $('#addOpEmpNo').append(new Option());
+                form.render();
+                return false;
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                    $('#addKindCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#addKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
+                    }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+
+                 $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getChargePersonBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#addOpEmpNo').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#addOpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                        }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }           
+        })
+
+        form.on('select(OpSystemCategory)', function (data) {
+            $("#OpKindCategory").empty();
+            $("#OpEmpNo").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+               $("#OpKindCategory").empty();
+                $.ajax({
+                    url: "@(Url.Action("getKind", "DDL"))",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#OpKindCategory').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
+                        }
+                        //进行渲染
+                        layui.use('form', function () {
+                            var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+                            form.render();
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                });
+
+                $("#OpEmpNo").empty();
+                $.ajax({
+                    url: "@(Url.Action("getChargePerson", "DDL"))",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#OpEmpNo').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                        }
+                        //进行渲染
+                        layui.use('form', function () {
+                            var form = layui.form;
+                            form.render();
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpKindCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
+                    }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+
+                 $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getChargePersonBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpEmpNo').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                        }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }           
         })
 
         function render() {

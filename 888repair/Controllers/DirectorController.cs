@@ -24,11 +24,11 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@"SELECT charge_id, EmpNo, FullName ,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[charge]
+                    string sql = string.Format(@"SELECT charge_id, EmpNo, FullName,SystemCategory ,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[charge]
                                                 where 1=1  ");
-                    if (!string.IsNullOrEmpty(model.EmpNo))
+                    if (!string.IsNullOrEmpty(model.SystemCategory))
                     {
-                        sql += " and EmpNo = @EmpNo ";
+                        sql += " and SystemCategory = @SystemCategory ";
                     }
                     if (!string.IsNullOrEmpty(model.FullName))
                     {
@@ -54,7 +54,7 @@ namespace _888repair.Controllers
                 model.UpdateTime = DateTime.Now;
                 using (RepairDb db = new RepairDb())
                 {
-                    string checkSql = @"select * from [888_KsNorth].[dbo].[charge] where EmpNo = @EmpNo ";
+                    string checkSql = @"select * from [888_KsNorth].[dbo].[charge] where EmpNo = @EmpNo and SystemCategory = @SystemCategory";
                     var list = db.Query<DirectorModel>(checkSql, model).ToList();
                     if(list.Count() != 0)
                     {
@@ -62,7 +62,7 @@ namespace _888repair.Controllers
                     }
                     else
                     {
-                        string sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[charge] (EmpNo,FullName,UpdateUser,UpdateTime)VALUES(@EmpNo,@FullName,@UpdateUser,@UpdateTime)");
+                        string sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[charge] (SystemCategory,EmpNo,FullName,UpdateUser,UpdateTime)VALUES(@SystemCategory,@EmpNo,@FullName,@UpdateUser,@UpdateTime)");
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, model);
                         db.DoExtremeSpeedTransaction(trans);
@@ -87,8 +87,9 @@ namespace _888repair.Controllers
                     {
                         var deleteModel = new DirectorModel();
                         deleteModel.charge_id = model.charge_id;
+                        deleteModel.SystemCategory = model.SystemCategory;
                         deleteModel.EmpNo = model.EmpNo;
-                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[charge]  WHERE charge_id = @charge_id AND EmpNo = @EmpNo");
+                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[charge]  WHERE charge_id = @charge_id AND EmpNo = @EmpNo and SystemCategory = @SystemCategory");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);

@@ -126,13 +126,17 @@ namespace _888repair.Controllers
 	                                                    c.FullName,
                                                         a.sort,
                                                         a.UpdateUser,
-                                                        a.UpdateTime
+                                                        a.UpdateTime,a.SystemCategory
                                                  FROM [888_KsNorth].[dbo].[match] a
                                                      LEFT JOIN [888_KsNorth].[dbo].[kind] b
                                                          ON a.area_id = b.kind_id
 		                                                  LEFT JOIN [888_KsNorth].[dbo].[charge] c
                                                          ON a.charge_emp = c.EmpNo
                                                  WHERE 1 = 1 and match_type= 'KindMatch' ");
+                    if (!string.IsNullOrEmpty(model.SystemCategory))
+                    {
+                        sql += " and a.SystemCategory = @SystemCategory ";
+                    }
                     if (!string.IsNullOrEmpty(model.KindCategory))
                     {
                         sql += " and a.area_id = @KindCategory ";
@@ -165,19 +169,19 @@ namespace _888repair.Controllers
                     model.UpdateTime = DateTime.Now;
                     if (string.IsNullOrEmpty(model.MatchId))
                     {
-                        string checkSql = @"select * from [888_KsNorth].[dbo].[match] where area_id = @AreaId and charge_emp = @EmpNo and  match_type = 'KindMatch'";
+                        string checkSql = @"select * from [888_KsNorth].[dbo].[match] where area_id = @AreaId and charge_emp = @EmpNo and  match_type = 'KindMatch' and SystemCategory = @SystemCategory";
                         var list = db.Query<KindMatchModel>(checkSql, model).ToList();
                         if (list.Count() != 0)
                         {
                             return Json(new FlagTips { IsSuccess = false, Msg = "该辖区已维护负责人，请勿重复维护" }, JsonRequestBehavior.AllowGet);
                         }
-                        Int32 seq = db.Query<Int32>("SELECT MAX(sortno) FROM [888_KsNorth].[dbo].[match] WHERE match_type = 'KindMatch' ").FirstOrDefault();
+                        Int32 seq = db.Query<Int32>("SELECT MAX(sortno) FROM [888_KsNorth].[dbo].[match] WHERE match_type = 'KindMatch' and  SystemCategory = @SystemCategory ",new { model.SystemCategory }).FirstOrDefault();
                         model.SortNo = seq + 1;
-                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[match] (match_type,area_id,charge_emp,Sort,SortNo,UpdateUser,UpdateTime)VALUES(@MatchType,@AreaId,@EmpNo,@Sort,@SortNo,@UpdateUser,@UpdateTime)");
+                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[match] (SystemCategory,match_type,area_id,charge_emp,Sort,SortNo,UpdateUser,UpdateTime)VALUES(@SystemCategory,@MatchType,@AreaId,@EmpNo,@Sort,@SortNo,@UpdateUser,@UpdateTime)");
                     }
                     else
                     {
-                        sql = string.Format(@" update [888_KsNorth].[dbo].[match] set area_id = @AreaId,charge_emp=@EmpNo,Sort=@Sort,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where area_id = @AreaId and match_type ='KindMatch' ");
+                        sql = string.Format(@" update [888_KsNorth].[dbo].[match] set SystemCategory=@SystemCategory,area_id = @AreaId,charge_emp=@EmpNo,Sort=@Sort,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where area_id = @AreaId and match_type ='KindMatch' ");
                     }
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
@@ -201,10 +205,9 @@ namespace _888repair.Controllers
                     foreach (var model in deleteList)
                     {
                         var deleteModel = new KindMatchModel();
-                        deleteModel.AreaId = model.AreaId;
+                        deleteModel.SystemCategory = model.SystemCategory;
                         deleteModel.MatchId = model.MatchId;
-                        deleteModel.MatchType = model.MatchType;
-                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[match]  WHERE match_id = @MatchId  and match_type = 'KindMatch' ");
+                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[match]  WHERE SystemCategory= @SystemCategory and match_id = @MatchId  and match_type = 'KindMatch' ");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);

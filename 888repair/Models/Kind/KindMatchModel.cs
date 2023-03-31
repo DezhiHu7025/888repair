@@ -31,5 +31,7 @@ namespace _888repair.Models.Kind
         public string Remark { get; set; }
 
         public Int32 SortNo { get; set; }
+
+        public string SystemCategory { get; set; }
     }
 }
