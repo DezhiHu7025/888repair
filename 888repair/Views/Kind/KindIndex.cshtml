@@ -18,12 +18,17 @@
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">系统类别</label>
-                <div class="layui-input-block">
-                    <input type="text" name="SystemCategory" id="SystemCategory" required lay-verify="required" autocomplete="off" class="layui-input">
+                <div class="layui-input-inline">
+                    <select ID="SystemCategory" name="SystemCategory">
+                        <option value=""></option>
+                        <option value="IT(资讯类)">IT(资讯类)</option>
+                        <option value="Logistics(总务后勤类)">Logistics(总务后勤类)
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">业管类型</label>
+                <label class="layui-form-label">业管类别</label>
                 <div class="layui-input-inline">
                     <input type="text" name="KindCategory" id="KindCategory" placeholder="此查询框为模糊查询……" lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
@@ -47,8 +52,14 @@
         <input type="hidden" class="form-control" disabled="disabled" id="KindID">
         <div class="layui-inline">
             <label class="layui-form-label">系统类别&nbsp;&nbsp;<label style="color:red">*</label></label>
-            <div class="layui-input-block">
-                <input type="text" name="addSystemCategory" id="addSystemCategory" style="height:38px;width:300px" autocomplete="off" lay-verify="required" class="layui-input">
+            <div class="layui-input-inline" style="height:38px;width:300px">
+                <select ID="addSystemCategory" name="addSystemCategory">
+                    <option value=""></option>
+                    <option value="IT(资讯类)">IT(资讯类)</option>
+                    <option value="Logistics(总务后勤类)">
+                        Logistics(总务后勤类)
+                    </option>
+                </select>
             </div>
         </div>
         <div class="layui-inline">
@@ -80,7 +91,9 @@
         var $ = layui.$;
         var table = layui.table;
         var form = layui.form;
-        
+
+        render();
+
         //自定义验证规则
         form.verify({
             checkSystemCategory: function (value) {
@@ -258,10 +271,11 @@
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
-            $("#addSystemCategory").val("");
+            $('select[name=addSystemCategory]').val("");
             $("#addKindCategory").val("");
             $("#addRemark").val("");
             $("#addSort").val("");
+            render();
             layer.open({
                 title: '新增业管类别',
                 area: ['55%', '30%'],
@@ -305,10 +319,11 @@
             }
 
             $("#KindID").val(selectData[0].KindID);
-            $("#addSystemCategory").val(selectData[0].SystemCategory);
+            $('select[name=addSystemCategory]').val(selectData[0].SystemCategory);
             $("#addKindCategory").val(selectData[0].KindCategory);
             $("#addRemark").val(selectData[0].Remark);
             $("#addSort").val(selectData[0].Sort);
+            render();
 
             $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
@@ -381,6 +396,14 @@
                 });
             }
         });
+
+        function render() {
+            // 封装函数-表单更新渲染
+            layui.use('form', function () {
+                var form = layui.form;
+                form.render('select');
+            })
+        }
         
     });
 </script>

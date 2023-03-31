@@ -18,8 +18,17 @@
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">系统类别</label>
-                <div class="layui-input-block">
+                @*<div class="layui-input-block">
                     <input type="text" name="SystemCategory" id="SystemCategory" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>*@
+                <div class="layui-input-inline">
+                    <select ID="SystemCategory" name="SystemCategory">
+                        <option value=""></option>
+                        <option value="IT(资讯类)">IT(资讯类)</option>
+                        <option value="Logistics(总务后勤类)">
+                            Logistics(总务后勤类)
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="layui-inline">
@@ -80,6 +89,8 @@
         var $ = layui.$;
         var table = layui.table;
         var form = layui.form;
+
+        render();
 
         form.on('submit(demo1)', function (data) {
 
@@ -345,6 +356,14 @@
                 });
             }
         });
+
+        function render() {
+            // 封装函数-表单更新渲染
+            layui.use('form', function () {
+                var form = layui.form;
+                form.render('select');
+            })
+        }
     });
 </script>
 
