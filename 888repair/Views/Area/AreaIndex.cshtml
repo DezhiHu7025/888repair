@@ -31,7 +31,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">分类1</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="Buliding" id="Buliding" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+                    <input type="text" name="Building" id="Building" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
@@ -72,7 +72,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">分类1&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-inline">
-                <input type="text" name="addBuliding" id="addBuliding" lay-verify="required" autocomplete="off" class="layui-input" style="height:38px;width:300px">
+                <input type="text" name="addBuilding" id="addBuilding" lay-verify="required" autocomplete="off" class="layui-input" style="height:38px;width:300px">
             </div>
         </div>
 
@@ -100,7 +100,7 @@
             var model = {
                 "AreaId": "",
                 "SystemCategory": "",
-                "Buliding": "",
+                "Building": "",
                 "Location": "",
                 "Permission": "",
             };
@@ -111,7 +111,7 @@
             }
 
             model.SystemCategory = $("#addSystemCategory").val();
-            model.Buliding = $("#addBuliding").val();
+            model.Building = $("#addBuilding").val();
             model.Location = $("#addLocation").val();
 
             $.ajax({
@@ -183,7 +183,7 @@
                                 { type: 'checkbox', LAY_CHECKED: false},
                                // { field: 'AreaId', title: 'AreaId' },
                                 { field: 'SystemCategory', title: '系统类别', width: 200 },
-                                { field: 'Buliding', title: '分类1', width: 400 },
+                                { field: 'Building', title: '分类1', width: 400 },
                                 { field: 'Location', title: '分类2', width: 400},
                                 { field: 'UpdateUser', title: '操作人', width: 192 },
                                 {
@@ -207,7 +207,7 @@
         function reloadDate() {
             var model = {
                 SystemCategory: $('#SystemCategory').val(),
-                Buliding: $('#Buliding').val(),
+                Building: $('#Building').val(),
                 Location: $('#Location').val(),
             }
             $.ajax({
@@ -250,7 +250,7 @@
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
             $('select[name=addSystemCategory]').val("");
-            $("#addBuliding").val("");
+            $("#addBuilding").val("");
             $("#addLocation").val("");
             render();
             layer.open({
@@ -266,9 +266,10 @@
                     submited.click();
                 },
                 btn2: function (index, layero) {
-                    $("#addSystemCategory").val("");
-                    $("#addBuliding").val("");
+                    $('select[name=addSystemCategory]').val("");
+                    $("#addBuilding").val("");
                     $("#addLocation").val("");
+                    render();
                     return false;
                 },
                 cancel: function (layero, index) {
@@ -292,7 +293,7 @@
 
             $("#AreaId").val(selectData[0].AreaId);
             $('select[name=addSystemCategory]').val(selectData[0].SystemCategory);
-            $("#addBuliding").val(selectData[0].Buliding);
+            $("#addBuilding").val(selectData[0].Building);
             $("#addLocation").val(selectData[0].Location);
             $("#addPermission").val(selectData[0].Permission);
             render();
@@ -333,7 +334,7 @@
                 var newArr = {};
                 newArr.AreaId = this.AreaId;
                 newArr.SystemCategory = this.SystemCategory;
-                newArr.Buliding = this.Buliding;
+                newArr.Building = this.Building;
                 arrays.push(newArr)
             });
             if (selectData.length ==0 ) {

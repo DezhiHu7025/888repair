@@ -20,7 +20,7 @@ namespace _888repair.Models.Area
         /// <summary>
         /// 大楼别
         /// </summary>
-        public string Buliding { get; set; }
+        public string Building { get; set; }
 
         /// <summary>
         /// 位置

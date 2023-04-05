@@ -21,12 +21,11 @@ namespace _888repair.Controllers
         public ActionResult getBuilding(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT area_id AreaId,SystemCategory,Buliding,Location FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            string sql = "SELECT distinct SystemCategory,Buliding  Building FROM[888_KsNorth].[dbo].[area] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
-                sql += " and area_id = @keyWord";
+                sql += " and Buliding = @keyWord";
             }
-            sql += " order by sortno asc";
             var list = db.Query<AreaModel>(sql, new { keyWord }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
@@ -78,6 +77,38 @@ namespace _888repair.Controllers
                 sql += " and SystemCategory = @keyWord";
             }
             var list = db.Query<DirectorModel>(sql, new { keyWord }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult getBuildingBySystemCategory(string keyWord)
+        {
+            RepairDb db = new RepairDb();
+            string sql = "SELECT distinct SystemCategory,Buliding Building FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                sql += " and SystemCategory = @keyWord";
+            }
+            var list = db.Query<AreaModel>(sql, new { keyWord }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult getLoactionByBuilding(string keyWord)
+        {
+            RepairDb db = new RepairDb();
+            string sql = "SELECT area_id AreaId,SystemCategory,Buliding,Location FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                sql += " and Buliding = @keyWord";
+            }
+            var list = db.Query<AreaModel>(sql, new { keyWord }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult getLoaction(string keyWord)
+        {
+            RepairDb db = new RepairDb();
+            string sql = "SELECT area_id AreaId,SystemCategory,Buliding,Location FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            var list = db.Query<AreaModel>(sql, new { keyWord }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
     }
