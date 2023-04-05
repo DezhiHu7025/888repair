@@ -292,10 +292,11 @@
                     submited.click();
                 },
                 btn2: function (index, layero) {
-                    $("#addSystemCategory").val("");
+                    $('select[name=addSystemCategory]').val("");
                     $("#addKindCategory").val("");
                     $("#addRemark").val("");
                     $("#addSort").val("");
+                    render();
                     return false;
                 },
                 cancel: function (layero, index) {
