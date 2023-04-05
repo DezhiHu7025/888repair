@@ -15,6 +15,15 @@
         .layui-select-disabled .layui-disabled {
             color: #000000 !important;
         }
+        .layui-form-select dl {
+            max-height: 1000%;
+            max-width: 60%;
+        }          
+        .layui-form-select dl dd, .layui-form-select dl dt {               
+            white-space: pre-wrap;             
+            overflow: visible;               
+            text-overflow: ellipsis;                      
+        }
     </style>
 </head>
 <body>
@@ -113,7 +122,7 @@
         var table = layui.table;
         var form = layui.form;
 
-        render();
+        loadOption();
 
         form.on('submit(demo1)', function (data) {
 
@@ -162,6 +171,7 @@
                     else {
                         alert(result.Msg);
                     }
+                    loadOption();
                 }
             });
             return false;
@@ -275,6 +285,7 @@
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
             $('#addKindCategory').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+            $('#addSystemCategory').removeClass("layui-disabled").removeAttr("disabled", "disabled");
             $('select[name=addOpEmpNo]').val("");
             $('select[name=addKindCategory]').val("");
             $('select[name=addSystemCategory]').val("");
@@ -297,8 +308,10 @@
                     $('select[name=addKindCategory]').val("");
                     $("#addRemark").val("");
                     $("#addSort").val("");
+                    $('select[name=addSystemCategory]').val("");
                     render();
                     return false;
+                    loadOption();
                 },
                 cancel: function (layero, index) {
                     $('#btn_add').removeClass("layui-btn-disabled").attr("disabled", false);
@@ -318,20 +331,39 @@
                 alert("请选择一条数据修改");
                 return false;
             }
-
+            console.log(selectData);
             $("#MatchId").val(selectData[0].MatchId);
-            $('select[name=addOpEmpNo]').val(selectData[0].EmpNo);
-            $('select[name=addKindCategory]').val(selectData[0].AreaId);
-            $("#addOpEmpNo").val(selectData[0].EmpNo);
-            $("#addSort").val(selectData[0].Sort);
             $("#addSystemCategory").val(selectData[0].SystemCategory);
-            $('#addKindCategory').addClass("layui-disabled").attr("disabled", "disabled");
+            $('select[name=addKindCategory]').val(selectData[0].AreaId);
+            $("#addSort").val(selectData[0].Sort);
             render();
+
+            var SystemCategory = $("#addSystemCategory").val();
+            $("#addOpEmpNo").empty();
+            $.ajax({
+                type: "post",
+                url: "@(Url.Action("getChargePersonBySystemCategory", "DDL"))",
+                data: { "keyWord": SystemCategory },
+                dataType: "json",
+                success: function (result) {
+                    $('#addOpEmpNo').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#addOpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                    }
+                    //设置选中员工姓名
+                    $('select[name=addOpEmpNo]').val(selectData[0].EmpNo);
+                    form.render();
+                }, error: function () {
+                    layer.alert('请求失败');
+                }
+            });
 
             $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", false);
+            $('#addKindCategory').addClass("layui-disabled").attr("disabled", "disabled");
+            $('#addSystemCategory').addClass("layui-disabled").attr("disabled", "disabled");
 
 
             layer.open({
@@ -391,51 +423,50 @@
             }
         });
 
-        $(document).ready(
-            function () {
-                $("#OpKindCategory").empty();
-                $.ajax({
-                    url: "@(Url.Action("getKind", "DDL"))",
-                    type: "POST",
-                    dataType: 'json',
-                    success: function (result) {
-                        $('#OpKindCategory').append(new Option());
-                        for (let i = 0, len = result.length; i < len; i++) {
-                            $("#OpKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
-                        }
-                        //进行渲染
-                        layui.use('form', function () {
-                            var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
-                            form.render();
-                        });
-                    },
-                    error: function (error) {
-                        console.log(error)
+        function loadOption() {
+            $("#OpKindCategory").empty();
+            $("#addKindCategory").empty();
+            $.ajax({
+                url: "@(Url.Action("getKind", "DDL"))",
+                type: "POST",
+                dataType: 'json',
+                success: function (result) {
+                    $('#OpKindCategory').append(new Option());
+                    $('#addKindCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
+                        $("#addKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
                     }
-                });
-
-                $("#OpEmpNo").empty();
-                $.ajax({
-                    url: "@(Url.Action("getChargePerson", "DDL"))",
-                    type: "POST",
-                    dataType: 'json',
-                    success: function (result) {
-                        $('#OpEmpNo').append(new Option());
-                        for (let i = 0, len = result.length; i < len; i++) {
-                            $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
-                        }
-                        //进行渲染
-                        layui.use('form', function () {
-                            var form = layui.form;
-                            form.render();
-                        });
-                    },
-                    error: function (error) {
-                        console.log(error)
-                    }
-                });
+                    layui.use('form', function () {
+                        var form = layui.form; 
+                        form.render();
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
             });
 
+             $("#OpEmpNo").empty();
+             $.ajax({
+                 url: "@(Url.Action("getChargePerson", "DDL"))",
+                 type: "POST",
+                 dataType: 'json',
+                 success: function (result) {
+                     $('#OpEmpNo').append(new Option());
+                     for (let i = 0, len = result.length; i < len; i++) {
+                         $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                     }
+                     layui.use('form', function () {
+                         var form = layui.form;
+                         form.render();
+                     });
+                 },
+                 error: function (error) {
+                     console.log(error)
+                 }                
+             });                
+        }
 
         $("#checkSC").on('click', function () {
             if ($("#addSystemCategory").val() == null || $("#addSystemCategory").val() == "") {
@@ -575,6 +606,47 @@
                         layer.alert('请求失败');
                     }
                 });
+            }           
+        })
+
+        form.on('select(OpSystemCategory)', function (data) {
+            $("#OpKindCategory").empty();
+            $("#OpEmpNo").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpKindCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
+                    }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+
+                 $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getChargePersonBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpEmpNo').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                        }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                 });
             }           
         })
 

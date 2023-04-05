@@ -346,7 +346,7 @@
             $('select[name=addLocation]').val(selectData[0].AreaId);
             $("#addSort").val(selectData[0].Sort);
             render();
-             var SystemCategory = $("#addSystemCategory").val();
+            var SystemCategory = $("#addSystemCategory").val();
             $("#addOpEmpNo").empty();
             $.ajax({
                 type: "post",
@@ -393,7 +393,6 @@
                     $('#btn_del').removeClass("layui-btn-disabled").attr("disabled", false);
                     $('#btn_search').removeClass("layui-btn-disabled").attr("disabled", false);
                     layer.closeAll();
-                    $(document).ready().re
                 }
             });
         });
