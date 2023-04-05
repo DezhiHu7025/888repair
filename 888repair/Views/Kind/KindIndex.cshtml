@@ -10,6 +10,10 @@
         body {
             padding: 32px; /*overflow-y: scroll;*/
         }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
     </style>
 </head>
 <body>
@@ -330,6 +334,7 @@
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#addSystemCategory').addClass("layui-disabled").attr("disabled", "disabled");
 
 
             layer.open({
