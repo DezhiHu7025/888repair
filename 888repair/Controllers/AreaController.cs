@@ -88,7 +88,24 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
+                    string Msg = null;
                     var modelList = new List<AreaModel>();
+                    foreach (var model in deleteList)
+                    {
+                        var deleteModel = new AreaModel();
+                        deleteModel.AreaId = model.AreaId;
+                        string checkSql = "SELECT * FROM  [888_KsNorth].[dbo].match WHERE match_type = 'AreaMatch' AND area_id = @AreaId ";
+                        var list = db.Query<AreaModel>(checkSql, new { AreaId = model.AreaId });
+                        if (list.Count() != 0)
+                        {
+                            Msg += model.Building+"  ";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Msg))
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = Msg + "存在对应的辖区配对，无法删除" }, JsonRequestBehavior.AllowGet);
+
+                    }
                     foreach (var model in deleteList)
                     {
                         var deleteModel = new AreaModel();
@@ -140,11 +157,11 @@ namespace _888repair.Controllers
 		                                                  LEFT JOIN [888_KsNorth].[dbo].[charge] c
                                                          ON a.charge_emp = c.EmpNo
                                                  WHERE 1 = 1 and match_type= 'AreaMatch' ");
-                    if (!string.IsNullOrEmpty(model.SystemCategory)) 
+                    if (!string.IsNullOrEmpty(model.SystemCategory))
                     {
                         sql += " and a.SystemCategory = @SystemCategory ";
                     }
-                    if (!string.IsNullOrEmpty(model.Building)) 
+                    if (!string.IsNullOrEmpty(model.Building))
                     {
                         sql += " and b.Buliding = @Building ";
                     }

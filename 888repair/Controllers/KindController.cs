@@ -83,7 +83,23 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    var modelList = new List<KindModel>();
+                    string Msg = null;
+                    foreach (var model in deleteList)
+                    {
+                        var deleteModel = new KindModel();
+                        deleteModel.KindID = model.KindID;
+                        string checkSql = "SELECT * FROM  [888_KsNorth].[dbo].match WHERE match_type = 'KindMatch' AND area_id = @KindID ";
+                        var list = db.Query<KindModel>(checkSql, new { KindID = model.KindID });
+                        if (list.Count() != 0)
+                        {
+                            Msg += model.KindCategory + "  ";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Msg))
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = Msg + "存在对应的业管配对，无法删除" }, JsonRequestBehavior.AllowGet);
+
+                    }
                     foreach (var model in deleteList)
                     {
                         var deleteModel = new KindModel();
