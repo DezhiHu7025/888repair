@@ -134,6 +134,7 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KindController.cs" />
+    <Compile Include="Controllers\RepairController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Db\IDbOperation.cs" />
     <Compile Include="Db\RepairDb.cs" />
@@ -196,6 +197,9 @@
     <Content Include="Views\Kind\KindIndex.cshtml" />
     <Content Include="Views\Area\AreaMatchIndex.cshtml" />
     <Content Include="Views\Kind\KindMatchIndex.cshtml" />
+    <Content Include="Views\Repair\RepairIndex.cshtml" />
+    <Content Include="Views\Repair\LogRepairVw.cshtml" />
+    <Content Include="Views\Repair\ITRepairVw.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -111,5 +111,18 @@ namespace _888repair.Controllers
             var list = db.Query<AreaModel>(sql, new { keyWord }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult getKindByKindCategory(string keyWord)
+        {
+            RepairDb db = new RepairDb();
+            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsNorth].[dbo].[kind] where 1=1 ";
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                sql += " and KindCategory = @keyWord";
+            }
+            sql += " order by sort asc";
+            var list = db.Query<KindModel>(sql, new { keyWord }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
     }
 }

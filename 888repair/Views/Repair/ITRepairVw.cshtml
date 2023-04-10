@@ -1,0 +1,519 @@
+﻿
+@{
+    ViewBag.Title = "ITRepairVw";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>填写问题</title>
+    <style>
+        body {
+            padding: 32px; /*overflow-y: scroll;*/
+        }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
+
+        .layui-form-select dl {
+            max-height: 1000%;
+            max-width: 60%;
+        }
+
+            .layui-form-select dl dd, .layui-form-select dl dt {
+                white-space: pre-wrap;
+                overflow: visible;
+                text-overflow: ellipsis;
+            }
+    </style>
+</head>
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>Fill in the problem 填写问题</legend>
+    </fieldset>
+    <table style="border:medium double #000000;border-spacing: 1px;" border="1">
+        <tr>
+            <td>
+                EmpNo(员工编号)：
+            </td>
+            <td>
+                Name(员工姓名)：
+            </td>
+            <td>
+                Category(系统类别)：
+            </td>
+        </tr>
+        <tr>
+            <td>
+                H22080031
+            </td>
+            <td>
+                胡德知(dezhi_hu)
+            </td>
+            <td>
+                IT(资讯类)
+            </td>
+        </tr>
+    </table>
+    <br />
+    <a type="button" class="layui-btn" href="javascript:;"><i class="layui-icon"></i>Add New Problem 新增问题</a>
+    <br />  <br />  <br />
+    <hr />
+    <div id="fillQuestion">
+        <form class="layui-form" action="">
+            <br />
+            <label style="color:red;font-size:large">
+                Do not upload photos with the same name, or they will be overwritten
+                /
+                ※上传照片请勿有相同名称，不然会覆盖之前的上传照片
+            </label>
+            <br /><br /><br />
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：</label>
+                    <div class="layui-input-inline" style="height:38px;width:300px">
+                        <select ID="OpAreaCategory" name="OpAreaCategory" lay-filter="OpAreaCategory" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline">Location(问题的区域)：</label>
+                    <div class="layui-input-inline" style="height:38px;width:300px" id="checkSC" lay-verify="required">
+                        <select ID="OpLocation" name="OpLocation">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-input-inline">RoomNum(问题的空间编号)：</label>
+                <div class="layui-input-inline" style="height:38px;width:300px">
+                    <input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input demo-phone">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline">Description(問題描述)：</label>
+                    <div class="layui-input-inline">
+                        <textarea id="Description" name="Description" style="width:450%;height:10%" lay-verify="required" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline"></label>
+                    Only one question is filled in this column. If there are multiple questions, please click the Add New Question button again<br />
+                    本栏位仅填写一项问题，如有多项问题需回报，请填报一项问题后，再次点选 新增问题
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：</label>
+                    <div class="layui-input-inline" style="height:38px;width:300px" lay-verify="required">
+                        <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline" id="remark" style="height:38px;width:400px"></label>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline" style="width:200%">
+                    <label class="layui-form-label layui-input-inline">Damage Reason(损坏原因):</label>
+                    <div class="layui-input-inline" style="width:60%" lay-verify="required">
+                        <input type="radio" name="DamageReason" value="自然" title="natural cause(自然)" checked="">
+                        <input type="radio" name="DamageReason" value="人为" title="human causes(人为)">
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="height:18px" pane="">
+                <div class="layui-inline" style="width:200%">
+                    <label class="layui-form-label layui-input-inline"></label>
+                    <div class="layui-input-inline" style="width:60%;margin-left:0">
+                        <label class="layui-form-label layui-input-inline">Mon(period)星期一(节次)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="like1[1One]" lay-skin="primary" title="One">
+                        <input type="checkbox" name="like1[1Two]" lay-skin="primary" title="Two">
+                        <input type="checkbox" name="like1[1Three]" lay-skin="primary" title="Three">
+                        <input type="checkbox" name="like1[1Four]" lay-skin="primary" title="Four">
+                        <input type="checkbox" name="like1[1Five]" lay-skin="primary" title="Five">
+                        <input type="checkbox" name="like1[1Six]" lay-skin="primary" title="Six">
+                        <input type="checkbox" name="like1[1Seven]" lay-skin="primary" title="Seven">
+                        <input type="checkbox" name="like1[1Eight]" lay-skin="primary" title="Eight">
+                        <input type="checkbox" name="like1[1Nine]" lay-skin="primary" title="Nine">
+                        <input type="checkbox" name="like1[1OT]" lay-skin="primary" title="Other Time(其他时间)">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="height:18px" pane="">
+                <div class="layui-inline" style="width:200%">
+                    <label class="layui-form-label layui-input-inline"></label>
+                    <div class="layui-input-inline" style="width:60%;margin-left:0">
+                        <label class="layui-form-label layui-input-inline">Mon(period)星期二(节次)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="like1[2One]" lay-skin="primary" title="One">
+                        <input type="checkbox" name="like1[2Two]" lay-skin="primary" title="Two">
+                        <input type="checkbox" name="like1[2Three]" lay-skin="primary" title="Three">
+                        <input type="checkbox" name="like1[2Four]" lay-skin="primary" title="Four">
+                        <input type="checkbox" name="like1[2Five]" lay-skin="primary" title="Five">
+                        <input type="checkbox" name="like1[2Six]" lay-skin="primary" title="Six">
+                        <input type="checkbox" name="like1[2Seven]" lay-skin="primary" title="Seven">
+                        <input type="checkbox" name="like1[2Eight]" lay-skin="primary" title="Eight">
+                        <input type="checkbox" name="like1[2Nine]" lay-skin="primary" title="Nine">
+                        <input type="checkbox" name="like1[2OT]" lay-skin="primary" title="Other Time(其他时间)">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="height:18px" pane="">
+                <div class="layui-inline" style="width:200%">
+                    <label class="layui-form-label layui-input-inline"></label>
+                    <div class="layui-input-inline" style="width:60%;margin-left:0">
+                        <label class="layui-form-label layui-input-inline">Mon(period)星期三(节次)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="like1[3One]" lay-skin="primary" title="One">
+                        <input type="checkbox" name="like1[3Two]" lay-skin="primary" title="Two">
+                        <input type="checkbox" name="like1[3Three]" lay-skin="primary" title="Three">
+                        <input type="checkbox" name="like1[3Four]" lay-skin="primary" title="Four">
+                        <input type="checkbox" name="like1[3Five]" lay-skin="primary" title="Five">
+                        <input type="checkbox" name="like1[3Six]" lay-skin="primary" title="Six">
+                        <input type="checkbox" name="like1[3Seven]" lay-skin="primary" title="Seven">
+                        <input type="checkbox" name="like1[3Eight]" lay-skin="primary" title="Eight">
+                        <input type="checkbox" name="like1[3Nine]" lay-skin="primary" title="Nine">
+                        <input type="checkbox" name="like1[3OT]" lay-skin="primary" title="Other Time(其他时间)">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="height:18px" pane="">
+                <div class="layui-inline" style="width:200%">
+                    <label class="layui-form-label layui-input-inline">repair time(维护时段)：</label>
+                    <div class="layui-input-inline" style="width:60%;margin-left:0">
+                        <label class="layui-form-label layui-input-inline">Mon(period)星期四(节次)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="like1[4One]" lay-skin="primary" title="One">
+                        <input type="checkbox" name="like1[4Two]" lay-skin="primary" title="Two">
+                        <input type="checkbox" name="like1[4Three]" lay-skin="primary" title="Three">
+                        <input type="checkbox" name="like1[4Four]" lay-skin="primary" title="Four">
+                        <input type="checkbox" name="like1[4Five]" lay-skin="primary" title="Five">
+                        <input type="checkbox" name="like1[4Six]" lay-skin="primary" title="Six">
+                        <input type="checkbox" name="like1[4Seven]" lay-skin="primary" title="Seven">
+                        <input type="checkbox" name="like1[4Eight]" lay-skin="primary" title="Eight">
+                        <input type="checkbox" name="like1[4Nine]" lay-skin="primary" title="Nine">
+                        <input type="checkbox" name="like1[4OT]" lay-skin="primary" title="Other Time(其他时间)">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="height:18px" pane="">
+                <div class="layui-inline" style="width:200%">
+                    <label class="layui-form-label layui-input-inline"></label>
+                    <div class="layui-input-inline" style="width:60%;margin-left:0">
+                        <label class="layui-form-label layui-input-inline">Mon(period)星期五(节次)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="like1[5One]" lay-skin="primary" title="One">
+                        <input type="checkbox" name="like1[5Two]" lay-skin="primary" title="Two">
+                        <input type="checkbox" name="like1[5Three]" lay-skin="primary" title="Three">
+                        <input type="checkbox" name="like1[5Four]" lay-skin="primary" title="Four">
+                        <input type="checkbox" name="like1[5Five]" lay-skin="primary" title="Five">
+                        <input type="checkbox" name="like1[5Six]" lay-skin="primary" title="Six">
+                        <input type="checkbox" name="like1[5Seven]" lay-skin="primary" title="Seven">
+                        <input type="checkbox" name="like1[5Eight]" lay-skin="primary" title="Eight">
+                        <input type="checkbox" name="like1[5Nine]" lay-skin="primary" title="Nine">
+                        <input type="checkbox" name="like1[5OT]" lay-skin="primary" title="Other Time(其他时间)">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="height:18px" pane="">
+                <div class="layui-inline" style="width:200%">
+                    <label class="layui-form-label layui-input-inline"></label>
+                    <div class="layui-input-inline" style="width:60%;margin-left:0">
+                        <label class="layui-form-label layui-input-inline">Holiday(假日)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="like1[HM]" lay-skin="primary" title="Holiday maintenance(假日維修)">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="height:18px" pane="">
+                <div class="layui-inline" style="width:200%">
+                    <label class="layui-form-label layui-input-inline"></label>
+                    <div class="layui-input-inline" style="width:60%;margin-left:0">
+                        <label class="layui-form-label layui-input-inline">Any Time(无特定时段)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="like1[AT]" lay-skin="primary" title="Any Time(無特定時段)">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-input-inline">Tel-Ext/联络分机：</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input demo-phone">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-input-inline">Upload photos(照片上传)：</label>
+                <div class="layui-input-inline" style="width:80%">
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn" id="testList">选择多文件</button>
+                        <div class="layui-upload-list" style="max-width: 1000px;">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col>
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="150">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>文件名</th>
+                                        <th>预览图</th>
+                                        <th>大小</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="demoList"></tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+                    </div>
+                    <label>
+                        Photos help with processing speed, file size up to 1MB, format qualified JPG, JPEG, PNG, GIF
+                        <br />
+                        ※照片有助于处理速度，档案大小最多为 1MB(1024KB)，格式限定JPG、JPEG、PNG、GIF
+                    </label>
+                    <br />
+                    <br />
+                    <label style="color:red">
+                        Do not upload photos with the same name, or they will be overwritten
+                        <br />
+                        ※上传照片请勿有相同名称，不然会覆盖之前的上传照片
+                    </label>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+    </div>
+</body>
+<script>
+    layui.use(['upload', 'element', 'layer','form', 'util', 'laydate'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var util = layui.util;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+        var element = layui.element;
+
+        reloadDate();
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        ////自定义验证规则
+        //form.verify({
+        //    title: function (value) {
+        //        if (value.length < 5) {
+        //            return '标题至少得5个字符啊';
+        //        }
+        //    }
+        //    , pass: [
+        //        /^[\S]{6,12}$/
+        //        , '密码必须6到12位，且不能出现空格'
+        //    ]
+        //});
+
+
+        ////提交事件
+        //form.on('submit(demo1)', function (data) {
+        //    alert(JSON.stringify(data.field), {
+        //        title: '最终的提交信息'
+        //    })
+        //    return false;
+        //});
+
+        ////表单取值
+        //layui.$('#LAY-component-form-getval').on('click', function () {
+        //    var data = form.val('example');
+        //    alert(JSON.stringify(data));
+        //});
+
+        function reloadDate() {
+            //问题类别(业管 kind)
+            $("#OpKindCategory").empty();
+            $.ajax({
+                type: "post",
+                url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                data: { "keyWord": "IT(资讯类)" },
+                dataType: "json",
+                success: function (result) {
+                    $('#OpKindCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpKindCategory").append(`<option value="${result[i].KindCategory}">${result[i].KindCategory}</option>`);
+                    }
+                    form.render();
+                }, error: function () {
+                    layer.alert('请求失败');
+                }
+            });
+
+            //问题的类别( 辖区 area Building)
+            $("#OpAreaCategory").empty();
+            $.ajax({
+                type: "post",
+                url: "@(Url.Action("getBuildingBySystemCategory", "DDL"))",
+                data: { "keyWord": "IT(资讯类)" },
+                dataType: "json",
+                success: function (result) {
+                    $('#OpAreaCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpAreaCategory").append(`<option value="${result[i].Building}">${result[i].Building}</option>`);
+                    }
+                    form.render();
+                }, error: function () {
+                    layer.alert('请求失败');
+                }
+            });
+        }
+
+        $("#checkSC").on('click', function () {
+            if ($("#OpAreaCategory").val() == null || $("#OpAreaCategory").val() == "") {
+                $("#OpLocation").empty();
+                form.render();
+                alert("请先选择 Category(问题的类别) ");
+            }
+        });
+
+        form.on('select(OpAreaCategory)', function (data) {
+            $("#OpLocation").empty();
+            var AreaCategory = data.value;
+            if (OpAreaCategory == null || OpAreaCategory == "") {
+                $("#OpLocation").empty();
+                form.render();
+                return false;
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getLoactionByBuilding", "DDL"))",
+                    data: { "keyWord": AreaCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpLocation').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpLocation").append(`<option value="${result[i].Location}">${result[i].Location}</option>`);
+                        }
+                        if (len = result.length == 1) {
+                            //设置选中数据
+                            $('select[name=OpLocation]').val(result[0].Location);
+                        }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        })
+
+        form.on('select(OpKindCategory)', function (data) {
+            $("#remark").html("");
+            var KindCategory = data.value;
+            if (OpKindCategory == null || OpKindCategory == "") {
+                return false;
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getKindByKindCategory", "DDL"))",
+                    data: { "keyWord": KindCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $("#remark").html("");
+                        if (!(result[0].Remark == null || result[0].Remark =='')) {
+                            //设置选中数据
+                            $("#remark").html("备注：" + result[0].Remark);
+                        }
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        })
+
+        //演示多文件列表
+        var uploadListIns = upload.render({
+            elem: '#testList'
+            , elemList: $('#demoList') //列表元素对象
+            , url: '' //此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+            , accept: 'file'
+            , multiple: true
+            , number: 3
+            , size: 1024 //限制文件大小，单位 KB
+            , auto: false
+            , bindAction: '#testListAction'
+            , choose: function (obj) {
+                var that = this;
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function (index, file, result) {
+                    var tr = $(['<tr id="upload-' + index + '">'
+                        , '<td>' + file.name + '</td>'
+                        , '<td>' + '<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">' + '</td>'
+                        , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
+                        , '<td>'
+                        , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                        , '</td>'
+                        , '</tr>'].join(''));
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function () {
+                        obj.upload(index, file);
+                    });
+
+                    //删除
+                    tr.find('.demo-delete').on('click', function () {
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    that.elemList.append(tr);
+                    element.render('progress'); //渲染新加的进度条组件
+                });
+            }
+            , done: function (res, index, upload) { //成功的回调
+                var that = this;
+                //if(res.code == 0){ //上传成功
+                var tr = that.elemList.find('tr#upload-' + index)
+                    , tds = tr.children();
+                tds.eq(3).html(''); //清空操作
+                delete this.files[index]; //删除文件队列已经上传成功的文件
+                return;
+                //}
+                this.error(index, upload);
+            }
+            , allDone: function (obj) { //多文件上传完毕后的状态回调
+                console.log(obj)
+            }
+            , error: function (index, upload) { //错误回调
+                var that = this;
+                var tr = that.elemList.find('tr#upload-' + index)
+                    , tds = tr.children();
+                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+    });
+</script>
+

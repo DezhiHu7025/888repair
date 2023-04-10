@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "RepairIndex";
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>填写问题</title>
+</head>
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>Fill in the problem 填写问题</legend>
+    </fieldset>
+
+    <div class="layui-bg-gray" style="padding: 30px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6" id="LogQuestion">
+                <div class="layui-panel layui-bg-green">
+                    <div style="padding: 50px 30px;font-size:24px; color:Black;margin-left:25%">Logistics总务后勤类</div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-panel layui-bg-red" id="ITQuetion">
+                    <div style="padding: 50px 30px;font-size:24px; color:Black;margin-left:35%">IT资讯类</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $("#LogQuestion").on("click", function () {
+        var url = "@(Url.Action("LogRepairVw", "Repair"))";
+        $("#content").load(url);
+    });
+
+    $("#ITQuetion").on("click", function () {
+        var url = "@(Url.Action("ITRepairVw", "Repair"))";
+        $("#content").load(url);
+    });
+</script>
+
+
+
