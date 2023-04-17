@@ -11,7 +11,10 @@ namespace _888repair.Models.State
         /// id
         /// </summary>
         public string ID { get; set; }
-        
+
+        public string SystemCategory { get; set; }
+
+
         public string StatusValue { get; set; }
 
         public string StatusText { get; set; }

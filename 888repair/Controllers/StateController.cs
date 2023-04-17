@@ -30,11 +30,15 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@"SELECT state_id ID,StatusValue,StatusText,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[state]
+                    string sql = string.Format(@"SELECT SystemCategory,state_id ID,StatusValue,StatusText,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[state]
                                                 where 1=1");
                     if (!string.IsNullOrEmpty(model.StatusText))
                     {
                         sql += " and StatusText like '%" + model.StatusText + "%'";
+                    }
+                    if (!string.IsNullOrEmpty(model.SystemCategory))
+                    {
+                        sql += " and SystemCategory =@SystemCategory ";
                     }
                     sql += " ORDER BY ID asc";
 
@@ -59,7 +63,7 @@ namespace _888repair.Controllers
                     model.UpdateTime = DateTime.Now;
                     if (string.IsNullOrEmpty(model.ID))
                     {
-                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[state] (StatusValue,StatusText,UpdateUser,UpdateTime)VALUES(@StatusValue,@StatusText,@UpdateUser,@UpdateTime)");
+                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[state] (SystemCategory,StatusValue,StatusText,UpdateUser,UpdateTime)VALUES(@SystemCategory,@StatusValue,@StatusText,@UpdateUser,@UpdateTime)");
                     }
                     else
                     {

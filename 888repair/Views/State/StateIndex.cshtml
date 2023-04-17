@@ -10,16 +10,34 @@
         body {
             padding: 32px; /*overflow-y: scroll;*/
         }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
     </style>
 </head>
 <body>
     <hr>
     <form class="layui-form layui-form-pane" action="">
         <div class="layui-form-item">
-            <label class="layui-form-label">状态名称</label>
-            <div class="layui-input-inline">
-                <input type="text" name="status" id="status" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+            <div class="layui-inline">
+                <label class="layui-form-label">系统类别</label>
+                <div class="layui-input-inline">
+                    <select ID="SystemCategory" name="SystemCategory">
+                        <option value=""></option>
+                        <option value="IT(资讯类)">IT(资讯类)</option>
+                        <option value="Logistics(总务后勤类)">
+                            Logistics(总务后勤类)
+                        </option>
+                    </select>
+                </div>
             </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">状态名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="status" id="status" placeholder="此查询框为模糊查询……" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>  
         </div>
     </form>
     <div class="layui-btn-group" style="margin-left:1100px">
@@ -34,11 +52,23 @@
 </body>
 
 <div class="layui-form" style="display:none" id="window">
-    <br /><br /><br /><br />
+    <br /><br />
     <form class="layui-form-item">
         <div class="layui-inline">
             <input type="hidden" class="form-control" disabled="disabled" id="addID">
-
+            <label class="layui-form-label">系统类别&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline">
+                <select ID="addSystemCategory" name="addSystemCategory" lay-verify="required">
+                    <option value=""></option>
+                    <option value="IT(资讯类)">IT(资讯类)</option>
+                    <option value="Logistics(总务后勤类)">
+                        Logistics(总务后勤类)
+                    </option>
+                </select>
+            </div>
+        </div>
+        <br /> <br />
+        <div class="layui-inline">
             <label class="layui-form-label">状态代码&nbsp;&nbsp;<label style="color:red">*</label></label>
             <div class="layui-input-block">
                 <input type="text" name="addStatusValue" id="addStatusValue" lay-verify="required" autocomplete="off" class="layui-input">
@@ -61,12 +91,21 @@
         var table = layui.table;
         var form = layui.form;
 
+        render();
+
         form.on('submit(demo1)', function (data) {
             var model = {
-                "ID": $("#addID").val(),
+                "ID": "",
+                "SystemCategory": $("#addSystemCategory").val(),
                 "StatusValue": $("#addStatusValue").val(),
                 "StatusText": $("#addStatusText").val(),
             };
+
+            var selectData = layui.table.checkStatus('statustable').data;
+            if (selectData.length == 1) {
+                model.ID = $("#addID").val();
+            }
+
             $.ajax({
                 type: 'post',
                 url: "@(Url.Action("editStatus", "State"))",
@@ -135,6 +174,7 @@
                             , cols: [[
                                 { type: 'checkbox', LAY_CHECKED: false},
                                 //{ field: 'ID', title: 'ID' },
+                                { field: 'SystemCategory', title: '系统类别', sort: true },
                                 { field: 'StatusValue', title: '状态代码', sort: true},
                                 { field: 'StatusText', title: '状态名称',sort:true},
                                 { field: 'UpdateUser', title: '操作人', sort: true},
@@ -186,12 +226,23 @@
         });
 
         $('#btn_add').click(function () {
+
+            var selectData = layui.table.checkStatus('statustable').data;
+            var arrays = new Array();
+            if (selectData.length != 0) {
+                alert("新增时请勿选择数据");
+                return false;
+            }
+
             $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
+            $('#addSystemCategory').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+            $('select[name=addSystemCategory]').val("");
             $("#addStatusValue").val("");
             $("#addStatusText").val("");
+            render();
             layer.open({
                 title: '新增状态',
                 area: ['40%','30%'],
@@ -205,8 +256,10 @@
                     submited.click();
                 },
                 btn2: function (index, layero) {
+                    $('select[name=addSystemCategory]').val("");
                     $("#addStatusValue").val("");
                     $("#addStatusText").val("");
+                    render();
                     return false;
                 },
                 cancel: function (layero, index) {
@@ -222,7 +275,6 @@
         $('#btn_edit').click(function () {
 
             var selectData = layui.table.checkStatus('statustable').data;
-            console.log(selectData);
             var arrays = new Array();
             if (selectData.length != 1) {
                 alert("请选择一条数据修改");
@@ -232,12 +284,14 @@
             $("#addID").val(selectData[0].ID);
             $("#addStatusValue").val(selectData[0].StatusValue);
             $("#addStatusText").val(selectData[0].StatusText);
+            $('select[name=addSystemCategory]').val(selectData[0].SystemCategory);
+            render();
 
             $('#btn_add').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_edit').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_del').addClass("layui-btn-disabled").attr("disabled", true);
             $('#btn_search').addClass("layui-btn-disabled").attr("disabled", true);
-
+            $('#addSystemCategory').addClass("layui-disabled").attr("disabled", "disabled");
 
             layer.open({
                 title: '修改状态',
@@ -297,6 +351,14 @@
                 });
             }
         });
+
+        function render() {
+            // 封装函数-表单更新渲染
+            layui.use('form', function () {
+                var form = layui.form;
+                form.render('select');
+            })
+        }
     });
 </script>
 
