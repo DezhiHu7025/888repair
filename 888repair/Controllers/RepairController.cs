@@ -72,9 +72,10 @@ namespace _888repair.Controllers
                                                 FROM[888_KsNorth].[dbo].[match] a
                                                 LEFT JOIN[888_KsNorth].[dbo].[charge] b
                                                 ON a.charge_emp = b.EmpNo
-                                                WHERE match_type = 'AreaMatch'
-                                                      AND area_id = @AreaId
-                                                      AND sort = '1' ";
+                                                WHERE a.match_type = 'AreaMatch'
+                                                      AND a.SystemCategory = 'IT(资讯类)'
+                                                      AND a.area_id = @AreaId
+                                                      AND a.sort = '1' ";
                         chargeModel = db.Query<DirectorModel>(findChargeSql, new { AreaId = model.AreaId }).FirstOrDefault();
                         model.ChargeEmpno = chargeModel.EmpNo;
                         model.ChargeEmpname = chargeModel.FullName;
@@ -86,14 +87,24 @@ namespace _888repair.Controllers
                                                 FROM[888_KsNorth].[dbo].[match] a
                                                 LEFT JOIN[888_KsNorth].[dbo].[charge] b
                                                 ON a.charge_emp = b.EmpNo
-                                                WHERE match_type = 'KindMatch'
-                                                      AND area_id = @AreaId
-                                                      AND sort = '1' ";
-                        chargeModel = db.Query<DirectorModel>(findChargeSql, new { AreaId = model.AreaId }).FirstOrDefault();
+                                                WHERE a.match_type = 'KindMatch'
+                                                      AND a.SystemCategory = 'Logistics(总务后勤类)'
+                                                      AND a.area_id = @KindId
+                                                      AND a.sort = '1' ";
+                        chargeModel = db.Query<DirectorModel>(findChargeSql, new { KindId = model.KindId }).FirstOrDefault();
                     }
 
                     if (chargeModel == null)
                     {
+                        if (!string.IsNullOrEmpty(model.PhotoPath))
+                        {
+                            FileUploadService upfile = new FileUploadService();
+                            string result = upfile.ITRepairPicDelete(model.PhotoPath);
+                            if (result != "OK")
+                            {
+                                return Json(new FlagTips { IsSuccess = false, Msg = "图片处理发生异常，请刷新页面重新提交表单" });
+                            }
+                        }
                         return Json(new FlagTips { IsSuccess = false, Msg = "负责人抓取异常，请联系资讯" });
 
                     }
@@ -112,11 +123,14 @@ namespace _888repair.Controllers
             }
             catch (Exception ex)
             {
-                FileUploadService upfile = new FileUploadService();
-                string result = upfile.ITRepairPicDelete(model.PhotoPath);
-                if (result != "OK")
+                if (!string.IsNullOrEmpty(model.PhotoPath))
                 {
-                    return Json(new FlagTips { IsSuccess = false, Msg = "图片处理发生异常，请刷新页面重新提交表单" });
+                    FileUploadService upfile = new FileUploadService();
+                    string result = upfile.ITRepairPicDelete(model.PhotoPath);
+                    if (result != "OK")
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = "图片处理发生异常，请刷新页面重新提交表单" });
+                    }
                 }
                 return Json(new FlagTips { IsSuccess = false, Msg = ex.Message });
             }

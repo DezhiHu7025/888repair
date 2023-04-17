@@ -301,7 +301,7 @@
             <div class="layui-form-item">
                 <div class="layui-input-block"  style="margin-left:40%">
                     <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="sendout">送出 Send out</button>
-                    <button type="button" class="layui-btn">返回 Back</button>
+                    <button type="button" id="btn_back" class="layui-btn">返回 Back</button>
                 </div>
             </div>
 
@@ -636,6 +636,10 @@
             }
         });
 
+         $("#btn_back").on("click", function () {
+             var url = "@(Url.Action("RepairIndex", "Repair"))";
+             $("#content").load(url);
+        });
     });
 </script>
 
