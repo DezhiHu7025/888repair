@@ -5,6 +5,7 @@ using _888repair.Service;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -76,9 +77,7 @@ namespace _888repair.Controllers
                                                       AND a.SystemCategory = 'IT(资讯类)'
                                                       AND a.area_id = @AreaId
                                                       AND a.sort = '1' ";
-                        chargeModel = db.Query<DirectorModel>(findChargeSql, new { AreaId = model.AreaId }).FirstOrDefault();
-                        model.ChargeEmpno = chargeModel.EmpNo;
-                        model.ChargeEmpname = chargeModel.FullName;
+                        chargeModel = db.Query<DirectorModel>(findChargeSql, new { AreaId = model.AreaId }).FirstOrDefault();                       
                     }
                     else if (model.SystemCategory == "Logistics(总务后勤类)")
                     {
@@ -93,7 +92,6 @@ namespace _888repair.Controllers
                                                       AND a.sort = '1' ";
                         chargeModel = db.Query<DirectorModel>(findChargeSql, new { KindId = model.KindId }).FirstOrDefault();
                     }
-
                     if (chargeModel == null)
                     {
                         if (!string.IsNullOrEmpty(model.PhotoPath))
@@ -108,6 +106,10 @@ namespace _888repair.Controllers
                         return Json(new FlagTips { IsSuccess = false, Msg = "负责人抓取异常，请联系资讯" });
 
                     }
+
+                    model.ChargeEmpno = chargeModel.EmpNo;
+                    model.ChargeEmpname = chargeModel.FullName;
+
                     sql = @"insert into [888_KsNorth].[dbo].[record] (repair_id,area_id,kind_id,SystemCategory,Building,Loaction,
                                                charge_empno,charge_empname,Category,ResponseContent,ReplyContent,Status,CreatTime,
                                                PhotoPath,RoomNum,repairTime,Telephone,DamageReason,DamageClass,DamageName,ResponseEmpno,
@@ -146,11 +148,21 @@ namespace _888repair.Controllers
             string Stu_Empno = "H22080031";
             if (httpPostedFileBase != null)
             {
-                FileUploadService upfile = new FileUploadService();
-                var uploadModel = upfile.FileLoad(httpPostedFileBase, Stu_Empno);
-                if (!uploadModel.IsSuccess)
+                try
                 {
-                    return Json(new FlagTips { IsSuccess = false, Msg = "照片上传失败 Photo upload failed" });
+                    string fileName = Path.GetFileName(httpPostedFileBase.FileName);//原始文件名称
+                    if (!Directory.Exists(Server.MapPath("~/UploadFile")))
+                    {
+                        Directory.CreateDirectory(Server.MapPath("~/UploadFile"));
+                    }
+                    string prefix = DateTime.Now.ToString("yyyyMMdd_") + Stu_Empno + "_";
+                    fileName = prefix + fileName;
+                    var path = Path.Combine(Server.MapPath("~/UploadFile"), fileName);
+                    httpPostedFileBase.SaveAs(path);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new FlagTips { IsSuccess = false, Msg = ex.Message });
                 }
 
             }
