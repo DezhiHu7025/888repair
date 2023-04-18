@@ -197,10 +197,14 @@
         });
 
         function reloadDate() {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                StatusText: $('#status').val(),
+            }
             $.ajax({
                 url: "@(Url.Action("getStateList", "State"))",  // 要提交的URL路径
                 type: "post",    // 发送请求的方式
-                data: { StatusText: $('#status').val() },
+                data: model,
                 dataType: "JSON",     // 指定传输的数据格式
                 success: function (result) {
                     if (result.IsSuccess) {
