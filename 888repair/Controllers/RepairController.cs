@@ -52,7 +52,7 @@ namespace _888repair.Controllers
                 model.ResponseEmpno = "H22080031";
                 model.ResponseEmpname = "dezhi_hu";
                 model.CreatTime = DateTime.Now;
-                model.Status = "";
+                model.Status = "pending";
                 if (!string.IsNullOrEmpty(model.PhotoPath))
                 {
                     model.PhotoPath = model.PhotoPath.Substring(0, model.PhotoPath.Length - 1);
