@@ -121,6 +121,17 @@ namespace _888repair.Models.Repair
         /// 破坏人姓名
         /// </summary>
         public string DamageName { get; set; }
-        
+
+        /// <summary>
+        /// 填表时间开始日期
+        /// </summary>
+        public DateTime? startDate { get; set; }
+
+        /// <summary>
+        /// 填表时间结束日期
+        /// </summary>
+        public DateTime? endDate { get; set; }
+
+
     }
 }

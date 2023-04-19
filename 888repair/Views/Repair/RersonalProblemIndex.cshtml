@@ -1,0 +1,315 @@
+﻿
+@{
+    ViewBag.Title = "RersonalProblemIndex";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>业管维护</title>
+    <style>
+        body {
+            padding: 32px; /*overflow-y: scroll;*/
+        }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
+    </style>
+</head>
+<body>
+    <hr>
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">系统类别</label>
+                <div class="layui-input-inline">
+                    <select ID="SystemCategory" name="SystemCategory" lay-filter="SystemCategory">
+                        <option value=""></option>
+                        <option value="IT(资讯类)">IT(资讯类)</option>
+                        <option value="Logistics(总务后勤类)">
+                            Logistics(总务后勤类)
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">执行状态</label>
+                <div class="layui-input-inline">
+                    <select ID="Status" name="Status">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline" id="test6">
+                <label class="layui-form-label">填表时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="startDate">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="endDate">
+                </div>
+            </div>
+        </div>
+    </form>
+    <hr><br />
+        <label style="color:red;font-size:medium">
+            导出的EXCEL数据为当前查询条件下所能查到的数据。您也可以选择数据表格右上方三个按钮中中间的导出按钮,使用layui自带的导出方法导出。<br>
+            The exported EXCEL data is the data that can be found under the current query conditions.<br />
+            You can also choose the export button in the middle of the three buttons on the top right of the data table and use the export method provided by Layui to export it
+        </label>
+    <div class="layui-btn-group" style="margin-left:1250px">
+        <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
+        <button class="layui-btn layui-btn-sm" id="btn_export"><i class="layui-icon">导出&nbsp;&#xe67d;</i></button>
+    </div>
+    <br />
+    <table class="layui-hide" lay-filter="user" id="RersonalProblemTable"></table>
+
+</body>
+<script>
+
+    layui.use(['table', 'dropdown', 'form', 'laydate'], function () {
+
+        var $ = layui.$;
+        var table = layui.table;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var download = layui.download;
+
+        loadOption();
+
+        //墨绿主题
+        laydate.render({
+            elem: '#startDate'
+            , theme: 'molv'
+        });
+
+        laydate.render({
+            elem: '#endDate'
+            , theme: 'molv'
+        });
+
+        render();
+
+        $.ajax({
+            url: "@(Url.Action("getRersonalProblemList", "Repair"))",  // 要提交的URL路径
+            type: "post",    // 发送请求的方式
+            dataType: "JSON",     // 指定传输的数据格式
+            beforeSend: function () {     //请求之前的方法
+            },
+            success: function (result) {
+                if (result.IsSuccess) {
+                    let d = result;
+                    layui.use(['form', 'jquery', 'table', 'layer'], function () {
+                        var form = layui.form;
+                        var $ = layui.jquery;
+                        var table = layui.table;
+                        var layer = layui.layer;
+
+                        table.render({
+                            elem: '#RersonalProblemTable',
+                            type: "post",
+                            data: d.data,
+                            id: "RersonalProblemTableID",
+                            contentType: 'application/json', // 参数为 json 格式传递
+                            page: !0 || { //详细参数可参考 laypage 组件文档
+                                curr: 5,
+                                groups: 1,
+                                first: false,
+                                last: false,
+                                layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                            }
+                            , height: 523
+                            , cellMinWidth: 80
+                            //,skin: 'line'
+                            //,size: 'lg'
+                            , toolbar: true
+                            , cols: [[
+                               // { type: 'checkbox', LAY_CHECKED: false},
+                               // { field: 'AreaId', title: 'AreaId' },
+                                { field: 'SystemCategory', title: 'SystemCategory(系统类别)', width: 210 },
+                                { field: 'Building', title: 'Building(大楼别)', width: 210 },
+                                { field: 'Loaction', title: 'Loaction(位置)', width: 210 },
+                                { field: 'Category', title: 'Category(类别)', width: 210 },
+                                { field: 'ChargeEmpname', title: 'Repairer(负责人姓名)', width: 170 },
+                                { field: 'ResponseContent', title: 'Description(反应内容)', width: 300 },
+                                { field: 'Status', title: 'Status(执行状态)', width: 170 },
+                                {
+                                    field: 'CreatTime', title: 'Fill-in Date(填表时间)', width: 180,
+                                    templet: "<div>{{ formatDate(d.CreatTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+                                },
+                                {
+                                    field: 'FinishTime', title: 'Finish Time(完单时间)', width: 180,
+                                    templet: "<div>{{ formatDate(d.FinishTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+                                }
+                            ]]
+                        });
+                    });
+                } else {
+                    alert(result.Msg);
+                }
+            },
+            error: function () {
+                // 请求失败后要执行的代码
+                console.log("失败");
+                alert(result.Msg);
+            }
+        });
+
+        function reloadDate() {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                KindCategory: $('#KindCategory').val(),
+                startDate: $('#startDate').val(),
+                endDate: $('#endDate').val(),
+                Status: $('#Status').val(),
+            }
+            $.ajax({
+                url: "@(Url.Action("getRersonalProblemList", "Repair"))",   // 要提交的URL路径
+                type: "post",    // 发送请求的方式
+                data: model,
+                dataType: "JSON",     // 指定传输的数据格式
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        let d = result;
+                        table.reload('RersonalProblemTableID', {
+                        data: d.data,
+                        page: { curr: 1 },
+                        });
+                    } else {
+                        alert(result.Msg);
+                    }
+                },
+                error: function () {
+                    // 请求失败后要执行的代码
+                    console.log("失败");
+                    alert(result.Msg);
+                }
+            });
+        }
+
+        function loadOption() {
+            $("#Status").empty();
+            $.ajax({
+                url: "@(Url.Action("getStatus", "DDL"))",
+                type: "POST",
+                dataType: 'json',
+                success: function (result) {
+                    $('#Status').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#Status").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                    }
+                    layui.use('form', function () {
+                        var form = layui.form;
+                        form.render();
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+
+        }
+
+        form.on('select(SystemCategory)', function (data) {
+            $("#Status").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getStatus", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#Status').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#Status").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                    }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        })
+
+        $('#btn_search').click(function () {
+            reloadDate();
+        });
+
+        function request() {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                KindCategory: $('#KindCategory').val(),
+                startDate: $('#startDate').val(),
+                endDate: $('#endDate').val(),
+                Status: $('#Status').val(),
+            };
+
+            fetch('/Repair/RersonalProblemExport', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(model),
+            })
+                .then(res => res.blob())
+                .then(data => {
+                    if (data.size == 0) {
+                        layui.use('layer', function () {
+                            var layer = layui.layer;
+                            layer.msg("下载失败！");
+                        });
+                    } else {
+                        let blobUrl = window.URL.createObjectURL(data);
+                       // window.location = blobUrl;
+                        const a = document.createElement('a');
+                        var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHHmmss");
+                        console.log(datetime);
+                        a.download = "RersonalProblem_" + datetime + ".xlsx";
+                        a.href = blobUrl;
+                        a.click();
+                        //download(blobUrl);
+                    }
+                });
+        }
+
+        $('#btn_export').click(function () {
+            request();
+            @*var model = new Array();
+            model.push({
+                SystemCategory: $('#SystemCategory').val(),
+                KindCategory: $('#KindCategory').val(),
+                startDate: $('#startDate').val(),
+                endDate: $('#endDate').val(),
+                Status: $('#Status').val(),
+            });
+            var url = '@Html.Raw(@Url.Action("RersonalProblemExport", "Repair", new { model = -1}))';
+
+           // var url = @(Url.Action("RersonalProblemExport", "Repair", new { model = -1}));
+            url = url.replace("-1", model);
+            console.log(model);
+            console.log(model[0]);
+            window.location = url;*@
+        });
+
+        function download(blobUrl) {
+            const a = document.createElement('a');
+            a.download = 'a.xsls';
+            a.href = blobUrl;
+            a.click();
+        }
+
+        function render() {
+            // 封装函数-表单更新渲染
+            layui.use('form', function () {
+                var form = layui.form;
+                form.render('select');
+            })
+        }
+
+    });
+</script>
+

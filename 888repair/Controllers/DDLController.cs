@@ -2,6 +2,7 @@
 using _888repair.Models;
 using _888repair.Models.Area;
 using _888repair.Models.Kind;
+using _888repair.Models.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,6 +123,18 @@ namespace _888repair.Controllers
             }
             sql += " order by sort asc";
             var list = db.Query<KindModel>(sql, new { keyWord }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult getStatus(string keyWord)
+        {
+            RepairDb db = new RepairDb();
+            string sql = "SELECT distinct StatusValue,StatusText FROM [888_KsNorth].[dbo].[state] where 1=1 ";
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                sql += " and SystemCategory = @keyWord";
+            }
+            var list = db.Query<StateModel>(sql, new { keyWord }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
     }
