@@ -248,7 +248,7 @@
                 Status: $('#Status').val(),
             };
 
-            fetch('/Repair/RersonalProblemExport', {
+            fetch("@(Url.Action("RersonalProblemExport", "Repair"))", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
