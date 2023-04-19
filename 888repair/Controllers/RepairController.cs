@@ -312,15 +312,16 @@ namespace _888repair.Controllers
 
                 for (int i = 0; i < dt.Count; i++)//遍历DataTable行
                 {
-                    sheet.Cells[i + 1, 0].PutValue(dt[i].SystemCategory);
-                    sheet.Cells[i + 1, 1].PutValue(dt[i].Building);
-                    sheet.Cells[i + 1, 2].PutValue(dt[i].Loaction);
-                    sheet.Cells[i + 1, 3].PutValue(dt[i].Category);
-                    sheet.Cells[i + 1, 4].PutValue(dt[i].ChargeEmpname);
-                    sheet.Cells[i + 1, 5].PutValue(dt[i].ResponseContent);
-                    sheet.Cells[i + 1, 6].PutValue(dt[i].Status);
-                    sheet.Cells[i + 1, 7].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());
-                    sheet.Cells[i + 1, 8].PutValue(dt[i].FinishTime.ToString() == "0001/01/01" ? "" : dt[i].FinishTime.ToString());
+                    sheet.Cells[i + 1, 0].PutValue(dt[i].RepairId);
+                    sheet.Cells[i + 1, 1].PutValue(dt[i].SystemCategory);
+                    sheet.Cells[i + 1, 2].PutValue(dt[i].Building);
+                    sheet.Cells[i + 1, 3].PutValue(dt[i].Loaction);
+                    sheet.Cells[i + 1, 4].PutValue(dt[i].Category);
+                    sheet.Cells[i + 1, 5].PutValue(dt[i].ChargeEmpname);
+                    sheet.Cells[i + 1, 6].PutValue(dt[i].ResponseContent);
+                    sheet.Cells[i + 1, 7].PutValue(dt[i].Status);
+                    sheet.Cells[i + 1, 8].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());
+                    sheet.Cells[i + 1, 9].PutValue(dt[i].FinishTime.ToString() == "0001/01/01" ? "" : dt[i].FinishTime.ToString());
 
                     //  sheet.Cells[i + 1, 24].PutValue(Convert.ToDateTime(dt[i].CreateTime).ToString("yyyy/MM/dd") == "0001/01/01" ? "" : Convert.ToDateTime(dt[i].CreateTime).ToString("yyyy-MM-dd HH:mm:ss"));
                 }
