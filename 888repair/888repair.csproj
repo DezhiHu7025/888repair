@@ -228,6 +228,7 @@
     <Content Include="Views\Repair\LogRepairVw.cshtml" />
     <Content Include="Views\Repair\ITRepairVw.cshtml" />
     <Content Include="Views\Repair\RersonalProblemIndex.cshtml" />
+    <Content Include="Views\Repair\RepairDetailVw.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

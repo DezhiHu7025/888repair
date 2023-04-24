@@ -53,11 +53,11 @@
         </div>
     </form>
     <hr><br />
-        <label style="color:red;font-size:medium">
-            导出的EXCEL数据为当前查询条件下所能查到的数据。您也可以选择数据表格右上方三个按钮中中间的导出按钮,使用layui自带的导出方法导出。<br>
-            The exported EXCEL data is the data that can be found under the current query conditions.<br />
-            You can also choose the export button in the middle of the three buttons on the top right of the data table and use the export method provided by Layui to export it
-        </label>
+    <label style="color:red;font-size:medium">
+        导出的EXCEL数据为当前查询条件下所能查到的数据。您也可以选择数据表格右上方三个按钮中中间的导出按钮,使用layui自带的导出方法导出。<br>
+        The exported EXCEL data is the data that can be found under the current query conditions.<br />
+        You can also choose the export button in the middle of the three buttons on the top right of the data table and use the export method provided by Layui to export it
+    </label>
     <div class="layui-btn-group" style="margin-left:1250px">
         <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_export"><i class="layui-icon">导出&nbsp;&#xe67d;</i></button>
@@ -66,8 +66,63 @@
     <table class="layui-hide" lay-filter="user" id="RersonalProblemTable"></table>
 
 </body>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" onclick=queryDetail('{{d.RepairId}}')>查看</a>
+    @*<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>*@
+</script>
 <script>
 
+     function queryDetail(RepairId) {
+         $.ajax({
+             url: "@(Url.Action("getRepairDetail", "Repair"))",   // 要提交的URL路径
+             type: "post",    // 发送请求的方式
+             data: { RepairId: RepairId },
+                dataType: "JSON",     // 指定传输的数据格式
+             success: function (res) {
+//取到的数据存储到localStorage
+                        localStorage.clear();
+                        localStorage.setItem("RepairId", res.RepairId);
+                        localStorage.setItem("Stu_Name", res.Stu_Name);
+                        localStorage.setItem("SystemCategory", res.SystemCategory);
+                        localStorage.setItem("Building", res.Building);
+                        localStorage.setItem("Loaction", res.Loaction);
+                        localStorage.setItem("ChargeEmpno", res.ChargeEmpno);
+                        localStorage.setItem("ChargeEmpname", res.ChargeEmpname);
+                        localStorage.setItem("Category", res.Category);
+                        localStorage.setItem("ResponseContent", res.ResponseContent);
+                        localStorage.setItem("ResponseEmpname", res.ResponseEmpname);
+                        localStorage.setItem("ReplyContent", res.ReplyContent);
+                        localStorage.setItem("Status", res.Status);
+                        localStorage.setItem("CreatTime", res.CreatTime);
+                        localStorage.setItem("FinishTime", res.FinishTime);
+                        localStorage.setItem("PhotoPath", res.PhotoPath);
+                        localStorage.setItem("RoomNum", res.RoomNum);
+                        localStorage.setItem("RepairTime", res.RepairTime);
+                        localStorage.setItem("Telephone", res.Telephone);
+                        localStorage.setItem("DamageReason", res.DamageReason);
+                        localStorage.setItem("DamageClass", res.DamageClass);
+                        localStorage.setItem("DamageName", res.DamageName);
+                        //原窗口打开新页面
+                         var url = "@(Url.Action("RepairDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
+
+                        $("#content").load(url);
+
+             },
+
+             error: function () {
+                    // 请求失败后要执行的代码
+
+                 console.log("失败");
+
+                 //alert(res.Msg);
+
+             }
+
+         });
+         @*var url = "@(Url.Action("RepairDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
+         $("#content").load(url);*@
+     }
+       
     layui.use(['table', 'dropdown', 'form', 'laydate'], function () {
 
         var $ = layui.$;
@@ -111,6 +166,7 @@
                             type: "post",
                             data: d.data,
                             id: "RersonalProblemTableID",
+                            toolbar: '#user',
                             contentType: 'application/json', // 参数为 json 格式传递
                             page: !0 || { //详细参数可参考 laypage 组件文档
                                 curr: 5,
@@ -126,7 +182,8 @@
                             , toolbar: true
                             , cols: [[
                                // { type: 'checkbox', LAY_CHECKED: false},
-                                { field: 'RepairId', title: '请修编号', width: 180 },
+                                { fixed: 'left', title: '操作', width: 80, minWidth: 80, toolbar: '#barDemo' },
+                                { field: 'RepairId', title: '请修编号(RepairID)', width: 180 },
                                 { field: 'SystemCategory', title: 'SystemCategory(系统类别)', width: 210 },
                                 { field: 'Building', title: 'Building(大楼别)', width: 210 },
                                 { field: 'Loaction', title: 'Loaction(位置)', width: 210 },
@@ -278,21 +335,31 @@
 
         $('#btn_export').click(function () {
             request();
-            @*var model = new Array();
-            model.push({
-                SystemCategory: $('#SystemCategory').val(),
-                KindCategory: $('#KindCategory').val(),
-                startDate: $('#startDate').val(),
-                endDate: $('#endDate').val(),
-                Status: $('#Status').val(),
-            });
-            var url = '@Html.Raw(@Url.Action("RersonalProblemExport", "Repair", new { model = -1}))';
+        });
 
-           // var url = @(Url.Action("RersonalProblemExport", "Repair", new { model = -1}));
-            url = url.replace("-1", model);
-            console.log(model);
-            console.log(model[0]);
-            window.location = url;*@
+
+        //$('#queryDetail').click(function (data) {
+           
+        //});
+
+        //触发单元格工具事件
+        table.on('tool(user)', function (obj) { // 双击 toolDouble
+            var data = obj.data;
+            alert("222");
+            ////console.log(obj)
+            //if (obj.event === 'del') {
+            //    layer.confirm('真的删除行么', function (index) {
+            //        obj.del();
+            //        layer.close(index);
+            //    });
+            //} else if (obj.event === 'edit') {
+            //    layer.open({
+            //        title: '编辑',
+            //        type: 1,
+            //        area: ['80%', '80%'],
+            //        content: '<div style="padding: 16px;">自定义表单元素</div>'
+            //    });
+            //}
         });
 
         function download(blobUrl) {

@@ -336,5 +336,47 @@ namespace _888repair.Controllers
             }
         }
         #endregion
+
+
+        /// <summary>
+        /// 报修单详细信息
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult RepairDetailVw()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 根据请修编号获取报修单详情
+        /// </summary>
+        /// <param name="RepairId"></param>
+        /// <returns></returns>
+        public ActionResult getRepairDetail(string RepairId)
+        {
+            var model = new RepairRecordModel();
+            try
+            {
+                using (RepairDb db = new RepairDb())
+                {
+                    string sql = string.Format(@"SELECT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building,a.Loaction,
+                                               a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
+                                               a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
+                                               a.ResponseEmpname,a.FinishTime,b.StatusText Status from [888_KsNorth].[dbo].[record] a 
+                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory where 1= 1");
+                    if (!string.IsNullOrEmpty(RepairId))
+                    {
+                        sql += " and a.repair_id =@RepairId ";
+                    }
+
+                    model = db.Query<RepairRecordModel>(sql, new { RepairId }).FirstOrDefault();
+                }
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new FlagTips { IsSuccess = false, Msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
