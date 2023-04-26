@@ -137,5 +137,25 @@ namespace _888repair.Controllers
             var list = db.Query<StateModel>(sql, new { keyWord }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult getLocationAll(string keyWord)
+        {
+            RepairDb db = new RepairDb();
+            string sql = "SELECT distinct Location FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            var list = db.Query<AreaModel>(sql, new { keyWord }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult getLocationAllBySC(string keyWord)
+        {
+            RepairDb db = new RepairDb();
+            string sql = "SELECT distinct Location FROM [888_KsNorth].[dbo].[area] where 1=1 ";
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                sql += " and SystemCategory = @keyWord";
+            }
+            var list = db.Query<AreaModel>(sql, new { keyWord }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

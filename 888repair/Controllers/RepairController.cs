@@ -47,10 +47,9 @@ namespace _888repair.Controllers
             try
             {
                 string sql = "";
-                model.RepairId = DateTime.Now.ToShortTimeString();
                 model.RepairId = DateTime.Now.ToString("yyyyMMddHHmmssfff");
                 model.ResponseEmpno = "H22080031";
-                model.ResponseEmpname = "dezhi_hu";
+                model.ResponseEmpname = "胡德知(dezhi_hu)";
                 model.CreatTime = DateTime.Now;
                 model.Status = "pending";
                 if (!string.IsNullOrEmpty(model.PhotoPath))
@@ -121,8 +120,22 @@ namespace _888repair.Controllers
                                                @ChargeEmpno,@ChargeEmpname,@Category,@ResponseContent,@ReplyContent,@Status,@CreatTime,
                                                @PhotoPath,@RoomNum,@RepairTime,@Telephone,@DamageReason,@DamageClass,@DamageName,@ResponseEmpno,
                                                @ResponseEmpname,@FinishTime)";
+
+                    StepRecordModel stepModel = new StepRecordModel();
+                    stepModel.GUID = Guid.NewGuid().ToString();
+                    stepModel.RepairId = model.RepairId;
+                    stepModel.STATUS = model.Status;
+                    stepModel.STEP = "送出报修单";
+                    stepModel.ChargeEmpno = model.ChargeEmpno;
+                    stepModel.ChargeEmpname = model.ChargeEmpname;
+                    stepModel.UpdateEmpNo = model.ResponseEmpno;
+                    stepModel.UpdateEmpName = model.ResponseEmpname;
+                    stepModel.UpdateTime = model.CreatTime;
+                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                                            values (@GUID,@RepairId,@STATUS,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
+                    trans.Add(stepSQL, stepModel);
                     db.DoExtremeSpeedTransaction(trans);
                 }
             }
@@ -337,7 +350,7 @@ namespace _888repair.Controllers
         }
         #endregion
 
-
+        #region 报修单 回复问题
         /// <summary>
         /// 报修单详细信息
         /// </summary>
@@ -360,10 +373,10 @@ namespace _888repair.Controllers
                 using (RepairDb db = new RepairDb())
                 {
                     string sql = string.Format(@"SELECT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building,a.Loaction,
-                                               a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
+                                               a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,a.Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime,b.StatusText Status from [888_KsNorth].[dbo].[record] a 
-                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory where 1= 1");
+                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
+                                               where 1= 1");
                     if (!string.IsNullOrEmpty(RepairId))
                     {
                         sql += " and a.repair_id =@RepairId ";
@@ -378,5 +391,333 @@ namespace _888repair.Controllers
                 return Json(new FlagTips { IsSuccess = false, Msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        /// <summary>
+        /// 回复问题
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ReplyRepairIndex()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 回复问题报修单详情
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ReplyRepairDetailVw()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 回复问题列表查询
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult getReplyProblemList(RepairRecordModel model)
+        {
+            model.ResponseEmpno = "H22080031";
+            model.EmpNo = "H22080031";
+            var list = new List<RepairRecordModel>();
+            try
+            {
+                using (RepairDb db = new RepairDb())
+                {
+                    string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
+                                               a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
+                                               a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
+                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
+                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
+											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo)");
+                    //系统类别
+                    if (!string.IsNullOrEmpty(model.SystemCategory))
+                    {
+                        sql += " and a.SystemCategory =@SystemCategory ";
+                    }
+                    //大楼别
+                    if (!string.IsNullOrEmpty(model.Building))
+                    {
+                        sql += " and a.Building =@Building ";
+                    }
+                    //位置
+                    if (!string.IsNullOrEmpty(model.Loaction))
+                    {
+                        sql += " and a.Loaction =@Loaction ";
+                    }
+                    //类别
+                    if (!string.IsNullOrEmpty(model.Category))
+                    {
+                        sql += " and a.Category =@Category ";
+                    }
+                    //反应人姓名
+                    if (!string.IsNullOrEmpty(model.ResponseEmpname))
+                    {
+                        sql += " and a.ResponseEmpname like '%" + model.ResponseEmpname + "%'";
+                    }
+                    //反应内容
+                    if (!string.IsNullOrEmpty(model.ResponseContent))
+                    {
+                        sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        sql += " and a.Status =@Status ";
+                    }
+                    //负责人
+                    if (!string.IsNullOrEmpty(model.ChargeEmpname))
+                    {
+                        sql += " and a.charge_empname =@ChargeEmpname ";
+                    }
+                    //填表时间
+                    if (model.startDate != null)
+                    {
+                        sql += " and a.CreatTime >= @startDate ";
+                    }
+                    if (model.endDate != null)
+                    {
+                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
+                        sql += " and a.CreatTime <=@endDate ";
+                    }
+                    sql += " ORDER BY repair_id desc";
+
+                    list = db.Query<RepairRecordModel>(sql, model).ToList();
+                }
+                return Json(new FlagTips { IsSuccess = true, code = 0, count = list.Count(), data = list }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new FlagTips { IsSuccess = false, Msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 回复报修单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult ReplyProblemSave(RepairRecordModel model)
+        {
+
+            model.EmpNo = "H22080031";
+            model.FullName = "胡德知(dezhi_hu)";
+
+            StepRecordModel stepModel = new StepRecordModel();
+            stepModel.GUID = Guid.NewGuid().ToString();
+            stepModel.OPINION = model.NewReplyContent;//获取未重新定义前的新回复内容
+            stepModel.RepairId = model.RepairId;
+            stepModel.STATUS = model.Status;
+            stepModel.STEP = "回应报修单";
+            stepModel.ChargeEmpno = model.ChargeEmpno;
+            stepModel.ChargeEmpname = model.ChargeEmpname;
+            stepModel.UpdateEmpNo = model.EmpNo;
+            stepModel.UpdateEmpName = model.FullName;
+            stepModel.UpdateTime = DateTime.Now;
+
+            model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "回应-" + "\r\n\r\n";
+            if (model.Status == "complete" || model.Status == "rejectend")
+            {
+                model.FinishTime = DateTime.Now;
+            }
+            try
+            {
+                model.ResponseEmpno = "H22080031";
+                model.ResponseEmpname = "dezhi_hu";
+                model.CreatTime = DateTime.Now;
+                using (RepairDb db = new RepairDb())
+                {
+                    string sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime where repair_id = @RepairId ";
+
+                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[OPINION],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                                            values (@GUID,@RepairId,@STATUS,@OPINION,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
+
+                    Dictionary<string, object> trans = new Dictionary<string, object>();
+                    trans.Add(sql, model);
+                    trans.Add(stepSQL, stepModel);
+                    db.DoExtremeSpeedTransaction(trans);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new FlagTips { IsSuccess = false, Msg = ex.Message });
+            }
+            return Json(new FlagTips { IsSuccess = true });
+        }
+
+        /// <summary>
+        /// 报修单转派
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult TransferProblem(RepairRecordModel model)
+        {
+
+            model.EmpNo = "H22080031";
+            model.FullName = "胡德知(dezhi_hu)";
+
+            StepRecordModel stepModel = new StepRecordModel();
+            stepModel.GUID = Guid.NewGuid().ToString();
+            stepModel.OPINION = model.NewReplyContent;//获取未重新定义前的新回复内容
+            stepModel.RepairId = model.RepairId;
+            stepModel.STATUS = model.Status;
+            stepModel.STEP = "转派报修单";
+            stepModel.ChargeEmpno = model.ChargeEmpno;
+            stepModel.ChargeEmpname = model.ChargeEmpname;
+            stepModel.UpdateEmpNo = model.EmpNo;
+            stepModel.UpdateEmpName = model.FullName;
+            stepModel.UpdateTime = DateTime.Now;
+
+            model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "转派给-" + model.ChargeEmpname + "\r\n\r\n";
+            if (model.Status == "complete")
+            {
+                model.FinishTime = DateTime.Now;
+            }
+            try
+            {
+                string sql = "";
+                using (RepairDb db = new RepairDb())
+                {
+                    sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime,charge_empno = @ChargeEmpno,charge_empname = @ChargeEmpname where repair_id = @RepairId ";
+
+                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[OPINION],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                                            values (@GUID,@RepairId,@STATUS,@STEP,@OPINION,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
+
+
+                    Dictionary<string, object> trans = new Dictionary<string, object>();
+                    trans.Add(sql, model);
+                    trans.Add(stepSQL, stepModel);
+                    db.DoExtremeSpeedTransaction(trans);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new FlagTips { IsSuccess = false, Msg = ex.Message });
+            }
+            return Json(new FlagTips { IsSuccess = true });
+        }
+
+        /// <summary>
+        /// 报修单 驳回任务
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult RejectTask(RepairRecordModel model)
+        {
+            model.EmpNo = "H22080031";
+            model.FullName = "胡德知(dezhi_hu)";
+
+            StepRecordModel stepModel = new StepRecordModel();
+            stepModel.GUID = Guid.NewGuid().ToString();
+            stepModel.OPINION = model.NewReplyContent;//获取未重新定义前的新回复内容
+            stepModel.RepairId = model.RepairId;
+            stepModel.STEP = "驳回任务";
+            stepModel.STATUS = model.Status;
+            stepModel.UpdateEmpNo = model.EmpNo;
+            stepModel.UpdateEmpName = model.FullName;
+            stepModel.UpdateTime = DateTime.Now;
+
+            if (model.Status == "complete" || model.Status == "rejectend")
+            {
+                model.FinishTime = DateTime.Now;
+            }
+            try
+            {
+                string sql = "";
+                using (RepairDb db = new RepairDb())
+                {
+                    sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent), Status = @Status,FinishTime = @FinishTime,charge_empno = @ChargeEmpno,charge_empname = @ChargeEmpname where repair_id = @RepairId ";
+
+                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[OPINION],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                                            values (@GUID,@RepairId,@STATUS,@OPINION,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
+
+                    //判断是否为转派单，否则无法驳回任务
+                    string checkTransSql = @" select * from [888_KsNorth].[dbo].[steprecord] where step = '转派报修单' and charge_empno =@ChargeEmpno and repair_id = @RepairId ";
+                    var checkModel = db.Query<StepRecordModel>(checkTransSql, new { ChargeEmpno = model.ChargeEmpno, RepairId = model.RepairId}).ToList();
+                    if (checkModel.Count() == 0)
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = "此单并非为转派单，无法驳回任务" });
+                    }
+                    //抓取原来的负责人
+                    string findCharge = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsNorth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
+                                             AND a.sort < (select TOP(1) sort from [888_KsNorth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' AND charge_empno = @ChargeEmpno order by sort desc )  order by sort desc ";
+                    var chargeModel = db.Query<StepRecordModel>(findCharge, new { RepairId = model.RepairId , ChargeEmpno  = model.ChargeEmpno}).FirstOrDefault();
+                    stepModel.ChargeEmpno = chargeModel.ChargeEmpno;
+                    stepModel.ChargeEmpname = chargeModel.ChargeEmpname;
+
+                    model.ChargeEmpno = chargeModel.ChargeEmpno;
+                    model.ChargeEmpname = chargeModel.ChargeEmpname;
+
+                    model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "驳回任务给-" + model.ChargeEmpname + "\r\n\r\n";
+
+                    Dictionary<string, object> trans = new Dictionary<string, object>();
+                    trans.Add(sql, model);
+                    trans.Add(stepSQL, stepModel);
+                    db.DoExtremeSpeedTransaction(trans);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new FlagTips { IsSuccess = false, Msg = ex.Message });
+            }
+            return Json(new FlagTips { IsSuccess = true });
+        }
+
+        /// <summary>
+        /// 报修单 驳回至使用者
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult RejectEnd(RepairRecordModel model)
+        {
+            model.EmpNo = "H22080031";
+            model.FullName = "胡德知(dezhi_hu)";
+
+            StepRecordModel stepModel = new StepRecordModel();
+            stepModel.OPINION = model.NewReplyContent;//获取未重新定义前的新回复内容
+            stepModel.RepairId = model.RepairId;
+            stepModel.STATUS = "rejectend";
+            stepModel.STEP = "驳回至使用者";
+            stepModel.ChargeEmpno = model.ChargeEmpno;
+            stepModel.ChargeEmpname = model.ChargeEmpname;
+            stepModel.UpdateEmpNo = model.EmpNo;
+            stepModel.UpdateEmpName = model.FullName;
+            stepModel.UpdateTime = DateTime.Now;
+            stepModel.GUID = Guid.NewGuid().ToString();
+
+            model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "驳回给反应者-" + model.ResponseEmpname + "\r\n\r\n";
+            model.Status = "rejectend";
+            model.FinishTime = DateTime.Now;
+            try
+            {
+                string sql = "";
+                model.ResponseEmpno = "H22080031";
+                model.ResponseEmpname = "dezhi_hu";
+                model.CreatTime = DateTime.Now;
+                using (RepairDb db = new RepairDb())
+                {
+                    sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime where repair_id = @RepairId ";
+
+                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                                            values (@GUID,@RepairId,@STATUS,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
+
+
+                    Dictionary<string, object> trans = new Dictionary<string, object>();
+                    trans.Add(sql, model);
+                    trans.Add(stepSQL, stepModel);
+                    db.DoExtremeSpeedTransaction(trans);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new FlagTips { IsSuccess = false, Msg = ex.Message });
+            }
+            return Json(new FlagTips { IsSuccess = true });
+        }
+        #endregion
     }
 }

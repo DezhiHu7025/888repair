@@ -34,8 +34,6 @@
         <legend>Fill in the problem 报修单详情</legend>
     </fieldset>
     <br />
-    @*<a type="button" class="layui-btn" href="javascript:;"><i class="layui-icon"></i>Add New Problem 新增问题</a>*@
-    <br />
     <hr />
     <div id="fillQuestion">
         <table width="70%" align="center" border="2">
@@ -117,7 +115,15 @@
             </tr>
             <tr>
                 <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Status(执行状态)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Status"></label> </td>
+                <td width="60%">
+                    <div class="layui-form layui-form-pane" style="margin-left:20px">
+                        <div class="layui-input-inline">
+                            <select ID="OpStatus" name="OpStatus" disabled="disabled">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
             </tr>
             <tr height="30px">
                 <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Finish Time(完单时间)：</label></td>
@@ -146,11 +152,39 @@
     </div>
 </body>
 <script>
-    layui.use(['upload', 'element', 'layer', 'laydate'], function () {
+    layui.use(['upload', 'element', 'layer', 'laydate','form'], function () {
         var form = layui.form;
         var layer = layui.layer;
         var util = layui.util;
         var laydate = layui.laydate;
+
+        loadOption();
+
+        function loadOption() {     
+            $("#OpStatus").empty();
+            var SystemCategory = localStorage.getItem("SystemCategory");
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getStatus", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpStatus').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++)
+                        {
+                            $("#OpStatus").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                        }
+                        $('select[name=OpStatus]').val(localStorage.getItem("Status"));
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        }
 
         //隐藏div
         $("#DamageText1").hide();
@@ -180,11 +214,9 @@
         $("#DamageName").html(localStorage.getItem("DamageName"));
         $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
         $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
-        $("#Status").html(localStorage.getItem("Status"));
         $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));   
-        localStorage.clear();
-
-       
+       // localStorage.clear();
+        
          $("#btn_back").on("click", function () {
              var url = "@(Url.Action("RersonalProblemIndex", "Repair"))";
              $("#content").load(url);

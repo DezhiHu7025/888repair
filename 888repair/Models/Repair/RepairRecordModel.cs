@@ -132,6 +132,19 @@ namespace _888repair.Models.Repair
         /// </summary>
         public DateTime? endDate { get; set; }
 
+        /// <summary>
+        /// 登录账号
+        /// </summary>
+        public string EmpNo { get; set; }
 
+        /// <summary>
+        /// 登录账号
+        /// </summary>
+        public string FullName { get; set; }
+
+        /// <summary>
+        /// 新增回应内容
+        /// </summary>
+        public string NewReplyContent { get; set; }
     }
 }

@@ -54,6 +54,8 @@
                 <ul class="layui-nav layui-nav-tree Menu" lay-filter="test" id="Menu">
                     <li class="layui-nav-item current" data-id="fill"><a class="layui-nav-item " language="fill">填写问题</a></li>
                     <li class="layui-nav-item current" data-id="personalProblem"><a class="layui-nav-item ">个人问题列表</a></li>
+                    <li class="layui-nav-item current" data-id="replyProblem"><a class="layui-nav-item ">回复问题</a></li>
+                    <li class="layui-nav-item current" data-id="listProblem"><a class="layui-nav-item ">问题列表</a></li>
                     <li class="layui-nav-item" data-id="areaMatch"><a class="layui-nav-item ">辖区配对维护</a></li>
                     <li class="layui-nav-item" data-id="kindMatch"><a class="layui-nav-item ">业管配对维护</a></li>
                     @*<li class="layui-nav-item" data-id="fillQuestion"><a class="layui-nav-item ">业管配对维护</a></li>*@
@@ -172,7 +174,11 @@
                 case "#personalProblem":
                     pathn = "@(Url.Action("RersonalProblemIndex", "Repair"))",
                         i = 0;
-                    break; personalProblem
+                    break; 
+                case "#replyProblem":
+                    pathn = "@(Url.Action("ReplyRepairIndex", "Repair"))",
+                        i = 0;
+                    break; 
                 default:
                     pathn = "@(Url.Action("GroupIndex", "Group"))",
                         i = 0;

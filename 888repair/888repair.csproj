@@ -170,6 +170,7 @@
     <Compile Include="Models\Kind\KindMatchModel.cs" />
     <Compile Include="Models\Kind\KindModel.cs" />
     <Compile Include="Models\Repair\RepairRecordModel.cs" />
+    <Compile Include="Models\Repair\StepRecordModel.cs" />
     <Compile Include="Models\State\StateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\FileUploadService.cs" />
@@ -229,6 +230,8 @@
     <Content Include="Views\Repair\ITRepairVw.cshtml" />
     <Content Include="Views\Repair\RersonalProblemIndex.cshtml" />
     <Content Include="Views\Repair\RepairDetailVw.cshtml" />
+    <Content Include="Views\Repair\ReplyRepairDetailVw.cshtml" />
+    <Content Include="Views\Repair\ReplyRepairIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

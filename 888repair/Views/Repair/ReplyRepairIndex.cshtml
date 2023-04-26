@@ -1,11 +1,11 @@
 ﻿
 @{
-    ViewBag.Title = "RersonalProblemIndex";
+    ViewBag.Title = "ReplyRepairIndex";
 }
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>个人问题列表</title>
+    <title>回复问题</title>
     <style>
         body {
             padding: 32px; /*overflow-y: scroll;*/
@@ -23,7 +23,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">系统类别</label>
                 <div class="layui-input-inline">
-                    <select ID="SystemCategory" name="SystemCategory" lay-filter="SystemCategory">
+                    <select ID="OpSystemCategory" name="OpSystemCategory" lay-filter="SystemCategory">
                         <option value=""></option>
                         <option value="IT(资讯类)">IT(资讯类)</option>
                         <option value="Logistics(总务后勤类)">
@@ -33,13 +33,61 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">执行状态</label>
+                <label class="layui-form-label">大楼别</label>
                 <div class="layui-input-inline">
-                    <select ID="Status" name="Status">
+                    <select ID="OpBuilding" name="OpBuilding" lay-filter="Building">
                         <option value=""></option>
                     </select>
                 </div>
             </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">位置</label>
+                <div class="layui-input-inline">
+                    <select ID="OpLocation" name="OpLocation">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">类别</label>
+                <div class="layui-input-inline">
+                    <select ID="OpCategory" name="OpCategory">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">反应人姓名</label>
+                <div class="layui-input-inline">
+                    <input id="ResponseEmpname" name="ResponseEmpname" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">反应内容</label>
+                <div class="layui-input-inline">
+                    <input id="ResponseContent" name="ResponseContent" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">执行状态</label>
+                <div class="layui-input-inline">
+                    <select ID="OpStatus" name="OpStatus">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">负责人</label>
+                <div class="layui-input-inline">
+                    <select ID="OpChargeEmpname" name="OpChargeEmpname" lay-search="">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">           
             <div class="layui-inline" id="test6">
                 <label class="layui-form-label">填表时间</label>
                 <div class="layui-input-inline">
@@ -68,10 +116,8 @@
 </body>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" onclick=queryDetail('{{d.RepairId}}')>查看</a>
-    @*<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>*@
 </script>
 <script>
-
      function queryDetail(RepairId) {
          $.ajax({
              url: "@(Url.Action("getRepairDetail", "Repair"))",   // 要提交的URL路径
@@ -103,17 +149,17 @@
                  localStorage.setItem("DamageClass", res.DamageClass);
                  localStorage.setItem("DamageName", res.DamageName);
                  //原窗口打开新页面
-                 var url = "@(Url.Action("RepairDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
+                 var url = "@(Url.Action("ReplyRepairDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
                  $("#content").load(url);
              },
              error: function () {
-                 // 请求失败后要执行的代码
                  console.log("失败");
                  alert(res.Msg);
              }
+
          });
      }
-       
+
     layui.use(['table', 'dropdown', 'form', 'laydate'], function () {
 
         var $ = layui.$;
@@ -138,7 +184,7 @@
         render();
 
         $.ajax({
-            url: "@(Url.Action("getRersonalProblemList", "Repair"))",  // 要提交的URL路径
+            url: "@(Url.Action("getReplyProblemList", "Repair"))",  // 要提交的URL路径
             type: "post",    // 发送请求的方式
             dataType: "JSON",     // 指定传输的数据格式
             beforeSend: function () {     //请求之前的方法
@@ -206,14 +252,19 @@
 
         function reloadDate() {
             var model = {
-                SystemCategory: $('#SystemCategory').val(),
-                KindCategory: $('#KindCategory').val(),
+                SystemCategory: $('#OpSystemCategory').val(),
+                Building: $('#OpBuilding').val(),
+                Loaction: $('#OpLocation').val(),
+                Category: $('#OpCategory').val(),
+                ResponseEmpname: $('#ResponseEmpname').val(),
+                ResponseContent: $('#ResponseContent').val(),
+                ChargeEmpname: $('#OpChargeEmpname').val(),
                 startDate: $('#startDate').val(),
                 endDate: $('#endDate').val(),
-                Status: $('#Status').val(),
+                Status: $('#OpStatus').val(),
             }
             $.ajax({
-                url: "@(Url.Action("getRersonalProblemList", "Repair"))",   // 要提交的URL路径
+                url: "@(Url.Action("getReplyProblemList", "Repair"))",   // 要提交的URL路径
                 type: "post",    // 发送请求的方式
                 data: model,
                 dataType: "JSON",     // 指定传输的数据格式
@@ -237,15 +288,37 @@
         }
 
         function loadOption() {
-            $("#Status").empty();
+            $("#OpBuilding").empty(); 
+            $.ajax({
+                url: "@(Url.Action("getBuilding", "DDL"))",
+                type: "POST",
+                dataType: 'json',
+                success: function (result) {
+                    $('#OpBuilding').append(new Option());
+                    $('#addBuilding').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpBuilding").append(`<option value="${result[i].Building}">${result[i].Building}</option>`);
+                    }
+                    //进行渲染
+                    layui.use('form', function () {
+                        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+                        form.render();
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+                
+            $("#OpStatus").empty();
             $.ajax({
                 url: "@(Url.Action("getStatus", "DDL"))",
                 type: "POST",
                 dataType: 'json',
                 success: function (result) {
-                    $('#Status').append(new Option());
+                    $('#OpStatus').append(new Option());
                     for (let i = 0, len = result.length; i < len; i++) {
-                        $("#Status").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                        $("#OpStatus").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
                     }
                     layui.use('form', function () {
                         var form = layui.form;
@@ -257,10 +330,73 @@
                 }
             });
 
-        }
+            $("#OpLocation").empty(); 
+            $.ajax({
+                url: "@(Url.Action("getLocationAll", "DDL"))",
+                type: "POST",
+                dataType: 'json',
+                success: function (result) {
+                    $('#OpLocation').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpLocation").append(`<option value="${result[i].Location}">${result[i].Location}</option>`)
+                    }
+                    //进行渲染
+                    layui.use('form', function () {
+                        var form = layui.form; 
+                        form.render();
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
 
-        form.on('select(SystemCategory)', function (data) {
-            $("#Status").empty();
+            $("#OpCategory").empty(); 
+            $.ajax({
+                url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                type: "POST",
+                dataType: 'json',
+                success: function (result) {
+                    $('#OpCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpCategory").append(`<option value="${result[i].KindCategory}">${result[i].KindCategory}</option>`)
+                    }
+                    //进行渲染
+                    layui.use('form', function () {
+                        var form = layui.form; 
+                        form.render();
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+
+            $("#OpChargeEmpname").empty(); 
+            $.ajax({
+                url: "@(Url.Action("getChargePerson", "DDL"))",
+                type: "POST",
+                dataType: 'json',
+                success: function (result) {
+                    $('#OpChargeEmpname').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpChargeEmpname").append(`<option value="${result[i].FullName}">${result[i].FullName}</option>`)
+                    }
+                    //进行渲染
+                    layui.use('form', function () {
+                        var form = layui.form; 
+                        form.render();
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        }
+        
+
+        form.on('select(SystemCategory)', function (data) {            
+            $("#OpStatus").empty();
             var SystemCategory = data.value;
             if (SystemCategory == null || SystemCategory == "") {
                 loadOption();
@@ -271,9 +407,98 @@
                     data: { "keyWord": SystemCategory },
                     dataType: "json",
                     success: function (result) {
-                        $('#Status').append(new Option());
+                        $('#OpStatus').append(new Option());
                     for (let i = 0, len = result.length; i < len; i++) {
-                        $("#Status").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                        $("#OpStatus").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                    }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+
+
+            $("#OpBuilding").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getBuildingBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpBuilding').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpBuilding").append(`<option value="${result[i].Building}">${result[i].Building}</option>`);
+                    }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+
+            $("#OpLocation").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getLocationAllBySC", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpLocation').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpLocation").append(`<option value="${result[i].Location}">${result[i].Location}</option>`);
+                    }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+
+            $("#OpCategory").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpCategory").append(`<option value="${result[i].KindCategory}">${result[i].KindCategory}</option>`);
+                    }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+
+            $("#OpChargeEmpname").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getChargePersonBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpChargeEmpname').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpChargeEmpname").append(`<option value="${result[i].FullName}">${result[i].FullName}</option>`);
                     }
                         form.render();
                     }, error: function () {
@@ -282,6 +507,31 @@
                 });
             }
         })
+
+        form.on('select(Building)', function (data) {
+            $("#OpLocation").empty();
+            var SystemCategory = data.value;
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getLoactionByBuilding", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpLocation').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpLocation").append(`<option value="${result[i].Location}">${result[i].Location}</option>`);
+                        }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        })
+
 
         $('#btn_search').click(function () {
             reloadDate();
@@ -327,32 +577,7 @@
         $('#btn_export').click(function () {
             request();
         });
-
-
-        //$('#queryDetail').click(function (data) {
-           
-        //});
-
-        //触发单元格工具事件
-        table.on('tool(user)', function (obj) { // 双击 toolDouble
-            var data = obj.data;
-            alert("222");
-            ////console.log(obj)
-            //if (obj.event === 'del') {
-            //    layer.confirm('真的删除行么', function (index) {
-            //        obj.del();
-            //        layer.close(index);
-            //    });
-            //} else if (obj.event === 'edit') {
-            //    layer.open({
-            //        title: '编辑',
-            //        type: 1,
-            //        area: ['80%', '80%'],
-            //        content: '<div style="padding: 16px;">自定义表单元素</div>'
-            //    });
-            //}
-        });
-
+        
         function download(blobUrl) {
             const a = document.createElement('a');
             a.download = 'a.xsls';
