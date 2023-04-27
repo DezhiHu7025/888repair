@@ -31,7 +31,7 @@
 </head>
 <body>
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>Reply to problem 回复问题</legend>
+        <legend>回复问题</legend>
     </fieldset>
     <br />
     <hr />
@@ -102,6 +102,8 @@
                 <td width="60%">
                     <div class="layui-input-inline">
                         <textarea id="ResponseContent" style="font-size:large;width:300%;height:170px" readonly />
+                    </div>
+                    <div id="imgId">
                     </div>
                 </td>
             </tr>
@@ -220,12 +222,42 @@
     </form>
 </div>
 <script>
+</script>
+<script>
+    
+    function loadImg() {
+        //遍历图片 PhotoPath
+        if (localStorage.getItem("PhotoPath") != null && localStorage.getItem("PhotoPath") != '' && localStorage.getItem("PhotoPath") != 'null') {
+            var PhotoPathS = localStorage.getItem("PhotoPath");
+            PhotoPathS = PhotoPathS.substring(0, PhotoPathS.length - 1);
+            var files = PhotoPathS.split(";");
+            var imgId = document.getElementById("imgId");
+            var url = "..";
+            for (var i = 0; i < files.length; i++) {
+                var name = files[i];
+                var img = document.createElement("img");
+                img.style = "width:120px;height:120px;";
+                img.className = "imgview";
+                img.src = url + name;
+                imgId.appendChild(img);
+            }
+        }
+    }
+
+
     layui.use(['table', 'dropdown', 'form'], function () {
         var $ = layui.$;
         var table = layui.table;
         var form = layui.form;
+        var layer = layui.layer;
 
         loadOption();
+
+        loadImg();
+        
+        $("body").on("click", ".imgview", function (e) {
+            layer.photos({ photos: { "data": [{ "src": e.target.src }] } });
+        });
 
         function loadOption() {
             $("#OpStatus").empty();
@@ -528,8 +560,8 @@
                 form.render('select');
             })
         }
-        
-        $('#TransferProblem').click(function () {            
+
+        $('#TransferProblem').click(function () {
             layer.open({
                 title: '转派任务',
                 area: ['40%', '35%'],

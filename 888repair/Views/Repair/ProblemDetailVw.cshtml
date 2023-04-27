@@ -158,9 +158,7 @@
     function loadImg() {
         //遍历图片 PhotoPath
         if (localStorage.getItem("PhotoPath") != null && localStorage.getItem("PhotoPath") != '' && localStorage.getItem("PhotoPath") != 'null') {
-            console.log(111);
             var PhotoPathS = localStorage.getItem("PhotoPath");
-            console.log(PhotoPathS);
             PhotoPathS = PhotoPathS.substring(0, PhotoPathS.length - 1);
             var files = PhotoPathS.split(";");
             var imgId = document.getElementById("imgId");
@@ -169,6 +167,7 @@
                 var name = files[i];
                 var img = document.createElement("img");
                 img.style = "width:120px;height:120px;";
+                img.className = "imgview";
                 img.src = url + name;
                 imgId.appendChild(img);
             }
@@ -180,10 +179,16 @@
         var layer = layui.layer;
         var util = layui.util;
         var laydate = layui.laydate;
+        var layer = layui.layer;
 
         loadOption();
 
         loadImg();
+
+
+        $("body").on("click", ".imgview", function (e) {
+            layer.photos({ photos: { "data": [{ "src": e.target.src }] } });
+        });
 
         function loadOption() {
             $("#OpStatus").empty();
