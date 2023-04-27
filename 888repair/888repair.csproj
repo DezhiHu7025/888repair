@@ -232,6 +232,8 @@
     <Content Include="Views\Repair\RepairDetailVw.cshtml" />
     <Content Include="Views\Repair\ReplyRepairDetailVw.cshtml" />
     <Content Include="Views\Repair\ReplyRepairIndex.cshtml" />
+    <Content Include="Views\Repair\ProblemListIndex.cshtml" />
+    <Content Include="Views\Repair\ProblemDetailVw.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
