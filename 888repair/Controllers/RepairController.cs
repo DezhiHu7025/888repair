@@ -564,7 +564,7 @@ namespace _888repair.Controllers
             stepModel.GUID = Guid.NewGuid().ToString();
             stepModel.OPINION = model.NewReplyContent;//获取未重新定义前的新回复内容
             stepModel.RepairId = model.RepairId;
-            stepModel.STATUS = model.Status;
+            //stepModel.STATUS = model.Status;
             stepModel.STEP = "转派报修单";
             stepModel.ChargeEmpno = model.ChargeEmpno;
             stepModel.ChargeEmpname = model.ChargeEmpname;
@@ -572,17 +572,15 @@ namespace _888repair.Controllers
             stepModel.UpdateEmpName = model.FullName;
             stepModel.UpdateTime = DateTime.Now;
 
-            model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "转派给-" + model.ChargeEmpname + "\r\n\r\n";
-            if (model.Status == "complete")
-            {
-                model.FinishTime = DateTime.Now;
-            }
+            model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "转派给-" + model.ChargeEmpname + "\r\n\r\n";        
             try
             {
                 string sql = "";
                 using (RepairDb db = new RepairDb())
                 {
-                    sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime,charge_empno = @ChargeEmpno,charge_empname = @ChargeEmpname where repair_id = @RepairId ";
+                    string findStatusSql = @"SELECT Status FROM  [888_KsNorth].[dbo].[record] WHERE repair_id = @RepairId";
+                    stepModel.STATUS = db.Query<string>(findStatusSql, new { RepairId = model.RepairId }).FirstOrDefault();
+                    sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),charge_empno = @ChargeEmpno,charge_empname = @ChargeEmpname where repair_id = @RepairId ";
 
                     string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[OPINION],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@STEP,@OPINION,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
@@ -984,6 +982,112 @@ namespace _888repair.Controllers
                 return Json(new FlagTips { IsSuccess = false, Msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
+
+        #region  问题列表维护
+        /// <summary>
+        /// 问题列表维护
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ProblemAllVw()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 问题列表维护查询
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult getProblemAllList(RepairRecordModel model)
+        {
+            var list = new List<RepairRecordModel>();
+            try
+            {
+                using (RepairDb db = new RepairDb())
+                {
+                    string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
+                                               a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
+                                               a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
+                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
+                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
+											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+											  ");
+                    //系统类别
+                    if (!string.IsNullOrEmpty(model.SystemCategory))
+                    {
+                        sql += " and a.SystemCategory =@SystemCategory ";
+                    }
+                    //大楼别
+                    if (!string.IsNullOrEmpty(model.Building))
+                    {
+                        sql += " and a.Building =@Building ";
+                    }
+                    //位置
+                    if (!string.IsNullOrEmpty(model.Loaction))
+                    {
+                        sql += " and a.Loaction =@Loaction ";
+                    }
+                    //类别
+                    if (!string.IsNullOrEmpty(model.Category))
+                    {
+                        sql += " and a.Category =@Category ";
+                    }
+                    //反应人姓名
+                    if (!string.IsNullOrEmpty(model.ResponseEmpname))
+                    {
+                        sql += " and a.ResponseEmpname like '%" + model.ResponseEmpname + "%'";
+                    }
+                    //反应内容
+                    if (!string.IsNullOrEmpty(model.ResponseContent))
+                    {
+                        sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        sql += " and a.Status =@Status ";
+                    }
+                    //负责人
+                    if (!string.IsNullOrEmpty(model.ChargeEmpname))
+                    {
+                        sql += " and a.charge_empname =@ChargeEmpname ";
+                    }
+                    //填表时间
+                    if (model.startDate != null)
+                    {
+                        sql += " and a.CreatTime >= @startDate ";
+                    }
+                    if (model.endDate != null)
+                    {
+                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
+                        sql += " and a.CreatTime <=@endDate ";
+                    }
+                    sql += " ORDER BY repair_id desc";
+
+                    list = db.Query<RepairRecordModel>(sql, model).ToList();
+                }
+                return Json(new FlagTips { IsSuccess = true, code = 0, count = list.Count(), data = list }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new FlagTips { IsSuccess = false, Msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 问题列表维护 报修单详情
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ProblemAllDetailVw()
+        {
+            return View();
+        }
+
+
         #endregion
     }
 }
