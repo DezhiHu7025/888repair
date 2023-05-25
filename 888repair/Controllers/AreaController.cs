@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace _888repair.Controllers
 {
+    [App_Start.AuthFilter]
     public class AreaController : Controller
     {
         // GET: Area 辖区维护

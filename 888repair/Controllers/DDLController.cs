@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace _888repair.Controllers
 {
+    [App_Start.AuthFilter]
     public class DDLController : Controller
     {
         // GET: DDL

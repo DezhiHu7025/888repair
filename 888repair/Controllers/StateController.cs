@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace _888repair.Controllers
 {
+    [App_Start.AuthFilter]
     public class StateController : Controller
     {
         // GET: State

@@ -15,6 +15,7 @@ using System.Web.Mvc;
 
 namespace _888repair.Controllers
 {
+    [App_Start.AuthFilter]
     public class RepairController : Controller
     {
         // GET: Repair 填写问题
