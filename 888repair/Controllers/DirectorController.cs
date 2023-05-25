@@ -1,6 +1,7 @@
 ﻿using _888repair.Db;
 using _888repair.Models;
 using _888repair.Models.Director;
+using _888repair.Models.Kind;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace _888repair.Controllers
                 {
                     string checkSql = @"select * from [888_KsNorth].[dbo].[charge] where EmpNo = @EmpNo and SystemCategory = @SystemCategory";
                     var list = db.Query<DirectorModel>(checkSql, model).ToList();
-                    if(list.Count() != 0)
+                    if (list.Count() != 0)
                     {
                         return Json(new FlagTips { IsSuccess = false, Msg = "请勿重复新增" });
                     }
@@ -83,18 +84,38 @@ namespace _888repair.Controllers
                 using (RepairDb db = new RepairDb())
                 {
                     var modelList = new List<DirectorModel>();
-                    foreach (var model in deleteList)
+                    string MsgUser = null;
+                    foreach (var cmodel in deleteList)
                     {
-                        var deleteModel = new DirectorModel();
-                        deleteModel.charge_id = model.charge_id;
-                        deleteModel.SystemCategory = model.SystemCategory;
-                        deleteModel.EmpNo = model.EmpNo;
-                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[charge]  WHERE charge_id = @charge_id AND EmpNo = @EmpNo and SystemCategory = @SystemCategory");
-
-                        Dictionary<string, object> trans = new Dictionary<string, object>();
-                        trans.Add(sql, deleteModel);
-                        db.DoExtremeSpeedTransaction(trans);
+                        string check1 = @"SELECT * FROM  [888_KsNorth].[dbo].[match] WHERE  charge_emp = @charge_emp ";
+                        var checkList = db.Query<KindMatchModel>(check1, new { charge_emp = cmodel.EmpNo }).ToList();
+                        if (checkList.Count() != 0)
+                        {
+                            MsgUser += "  " + cmodel.FullName;
+                        }
                     }
+
+                    if (string.IsNullOrEmpty(MsgUser))
+                    {
+                        foreach (var model in deleteList)
+                        {
+                            var deleteModel = new DirectorModel();
+                            deleteModel.charge_id = model.charge_id;
+                            deleteModel.SystemCategory = model.SystemCategory;
+                            deleteModel.EmpNo = model.EmpNo;
+                            string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[charge]  WHERE charge_id = @charge_id AND EmpNo = @EmpNo and SystemCategory = @SystemCategory");
+
+                            Dictionary<string, object> trans = new Dictionary<string, object>();
+                            trans.Add(sql, deleteModel);
+                            db.DoExtremeSpeedTransaction(trans);
+                        }
+                    }
+                    else
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = MsgUser + "为辖区或业管的负责人，无法删除" });
+                    }
+
+
 
                 }
             }
@@ -141,7 +162,7 @@ ON a.AccountID = c.account
 where sourcetype='A' and status = 'Y'
 and ( a.Empno = @EmpNo)";
                     user = db.Query<UserModel>(userSql, new { EmpNo }).FirstOrDefault();
-                    if(user == null)
+                    if (user == null)
                     {
                         return Json(new FlagTips { IsSuccess = false, Msg = "未找到账号，请重新输入" });
                     }
