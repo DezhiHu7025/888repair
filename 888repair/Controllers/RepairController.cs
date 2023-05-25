@@ -48,8 +48,8 @@ namespace _888repair.Controllers
             {
                 string sql = "";
                 model.RepairId = DateTime.Now.ToString("yyyyMMddHHmmssfff");
-                model.ResponseEmpno = "H22080031";
-                model.ResponseEmpname = "胡德知(dezhi_hu)";
+                model.ResponseEmpno = Session["EmpNo"].ToString();
+                model.ResponseEmpname = Session["fullname"].ToString();
                 model.CreatTime = DateTime.Now;
                 model.Status = "pending";
                 if (!string.IsNullOrEmpty(model.PhotoPath))
@@ -161,7 +161,7 @@ namespace _888repair.Controllers
             ControllerContext.HttpContext.Request.ContentEncoding = Encoding.GetEncoding("UTF-8");
             ControllerContext.HttpContext.Response.Charset = "UTF-8";
             RepairRecordModel model = new RepairRecordModel();
-            string Stu_Empno = "H22080031";
+            string Stu_Empno = Session["EmpNo"].ToString();
             if (httpPostedFileBase != null)
             {
                 try
@@ -203,7 +203,7 @@ namespace _888repair.Controllers
         /// <returns></returns>
         public ActionResult getRersonalProblemList(RepairRecordModel model)
         {
-            model.ResponseEmpno = "H22080031";
+            model.ResponseEmpno = Session["EmpNo"].ToString();
             var list = new List<RepairRecordModel>();
             try
             {
@@ -249,7 +249,7 @@ namespace _888repair.Controllers
 
         public List<RepairRecordModel> queryRersonalProblemList(RepairRecordModel model)
         {
-            model.ResponseEmpno = "H22080031";
+            model.ResponseEmpno = Session["EmpNo"].ToString();
             var list = new List<RepairRecordModel>();
             try
             {
@@ -417,8 +417,8 @@ namespace _888repair.Controllers
         /// <returns></returns>
         public ActionResult getReplyProblemList(RepairRecordModel model)
         {
-            model.ResponseEmpno = "H22080031";
-            model.EmpNo = "H22080031";
+            model.ResponseEmpno = Session["EmpNo"].ToString();
+            model.EmpNo = Session["EmpNo"].ToString();
             var list = new List<RepairRecordModel>();
             try
             {
@@ -504,8 +504,8 @@ namespace _888repair.Controllers
         public ActionResult ReplyProblemSave(RepairRecordModel model)
         {
 
-            model.EmpNo = "H22080031";
-            model.FullName = "胡德知(dezhi_hu)";
+            model.EmpNo = Session["EmpNo"].ToString();
+            model.FullName = Session["fullname"].ToString();
 
             StepRecordModel stepModel = new StepRecordModel();
             stepModel.GUID = Guid.NewGuid().ToString();
@@ -526,8 +526,8 @@ namespace _888repair.Controllers
             }
             try
             {
-                model.ResponseEmpno = "H22080031";
-                model.ResponseEmpname = "dezhi_hu";
+                model.ResponseEmpno = Session["EmpNo"].ToString();
+                model.ResponseEmpname = Session["fullname"].ToString();
                 model.CreatTime = DateTime.Now;
                 using (RepairDb db = new RepairDb())
                 {
@@ -557,8 +557,8 @@ namespace _888repair.Controllers
         public ActionResult TransferProblem(RepairRecordModel model)
         {
 
-            model.EmpNo = "H22080031";
-            model.FullName = "胡德知(dezhi_hu)";
+            model.EmpNo = Session["EmpNo"].ToString();
+            model.FullName = Session["fullname"].ToString();
 
             StepRecordModel stepModel = new StepRecordModel();
             stepModel.GUID = Guid.NewGuid().ToString();
@@ -606,8 +606,8 @@ namespace _888repair.Controllers
         /// <returns></returns>
         public ActionResult RejectTask(RepairRecordModel model)
         {
-            model.EmpNo = "H22080031";
-            model.FullName = "胡德知(dezhi_hu)";
+            model.EmpNo = Session["EmpNo"].ToString();
+            model.FullName = Session["fullname"].ToString();
 
             StepRecordModel stepModel = new StepRecordModel();
             stepModel.GUID = Guid.NewGuid().ToString();
@@ -672,8 +672,8 @@ namespace _888repair.Controllers
         /// <returns></returns>
         public ActionResult RejectEnd(RepairRecordModel model)
         {
-            model.EmpNo = "H22080031";
-            model.FullName = "胡德知(dezhi_hu)";
+            model.EmpNo = Session["EmpNo"].ToString();
+            model.FullName = Session["fullname"].ToString();
 
             StepRecordModel stepModel = new StepRecordModel();
             stepModel.OPINION = model.NewReplyContent;//获取未重新定义前的新回复内容
@@ -693,8 +693,8 @@ namespace _888repair.Controllers
             try
             {
                 string sql = "";
-                model.ResponseEmpno = "H22080031";
-                model.ResponseEmpname = "dezhi_hu";
+                model.ResponseEmpno = Session["EmpNo"].ToString();
+                model.ResponseEmpname = Session["fullname"].ToString();
                 model.CreatTime = DateTime.Now;
                 using (RepairDb db = new RepairDb())
                 {

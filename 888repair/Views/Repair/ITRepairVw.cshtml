@@ -47,10 +47,10 @@
         </tr>
         <tr>
             <td>
-                H22080031
-            </td>
+                <span id="logempno"></span>
+</td>
             <td>
-                胡德知(dezhi_hu)
+                <span id="logusername"></span>
             </td>
             <td>
                 IT(资讯类)
@@ -334,6 +334,11 @@
         reloadDate();
 
         var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHH");
+
+        var username = '@(Session["fullname"])';
+        var empno = '@(Session["EmpNo"])';
+        $("#logusername").html(username == "" ? "未登录" : username);
+        $("#logempno").html(empno == "" ? "未登录" : empno);
         
         ////自定义验证规则
         //form.verify({
@@ -572,7 +577,7 @@
                 obj.preview(function (index, file, result) {
                     
                     var tr = $(['<tr id="upload-' + index + '">'
-                        , '<td>' + datetime + '_' + "H22080031" + "_" + file.name + '</td>'
+                        , '<td>' + datetime + '_' + empno + "_" + file.name + '</td>'
                        // , '<td>' + file.name + '</td>'
                         , '<td>' + '<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">' + '</td>'
                         , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'

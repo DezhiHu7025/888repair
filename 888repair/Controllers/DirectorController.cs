@@ -50,7 +50,7 @@ namespace _888repair.Controllers
         {
             try
             {
-                model.UpdateUser = "dezhi_hu";
+                model.UpdateUser = Session["fullname"].ToString();
                 model.UpdateTime = DateTime.Now;
                 using (RepairDb db = new RepairDb())
                 {

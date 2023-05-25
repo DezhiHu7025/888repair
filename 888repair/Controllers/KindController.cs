@@ -55,7 +55,7 @@ namespace _888repair.Controllers
                 string sql = "";
                 using (RepairDb db = new RepairDb())
                 {
-                    model.UpdateUser = "dezhi_hu";
+                    model.UpdateUser = Session["fullname"].ToString();
                     model.UpdateTime = DateTime.Now;
                     if (string.IsNullOrEmpty(model.KindID))
                     {
@@ -181,7 +181,7 @@ namespace _888repair.Controllers
                 using (RepairDb db = new RepairDb())
                 {
                     model.MatchType = "KindMatch";
-                    model.UpdateUser = "dezhi_hu";
+                    model.UpdateUser = Session["fullname"].ToString();
                     model.UpdateTime = DateTime.Now;
                     if (string.IsNullOrEmpty(model.MatchId))
                     {
