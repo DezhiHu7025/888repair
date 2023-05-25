@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace _888repair.Controllers
 {
+    [App_Start.AuthFilter]
     public class KindController : Controller
     {
         // GET: Kind 业管维护

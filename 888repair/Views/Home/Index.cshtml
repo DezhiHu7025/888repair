@@ -9,7 +9,7 @@
     </title>
     <link rel="stylesheet" href="~/src/css/layui.css">
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-    <script src="~/src/language/index.js"></script>
+    @*<script src="~/src/language/index.js"></script>*@
 </head>
 <body>
     <div class="layui-layout layui-layout-admin">
@@ -49,7 +49,7 @@
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                 <ul class="layui-nav layui-nav-tree Menu" lay-filter="test" id="Menu">
-                    <li class="layui-nav-item current" data-id="fill"><a class="layui-nav-item " language="fill">填写问题</a></li>
+                    <li class="layui-nav-item current" data-id="fill"><a class="layui-nav-item ">填写问题</a></li>
                     <li class="layui-nav-item current" data-id="personalProblem"><a class="layui-nav-item ">个人问题列表</a></li>
                     <li id="replyProblem" class="layui-nav-item current" data-id="replyProblem"><a class="layui-nav-item ">回复问题</a></li>
                     <li id="listProblem" class="layui-nav-item current" data-id="listProblem"><a class="layui-nav-item ">问题列表</a></li>
@@ -62,8 +62,8 @@
                         <dl class="layui-nav-child" id="MenuChild">
                             <dd data-id="area"><a class="layui-nav-item ">辖区维护</a></dd>
                             <dd data-id="kind"><a class="layui-nav-item ">业管维护</a></dd>
-                            <dd data-id="charge"><a class="layui-nav-item " language="chargefix">负责人维护</a></dd>
-                            <dd data-id="status"><a class="layui-nav-item " language="statusfix">状态维护</a></dd>
+                            <dd data-id="charge"><a class="layui-nav-item ">负责人维护</a></dd>
+                            <dd data-id="status"><a class="layui-nav-item ">状态维护</a></dd>
                         </dl>
                     </li>
                 </ul>

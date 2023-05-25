@@ -11,7 +11,7 @@ namespace _888repair.App_Start
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
 
-        {
+       {
             // 获取当前请求的控制器和操作方法
             string controllerName = filterContext.RouteData.Values["controller"].ToString();
             string actionName = filterContext.RouteData.Values["action"].ToString();
@@ -31,10 +31,10 @@ namespace _888repair.App_Start
                 /*
             返回到了登陆界面，并且弹出提示信息
                 */
-                var url = "~/Login/LoginIndex";
+                var url = "../Login/LoginIndex";
                 // window.location.href = url;
                 filterContext.HttpContext.Response.Write("<script>window.location.href='" + url + "';</script>");
-                // filterContext.HttpContext.Response.Redirect("~/Login/LoginIndex");//跳转到登陆界面
+                // filterContext.HttpContext.Response.Redirect("~/Login/LoginIndex",true);//跳转到登陆界面
                 //base.OnActionExecuting(filterContext);
 
                 filterContext.Result = new EmptyResult();
