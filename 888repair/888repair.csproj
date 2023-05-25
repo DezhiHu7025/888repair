@@ -70,6 +70,8 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Services" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Security" />
@@ -155,6 +157,7 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KindController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\RepairController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Db\IDbOperation.cs" />
@@ -236,6 +239,7 @@
     <Content Include="Views\Repair\ProblemDetailVw.cshtml" />
     <Content Include="Views\Repair\ProblemAllVw.cshtml" />
     <Content Include="Views\Repair\ProblemAllDetailVw.cshtml" />
+    <Content Include="Views\Login\LoginIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

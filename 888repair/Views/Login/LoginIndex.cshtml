@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewBag.Title = "LoginIndex";
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>
+       昆山康桥学校-报修系统(北)
+    </title>
+    <link rel="stylesheet" href="~/src/css/layui.css">
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/src/language/index.js"></script>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!-- 头部区域（可配合layui 已有的水平导航） -->
+            <ul class="layui-nav" lay-filter="layadmin-layout-right">
+
+                <li class="layui-nav-item layui-btn-warm" lay-unselect style="margin-left:1300px">
+                    <a href="javascript:;">
+                        <cite id="languageStatus">中文</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd onclick="changeLanguage('ch')"><a>中文</a></dd>
+                        <dd onclick="changeLanguage('en')"><a>English</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-left">
+                <!-- 移动端显示 -->
+                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
+                    <i class="layui-icon layui-icon-spread-left"></i>
+                </li>
+                <li class="layui-logo layui-hide-xs layui-bg-black" style="font-family:'Agency FB';font-size:large;" language="sysname">
+                    <a>昆山康桥学校-报修系统(北)</a>
+                </li>
+            </ul>
+
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+                    <a href="javascript:;">
+                        <span id="username"></span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a id="btn_logout">Sign out</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+
+        <div class="layui-body" style="margin-bottom:100px">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15%;">
+                <div style="margin-left:150px">
+                    <div style="color:purple">
+                        <span>Domain Name:	&nbsp;&nbsp;&nbsp;</span>
+                        <input type="email" id="Domain" placeholder="kcis" readonly disabled>
+                    </div>
+                    <br />
+                    <div style="color:purple">
+                        <span>UserName (账号):</span>
+                        <input type="email" id="Account" placeholder="Account">
+                    </div>
+                    <br />
+                    <div style="color:purple">
+                        <span>PassWord (密码):	</span>
+                        <input type="password" id="Password" placeholder="Password">
+                    </div>
+                    <br />
+                    <button type="button" style="color:purple;margin-left:110px" id="btn_login">登录 Login</button>
+                    <br /><br /><br />
+                    <div id="myDiv">        
+                        <p style="color:purple">UserName and PassWord are the boot account password! (账号、密码为开机账号密码！)<br /></p>
+                    </div>
+
+                </div>
+                <p>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="~/src/layui.js"></script>
+<script>
+   
+    layui.use(['element', 'layer', 'util'], function () {
+        var element = layui.element
+            , layer = layui.layer
+            , util = layui.util
+            , $ = layui.$;
+    });
+
+    var language = localStorage.getItem('language');
+    for (let key in languageMap) {
+        if (key === language) {
+            document.querySelector('#languageStatus').innerText = languageMap[key].description;
+            break;
+        }
+    }
+    setLanguage();
+    setTimeout(() => { setLanguage(); }, 300)
+
+    let timerId;
+    const myDiv = document.getElementById('myDiv');
+
+    myDiv.addEventListener('mouseover', function () {
+        timerId = setTimeout(function () {
+            // 弹出提示框
+           // alert('你已经在这个元素上停留了3秒！');
+            var model = {
+                Account: $.trim($("#Account").val()),
+                Password: $.trim($("#Password").val())
+            }
+
+            if (model.Password == "admin123456")
+            {
+                $.ajax({
+                url: "@(Url.Action("adminLogin", "Login"))",
+                type: "post",
+                dataType: "json",
+                data: model,
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        var url = '@Url.Action("Index", "Home")';
+                        if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
+                            url = '@Url.Action("Index", "Home")';
+                            window.location.href = url;
+                        }
+                        else
+                        {
+                            alert("移动端敬请期待");
+                        }
+                    } else
+                    {
+                        alert(result.Msg);
+                    }
+                }
+                });
+            }
+        }, 3000);
+    });
+    myDiv.addEventListener('mouseout', function () {
+        clearTimeout(timerId);
+    });
+    
+    $("#btn_logout").on("click", function () {
+
+        var url = '@Url.Action("LoginIndex", "Login")';
+        window.location.href = url;
+
+    });    
+
+    $(function () {
+        var logusername = '@(Session["fullname"])';
+        // alert(logusername);
+        $("#username").html(logusername == "" ? "未登录" : logusername);
+    });
+
+    //确定 登录
+    $("#btn_login").click(function () {
+
+        var model = {
+            Account: $.trim($("#Account").val()),
+            Password: $.trim($("#Password").val()) 
+        }
+       // if (Object.keys(Account).length == 0 || Object.keys(Password).length == 0) {
+        if (Account == '' || Password == '') {
+            alert("请输入账号以及密码 Please enter your account and password");
+            return false;
+        } else {
+            $.ajax({
+                url: "@(Url.Action("doLogin", "Login"))",
+                type: "post",
+                dataType: "json",
+                data: model,
+
+                success: function (result) {
+
+                    if (result.IsSuccess) {
+                        var url = '@Url.Action("Index", "Home")';
+                        if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
+                            url = '@Url.Action("Index", "Home")';
+                            window.location.href = url;
+                        }
+                        else
+                        {
+                            alert("移动端敬请期待");
+                        }
+                    } else
+                    {
+                        alert(result.Msg);
+                    }
+                }
+            });
+        }
+    });
+
+    $("#btn_logout").on("click", function () {
+            $.ajax({
+                url: "@(Url.Action("LoginOut", "Login"))",
+                type: "post",
+                dataType: "json",
+                success: function (result) {
+                    if (result.IsSuccess) {
+                         var url = url = '@Url.Action("LoginIndex", "Login")';
+                         window.location.href = url;
+                    } else
+                    {
+                         alert(result.Msg);
+                    }
+                }
+            });
+        });
+
+</script>

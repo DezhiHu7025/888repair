@@ -32,17 +32,16 @@
                 <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
                     <i class="layui-icon layui-icon-spread-left"></i>
                 </li>
-                <li class="layui-logo layui-hide-xs layui-bg-black" style="font-family:'Agency FB';font-size:x-large;" language="sysname"><a>888报修系统</a></li>
+                <li class="layui-logo layui-hide-xs layui-bg-black" style="font-family:'Agency FB';font-size:large;" language="sysname"><a>昆山康桥学校-报修系统(北)</a></li>
             </ul>
 
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item layui-hide layui-show-md-inline-block">
                     <a href="javascript:;">
-                        <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
-                        tester
+                       <span id="username"></span>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">Sign out</a></dd>
+                        <dd><a id="btn_logout">Sign out</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -54,13 +53,13 @@
                 <ul class="layui-nav layui-nav-tree Menu" lay-filter="test" id="Menu">
                     <li class="layui-nav-item current" data-id="fill"><a class="layui-nav-item " language="fill">填写问题</a></li>
                     <li class="layui-nav-item current" data-id="personalProblem"><a class="layui-nav-item ">个人问题列表</a></li>
-                    <li class="layui-nav-item current" data-id="replyProblem"><a class="layui-nav-item ">回复问题</a></li>
-                    <li class="layui-nav-item current" data-id="listProblem"><a class="layui-nav-item ">问题列表</a></li>
-                    <li class="layui-nav-item current" data-id="ProblemRepair"><a class="layui-nav-item ">问题列表维护</a></li>
-                    <li class="layui-nav-item" data-id="areaMatch"><a class="layui-nav-item ">辖区配对维护</a></li>
-                    <li class="layui-nav-item" data-id="kindMatch"><a class="layui-nav-item ">业管配对维护</a></li>
+                    <li id="replyProblem" class="layui-nav-item current" data-id="replyProblem"><a class="layui-nav-item ">回复问题</a></li>
+                    <li id="listProblem" class="layui-nav-item current" data-id="listProblem"><a class="layui-nav-item ">问题列表</a></li>
+                    <li id="ProblemRepair" class="layui-nav-item current" data-id="ProblemRepair"><a class="layui-nav-item ">问题列表维护</a></li>
+                    <li id="areaMatch" class="layui-nav-item" data-id="areaMatch"><a class="layui-nav-item ">辖区配对维护</a></li>
+                    <li id="kindMatch" class="layui-nav-item" data-id="kindMatch"><a class="layui-nav-item ">业管配对维护</a></li>
                     @*<li class="layui-nav-item" data-id="fillQuestion"><a class="layui-nav-item ">业管配对维护</a></li>*@
-                    <li class="layui-nav-item">
+                    <li id="dataRepair" class="layui-nav-item">
                         <a href="javascript:;">基础数据维护</a>
                         <dl class="layui-nav-child" id="MenuChild">
                             <dd data-id="area"><a class="layui-nav-item ">辖区维护</a></dd>
@@ -120,6 +119,58 @@
     setTimeout(() => {setLanguage();}, 300)
 
     $(function () {
+
+        $('#areaMatch').hide();
+        $('#kindMatch').hide();
+        $('#dataRepair').hide();
+        $('#listProblem').hide();
+        $('#replyProblem').hide();
+        $('#ProblemRepair').hide();
+
+        var logusername = '@(Session["fullname"])';
+        var logempno = '@(Session["EmpNo"])';
+        var logmanager = '@(Session["Manager"])';
+        var logviewer = '@(Session["Viewer"])';
+
+       // alert(logusername);
+        $("#username").html(logusername == "" ? "未登录" : logusername);
+
+        if (logmanager == "1")
+        {
+            $('#areaMatch').show();
+            $('#kindMatch').show();
+            $('#dataRepair').show();
+            $('#ProblemRepair').show();
+        } else
+        {
+            $('#areaMatch').hide();
+            $('#kindMatch').hide();
+            $('#dataRepair').hide();
+            $('#ProblemRepair').hide();
+        }
+
+        if (logviewer == "1") {
+            $('#listProblem').show();
+        }
+
+        $.ajax({
+            type: 'post',
+            url: "@(Url.Action("checkDirector", "Login"))",
+            data: { EmpNo: logempno },
+            success: function (result) {
+                if (result.IsSuccess) {
+                    if (result.Msg == "1")
+                    {
+                        $('#replyProblem').show();
+                        $('#listProblem').show();
+                    }
+                }
+                else {
+                    alert("程式异常，请联系资讯");
+                }
+            }
+        });
+
         $(".Menu").on("click", "dd", function () {
             var sId = $(this).data("id");//获取data-id的值
             window.location.hash = sId;
@@ -200,5 +251,23 @@
 
         var sId = window.location.hash;
         loacdInner(sId);
+
+        $("#btn_logout").on("click", function () {
+            $.ajax({
+                url: "@(Url.Action("LoginOut", "Login"))",
+                type: "post",
+                dataType: "json",
+                success: function (result) {
+                    if (result.IsSuccess) {
+                         var url = url = '@Url.Action("LoginIndex", "Login")';
+                         window.location.href = url;
+                    } else
+                    {
+                         alert(result.Msg);
+                    }
+                }
+            });
+        });
+
     });
 </script>

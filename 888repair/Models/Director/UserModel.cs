@@ -33,9 +33,22 @@ namespace _888repair.Models.Director
 
         public string GroupId { get; set; }
 
+        /// <summary>
+        /// 资讯or后勤权限
+        /// </summary>
         public string GroupName { get; set; }
 
         public string password2 { get; set; }
+
+        /// <summary>
+        /// 浏览者权限
+        /// </summary>
+        public string Viewer { get; set; }
+
+        /// <summary>
+        /// 管理者权限
+        /// </summary>
+        public string Manager { get; set; }
 
     }
 }

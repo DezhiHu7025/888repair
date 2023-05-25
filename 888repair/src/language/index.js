@@ -9,7 +9,7 @@ const languageMap = {
 		hello: '你好',
 		world: '世界',
 		fill:'填写问题',
-		sysname:'888报修系统',
+		sysname:'昆山康桥学校-报修系统(北)',
 		statusfix:'状态维护',
 		status:'状态',
 		chargefix:'负责人维护',
