@@ -15,7 +15,7 @@
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header">
             <!-- 头部区域（可配合layui 已有的水平导航） -->
-            <ul class="layui-nav" lay-filter="layadmin-layout-right">
+            @*<ul class="layui-nav" lay-filter="layadmin-layout-right">
 
                 <li class="layui-nav-item layui-btn-warm" lay-unselect style="margin-left:1300px">
                     <a href="javascript:;">
@@ -26,13 +26,11 @@
                         <dd onclick="changeLanguage('en')"><a>English</a></dd>
                     </dl>
                 </li>
-            </ul>
+            </ul>*@
             <ul class="layui-nav layui-layout-left">
-                <!-- 移动端显示 -->
-                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
-                    <i class="layui-icon layui-icon-spread-left"></i>
+                <li style="padding-top:5%">
+                    <a style="font-family:Cambria;font-size:x-large;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
                 </li>
-                <li class="layui-logo layui-hide-xs layui-bg-black" style="font-family:'Agency FB';font-size:large;" language="sysname"><a>昆山康桥学校-报修系统(北)</a></li>
             </ul>
 
             <ul class="layui-nav layui-layout-right">
@@ -108,15 +106,15 @@
             , $ = layui.$;
     });
 
-    var language = localStorage.getItem('language');
-    for (let key in languageMap) {
-        if (key === language) {
-            document.querySelector('#languageStatus').innerText = languageMap[key].description;
-            break;
-        }
-    }
-    setLanguage();
-    setTimeout(() => {setLanguage();}, 300)
+    //var language = localStorage.getItem('language');
+    //for (let key in languageMap) {
+    //    if (key === language) {
+    //        document.querySelector('#languageStatus').innerText = languageMap[key].description;
+    //        break;
+    //    }
+    //}
+    //setLanguage();
+    //setTimeout(() => {setLanguage();}, 300)
 
     $(function () {
 
@@ -240,7 +238,7 @@
                         i = 0;
                     break; 
                 default:
-                    pathn = "@(Url.Action("GroupIndex", "Group"))",
+                    pathn = "@(Url.Action("RepairIndex", "Repair"))",
                         i = 0; 
                     break;
             }
