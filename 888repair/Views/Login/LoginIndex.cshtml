@@ -29,14 +29,16 @@
                     </dl>
                 </li>
             </ul>*@
-            <ul class="layui-nav layui-layout-left">
-                <!-- 移动端显示 -->
-             
+            <ul class="layui-nav layui-layout-left" id="PCtitle">
+                 移动端显示 
+
                 <li style="padding-top:5%">
                     <a style="font-family:Cambria;font-size:x-large;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
                 </li>
             </ul>
-
+            <div id="phonetitle"> 
+            <a style="font-family:Cambria;font-size:x-large;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
+            </div>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item layui-hide layui-show-md-inline-block">
                     <a href="javascript:;">
@@ -51,8 +53,8 @@
 
         <div class="layui-body" style="margin-bottom:100px">
             <!-- 内容主体区域 -->
-            <div style="padding: 15%;">
-                <div style="margin-left:150px">
+            <div style="padding: 15%;" id="PC">
+                <form style="margin-left:150px">
                     <div style="color:purple">
                         <span>Domain Name:	&nbsp;&nbsp;&nbsp;</span>
                         <input type="email" id="Domain" placeholder="kcis" readonly disabled>
@@ -74,14 +76,40 @@
                         <p style="color:grey">UserName and PassWord are the boot account password! (账号、密码为开机账号密码！)<br /></p>
                     </div>
 
-                </div>
+                </form>
                 <br /> <br /> <br /> <br />
                 <div style="padding-left:80%; width:20%;height:120px;">
                     <img src="~/src/phoneLink.png" style="width:120px;height:120px" />
                     <p style="font-family:Cambria;font-weight:800">手机版/For Phone</p>
                 </div>
             </div>
-           
+        </div>
+
+        <div id="phone" style="padding-top:20%;padding-left:15%">
+            <form>
+                <div style="color:purple">
+                    <span style="font-size:large">Domain Name:	&nbsp;&nbsp;&nbsp;</span><br />
+                    <input style="width:90%;height:30px" type="email" id="Domain2" placeholder="kcis" readonly disabled>
+                </div>
+                <br />
+                <div style="color:purple">
+                    <span style="font-size:large">UserName (账号):</span><br />
+                    <input style="width:90%;height:30px" type="email" id="Account2" placeholder="账号" autocomplete="off">
+                </div>
+                <br />
+                <div style="color:purple;width:100%">
+                    <span style="font-size:large">PassWord (密码):	</span><br />
+                    <input style="width:90%;height:30px" type="password" id="Password2" placeholder="密码" autocomplete="off">
+                </div>
+                <br />
+                <button type="button" style="color:purple;margin-left:110px" id="btn_login2">登录 Login</button>
+                <br /><br /><br />
+
+            </form>
+        </div>
+        <div id="myDiv">
+            <p style="color:grey;margin-left:5%">UserName and PassWord are the boot account password!</p>
+            <p style="color:grey;width:50%;margin:20px auto;"> (账号、密码为开机账号密码！)<br /></p>
         </div>
     </div>
 </body>
@@ -108,6 +136,30 @@
     let timerId;
     const myDiv = document.getElementById('myDiv');
 
+    if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
+       
+
+        $('#phone').hide();
+        $('#phonetitle').hide();
+
+        $('#PC').show();
+        $('#PCtitle').show();
+        
+        //$('#phone').show();
+        //$('#PC').hide();
+    }
+    else
+    {
+        $('#phone').show();
+        $('#phonetitle').show();
+
+        $('#PC').hide();
+        $('#PCtitle').hide();
+
+        //$('#phone').hide();
+        //$('#PC').show();
+    }
+
     myDiv.addEventListener('mouseover', function () {
         timerId = setTimeout(function () {
             // 弹出提示框
@@ -133,7 +185,9 @@
                         }
                         else
                         {
-                            alert("移动端敬请期待");
+                            alert("移动端开发中,请PC端登录");
+                            url = '@Url.Action("LoginIndex", "Login")';
+                            window.location.href = url;
                         }
                     } else
                     {
@@ -178,6 +232,46 @@
                 type: "post",
                 dataType: "json",
                 data: model,
+                success: function (result) {
+
+                    if (result.IsSuccess) {
+                        var url = '@Url.Action("Index", "Home")';
+                        if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
+                            url = '@Url.Action("Index", "Home")';
+                            window.location.href = url;
+                        }
+                        else
+                        {
+                            alert("移动端开发中,请PC端登录");
+                            url = '@Url.Action("LoginIndex", "Login")';
+                            window.location.href = url;
+                        }
+                    } else
+                    {
+                        alert(result.Msg);
+                    }
+                }
+            });
+        }
+    });
+
+     //确定 登录
+    $("#btn_login2").click(function () {
+
+        var model = {
+            Account: $.trim($("#Account2").val()),
+            Password: $.trim($("#Password2").val()) 
+        }
+       // if (Object.keys(Account).length == 0 || Object.keys(Password).length == 0) {
+        if (Account == '' || Password == '') {
+            alert("请输入账号以及密码 Please enter your account and password");
+            return false;
+        } else {
+            $.ajax({
+                url: "@(Url.Action("doLogin", "Login"))",
+                type: "post",
+                dataType: "json",
+                data: model,
 
                 success: function (result) {
 
@@ -189,7 +283,9 @@
                         }
                         else
                         {
-                            alert("移动端敬请期待");
+                             alert("移动端开发中,请PC端登录");
+                             url = '@Url.Action("LoginIndex", "Login")';
+                             window.location.href = url;
                         }
                     } else
                     {
@@ -199,6 +295,7 @@
             });
         }
     });
+
 
     $("#btn_logout").on("click", function () {
             $.ajax({
