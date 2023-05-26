@@ -485,6 +485,21 @@ namespace _888repair.Controllers
                         model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
                         sql += " and a.CreatTime <=@endDate ";
                     }
+                    var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        switch (group)
+                        {
+                            case "资讯":
+                                sql += " and a.SystemCategory = 'IT(资讯类)' ";
+                                break;
+                            case "后勤":
+                                sql += " and a.SystemCategory = 'Logistics(总务后勤类)'";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     sql += " ORDER BY repair_id desc";
 
                     list = db.Query<RepairRecordModel>(sql, model).ToList();
@@ -803,6 +818,21 @@ namespace _888repair.Controllers
                         model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
                         sql += " and a.CreatTime <=@endDate ";
                     }
+                    var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        switch (group)
+                        {
+                            case "资讯":
+                                sql += " and a.SystemCategory = 'IT(资讯类)' ";
+                                break;
+                            case "后勤":
+                                sql += " and a.SystemCategory = 'Logistics(总务后勤类)'";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     sql += " ORDER BY repair_id desc";
 
                     list = db.Query<RepairRecordModel>(sql, model).ToList();
@@ -891,6 +921,21 @@ namespace _888repair.Controllers
                     {
                         model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
                         sql += " and a.CreatTime <=@endDate ";
+                    }
+                    var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        switch (group)
+                        {
+                            case "资讯":
+                                sql += " and a.SystemCategory = 'IT(资讯类)' ";
+                                break;
+                            case "后勤":
+                                sql += " and a.SystemCategory = 'Logistics(总务后勤类)'";
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     sql += " ORDER BY repair_id desc";
 
@@ -1066,6 +1111,21 @@ namespace _888repair.Controllers
                     {
                         model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
                         sql += " and a.CreatTime <=@endDate ";
+                    }
+                    var group = Session["GroupName"].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        switch (group)
+                        {
+                            case "资讯":
+                                sql += " and a.SystemCategory = 'IT(资讯类)' ";
+                                break;
+                            case "后勤":
+                                sql += " and a.SystemCategory = 'Logistics(总务后勤类)'";
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     sql += " ORDER BY repair_id desc";
 

@@ -37,6 +37,21 @@ namespace _888repair.Controllers
                     {
                         sql += " and KindCategory like '%" + model.KindCategory + "%' ";
                     }
+                    var group = Session["GroupName"].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        switch (group)
+                        {
+                            case "资讯":
+                                sql += " and SystemCategory = 'IT(资讯类)' ";
+                                break;
+                            case "后勤":
+                                sql += " and SystemCategory = 'Logistics(总务后勤类)'";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     sql += " ORDER BY Sort ASC ";
 
                     list = db.Query<KindModel>(sql, model).ToList();
@@ -161,6 +176,21 @@ namespace _888repair.Controllers
                     if (!string.IsNullOrEmpty(model.EmpNo))
                     {
                         sql += " and c.EmpNo = @EmpNo ";
+                    }
+                    var group = Session["GroupName"].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        switch (group)
+                        {
+                            case "资讯":
+                                sql += " and a.SystemCategory = 'IT(资讯类)' ";
+                                break;
+                            case "后勤":
+                                sql += " and a.SystemCategory = 'Logistics(总务后勤类)'";
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     sql += " ORDER BY a.sortno asc,a.match_id ASC,a.area_id ASC,a.sort ASC";
 

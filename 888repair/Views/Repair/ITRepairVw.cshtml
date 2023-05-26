@@ -514,7 +514,7 @@
             } else {
                 $.ajax({
                     type: "post",
-                    url: "@(Url.Action("getKind", "DDL"))",
+                    url: "@(Url.Action("getKindEvery", "DDL"))",
                     data: { "keyWord": KindCategory },
                     dataType: "json",
                     success: function (result) {

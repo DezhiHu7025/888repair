@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using _888repair.Db;
 using _888repair.Models;
+using _888repair.Models.Area;
 using _888repair.Models.Director;
 
 namespace _888repair.Controllers
@@ -57,6 +58,28 @@ namespace _888repair.Controllers
                         Session["Manager"] = model.Manager;
                         Session["Viewer"] = model.Viewer;
                         Session["EmpNo"] = model.EmpNo;
+                        if (string.IsNullOrEmpty(model.GroupName))
+                        {
+                            using (RepairDb db = new RepairDb())
+                            {
+                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsNorth].[dbo].[match] where charge_emp = @EmpNo ";
+                                var list = db.Query<AreaMatchModel>(permissionCheck, new { EmpNo = model.EmpNo }).ToList();
+                                if (list.Count() == 1 && list.FirstOrDefault().SystemCategory == "IT(资讯类)")
+                                {
+                                    Session["OPGroup"] = "资讯";
+                                }
+                                else if (list.Count() == 1 && list.FirstOrDefault().SystemCategory == "Logistics(总务后勤类)")
+                                {
+                                    Session["OPGroup"] = "后勤";
+                                }
+                                else
+                                {
+                                    Session["OPGroup"] = "管理者";
+                                }
+
+                            }
+
+                        }
                     }
                     else
                     {
@@ -192,6 +215,28 @@ where a.AccountID = @Account";
                         Session["Manager"] = model.Manager;
                         Session["Viewer"] = model.Viewer;
                         Session["EmpNo"] = model.EmpNo;
+                        if (string.IsNullOrEmpty(model.GroupName))
+                        {
+                            using (RepairDb db = new RepairDb())
+                            {
+                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsNorth].[dbo].[match] where charge_emp = @EmpNo ";
+                                var list = db.Query<AreaMatchModel>(permissionCheck, new { EmpNo = model.EmpNo }).ToList();
+                                if (list.Count() == 1 && list.FirstOrDefault().SystemCategory == "IT(资讯类)")
+                                {
+                                    Session["OPGroup"] = "资讯";
+                                }
+                                else if (list.Count() == 1 && list.FirstOrDefault().SystemCategory == "Logistics(总务后勤类)")
+                                {
+                                    Session["OPGroup"] = "后勤";
+                                }
+                                else
+                                {
+                                    Session["OPGroup"] = "管理者";
+                                }
+
+                            }
+
+                        }
                     }
                     else
                     {

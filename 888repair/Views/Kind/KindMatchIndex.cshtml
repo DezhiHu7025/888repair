@@ -37,10 +37,10 @@
                 <div class="layui-input-inline">
                     <select ID="OpSystemCategory" name="OpSystemCategory" lay-filter="OpSystemCategory">
                         <option value=""></option>
-                        <option value="IT(资讯类)">IT(资讯类)</option>
+                        @*<option value="IT(资讯类)">IT(资讯类)</option>
                         <option value="Logistics(总务后勤类)">
                             Logistics(总务后勤类)
-                        </option>
+                        </option>*@
                     </select>
                 </div>
             </div>
@@ -82,10 +82,10 @@
             <div class="layui-input-block" style="height:38px;width:300px">
                 <select ID="addSystemCategory" name="addSystemCategory" lay-filter="addSystemCategory" lay-verify="required">
                     <option value=""></option>
-                    <option value="IT(资讯类)">IT(资讯类)</option>
+                    @*<option value="IT(资讯类)">IT(资讯类)</option>
                     <option value="Logistics(总务后勤类)">
                         Logistics(总务后勤类)
-                    </option>
+                    </option>*@
                 </select>
             </div>
         </div>
@@ -126,6 +126,20 @@
 
         loadOption();
 
+        var logGroupName = '@(Session["GroupName"])'
+        if (logGroupName == "资讯") {
+            $("#OpSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $("#addSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+        } else if (logGroupName == "后勤") {
+            $("#OpSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+            $("#addSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+        } else if (logGroupName == "管理者") {
+            $("#OpSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $("#OpSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+            $("#addSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $("#addSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+        }
+        
         form.on('submit(demo1)', function (data) {
 
             var model = {

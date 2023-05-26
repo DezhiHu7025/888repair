@@ -36,6 +36,21 @@ namespace _888repair.Controllers
                     {
                         sql += " and FullName like '%" + model.FullName + "%'";
                     }
+                    var group = Session["GroupName"].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        switch (group)
+                        {
+                            case "资讯":
+                                sql += " and SystemCategory = 'IT(资讯类)' ";
+                                break;
+                            case "后勤":
+                                sql += " and SystemCategory = 'Logistics(总务后勤类)'";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     sql += " ORDER BY charge_id asc";
 
                     list = db.Query<DirectorModel>(sql, model).ToList();

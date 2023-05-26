@@ -302,10 +302,10 @@
             $('#btn_submit').removeClass("layui-disabled").removeAttr("disabled", "disabled");
             $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
         }
-
-        //TODO :
+        
         //当前用户为负责人 则显示按钮组
-        if (1 == 1) {
+        var logusername = '@(Session["fullname"])';
+        if (logusername == localStorage.getItem("ChargeEmpname")) {
             $("#btngroup").show();
         } else
         {

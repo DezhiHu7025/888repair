@@ -27,10 +27,10 @@
                 <div class="layui-input-inline">
                     <select ID="OpSystemCategory" name="OpSystemCategory" lay-filter="SystemCategory">
                         <option value=""></option>
-                        <option value="IT(资讯类)">IT(资讯类)</option>
+                        @*<option value="IT(资讯类)">IT(资讯类)</option>
                         <option value="Logistics(总务后勤类)">
                             Logistics(总务后勤类)
-                        </option>
+                        </option>*@
                     </select>
                 </div>
             </div>
@@ -258,6 +258,16 @@
         });
 
         render();
+
+        var logGroupName = '@(Session["GroupName"])' == '' ? '@(Session["OPGroup"])' : '@(Session["GroupName"])';
+        if (logGroupName == "资讯") {
+            $("#OpSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+        } else if (logGroupName == "后勤") {
+            $("#OpSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+        } else if (logGroupName == "管理者") {
+            $("#OpSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $("#OpSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+        }
 
         $.ajax({
             url: "@(Url.Action("getProblemList", "Repair"))",  // 要提交的URL路径
