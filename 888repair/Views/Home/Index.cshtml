@@ -158,8 +158,8 @@
         }
 
         if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
-            url = '@Url.Action("Index", "Home")';
-            window.location.href = url;
+            @*url = '@Url.Action("Index", "Home")';
+            window.location.href = url;*@
         }
         else
         {
@@ -275,7 +275,6 @@
                 success: function (result) {
                     if (result.IsSuccess) {
                         var url = '@Url.Action("LoginIndex", "Login")';
-                        alert(url);
                          window.location.href = url;
                     } else
                     {
