@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace _888repair.Controllers
 {
+    [App_Start.AuthFilter]
     public class HomeController : Controller
     {
         public ActionResult Index()
