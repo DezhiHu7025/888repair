@@ -1,0 +1,342 @@
+﻿
+@{
+    ViewBag.Title = "MobileIndex";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>
+        888报修系统 888 repair system
+    </title>
+    <link rel="stylesheet" href="~/src/css/layui.css">
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <style type="text/css">
+
+        .layui-nav-tree .layui-nav-bar {
+            background-color: #ffffff;
+            width: 0px;
+            top: 96.5px;
+            opacity: 0;
+            height: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <ul class="layui-nav layui-layout-left">
+                <li style="padding-top:5%;padding-left:0">
+                    <a style="font-family:Cambria;font-size:larger;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
+                </li>
+            </ul>
+            <ul>
+                <li class="layui-nav-item layui-show-xs-inline-block" style="padding-top:5%;padding-left:5%;width:50px;" lay-header-event="menuLeft">
+                    <a href="javascript:;">
+                        <span id="leftEnumIcon" class="layui-icon layui-icon-spread-left"></span>
+                    </a>
+                </li>
+               
+            </ul>
+            @*<ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+                    <a href="javascript:;">
+                        <span id="username"></span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a id="btn_logout">Sign out</a></dd>
+                    </dl>
+                </li>
+            </ul>*@
+        </div>
+
+        <div class="layui-side layui-bg-black" id="leftmenu" style="display:none">
+                <div class="layui-side-scroll">
+                    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                    <ul class="layui-nav layui-nav-tree Menu" lay-filter="test" id="Menu"">
+                        <li class="layui-nav-item current">
+                            <a href="javascript:;">
+                                <img style="width:40px" src="../src/user1.jpg"><span id="username" style="color:lightyellow">&nbsp;&nbsp;</span>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd><a id="btn_logout">Sign out</a></dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item current" data-id="fill"><a class="layui-nav-item ">填写问题</a></li>
+                        <li class="layui-nav-item current" data-id="personalProblem"><a class="layui-nav-item ">个人问题列表</a></li>
+                        <li id="replyProblem" class="layui-nav-item current" data-id="replyProblem"><a class="layui-nav-item ">回复问题</a></li>
+                        <li id="listProblem" class="layui-nav-item current" data-id="listProblem"><a class="layui-nav-item ">问题列表</a></li>
+                        <li id="ProblemRepair" class="layui-nav-item current" data-id="ProblemRepair"><a class="layui-nav-item ">问题列表维护</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        <div class="layui-body" style="margin-bottom:100px">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;" id="content">
+
+            </div>
+        </div>
+        <div class="layui-footer" style="padding-bottom:6%">
+            <p style="font-size:smaller;line-height:30px">If you have any problem with the system, please contact IT section <br />若对报修系统有疑虑或系统发生错误，请洽资讯组 分机5509</p>
+ 
+        </div>
+    </div>
+</body>
+<script src="~/src/layui.js"></script>
+<script>
+    function formatDate(str) {
+        if (str != null && str != '') {
+            var now = new Date(parseInt(str.replace("/Date(", "").replace(")/", ""), 10));
+            var year = now.getFullYear();  //取得4位数的年份
+            var month = now.getMonth() + 1;  //取得日期中的月份，其中0表示1月，11表示12月
+            var date = now.getDate();      //返回日期月份中的天数（1到31）
+            var hour = now.getHours();     //返回日期中的小时数（0到23）
+            var minute = now.getMinutes(); //返回日期中的分钟数（0到59）
+            var second = now.getSeconds(); //返回日期中的秒数（0到59）
+            return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+        }
+        else {
+            return ;
+        }
+    }
+    //JS
+    layui.use(['element', 'layer', 'util'], function () {
+        var element = layui.element
+            , layer = layui.layer
+            , util = layui.util
+            , $ = layui.$;
+
+        var btn = $("#leftEnumIcon");
+        btn.removeClass('layui-nav-bar').addClass('layui-icon-shrink-right');
+        $(".layui-side").animate({ width: 'toggle' }); //toggle如果原来div是隐藏的就会把元素显示，如果原来是显示则隐藏
+        $(".zq-logo").animate({ width: 'toggle' });
+        $(".layui-body").animate({ left: '0px' });
+        $(".layui-footer").animate({ left: '0px' });
+
+        //头部事件
+        util.event('lay-header-event', {  //util 记得 声明 var util = layui.util
+            //左侧菜单事件
+            menuLeft: function (othis) {
+
+                var btn = $("#leftEnumIcon");
+                if (btn.hasClass('layui-icon-spread-left')) {
+                    menuHide(btn);
+                    btn.addClass('btn-index');
+                } else if (btn.has('layui-icon-shrink-right')) {
+                    btn.removeClass('btn-index');
+                    menuShow(btn);
+                }
+
+                $(window).resize(function () {
+                    var width = $(document.body).width();
+                    var btn = $("leftEnumIcon");
+                    if (width < 1000) {
+                        if (btn.hasClass('layui-icon-spread-left')) {
+                           // menuShow(btn);
+                            menuHide(btn);
+                        }
+                    } else {
+                        if (!btn.hasClass('btn-index')) {
+                            if (btn.hasClass('layui-icon-shrink-right')) {
+                              //  menuHide(btn);
+                                menuShow(btn);
+
+                            }
+                        }
+
+
+                    }
+
+                });
+
+                function menuShow(btn) {
+                    btn.removeClass('layui-icon-shrink-right').addClass('layui-nav-bar');
+                    $(".layui-side").animate({ width: 'toggle' });
+                    $(".zq-logo").animate({ width: 'toggle' });
+                    $(".layui-body").animate({ left: '200px' });
+                    $(".layui-footer").animate({ left: '200px' });
+                }
+
+                function menuHide(btn) {
+                    btn.removeClass('layui-nav-bar').addClass('layui-icon-shrink-right');
+                    $(".layui-side").animate({ width: 'toggle' }); //toggle如果原来div是隐藏的就会把元素显示，如果原来是显示则隐藏
+                    $(".zq-logo").animate({ width: 'toggle' });
+                    $(".layui-body").animate({ left: '0px' });
+                    $(".layui-footer").animate({ left: '0px' });
+                }
+            }
+        });
+    });
+    
+    $(function () {
+
+        $('#areaMatch').hide();
+        $('#kindMatch').hide();
+        $('#dataRepair').hide();
+        $('#listProblem').hide();
+        $('#replyProblem').hide();
+        $('#ProblemRepair').hide();
+
+        var logusername = '@(Session["fullname"])';
+        var logempno = '@(Session["EmpNo"])';
+        var logmanager = '@(Session["Manager"])';
+        var logviewer = '@(Session["Viewer"])';
+
+        if (logusername == "") {
+            $('#leftmenu').hide();
+        } else {
+            $('#leftmenu').show();
+        }
+
+       // alert(logusername);
+        $("#username").html(logusername == "" ? "未登录" : logusername);
+
+        if (logmanager == "1")
+        {
+            $('#areaMatch').show();
+            $('#kindMatch').show();
+            $('#dataRepair').show();
+            $('#ProblemRepair').show();
+        } else
+        {
+            $('#areaMatch').hide();
+            $('#kindMatch').hide();
+            $('#dataRepair').hide();
+            $('#ProblemRepair').hide();
+        }
+
+        if (logviewer == "1") {
+            $('#listProblem').show();
+        }
+
+        
+
+        @*if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
+
+        }
+        else
+        {
+            alert("移动端开发中,请PC端登录");
+            url = '@Url.Action("LoginIndex", "Login")';
+            window.location.href = url;
+        }*@
+
+        $.ajax({
+            type: 'post',
+            url: "@(Url.Action("checkDirector", "Login"))",
+            data: { EmpNo: logempno },
+            success: function (result) {
+                if (result.IsSuccess) {
+                    if (result.Msg == "1")
+                    {
+                        $('#replyProblem').show();
+                        $('#listProblem').show();
+                    }
+                }
+                else {
+                    alert("程式异常，请联系资讯");
+                }
+            }
+        });
+
+        $(".Menu").on("click", "dd", function () {
+            var sId = $(this).data("id");//获取data-id的值
+            window.location.hash = sId;
+            loacdInner(sId);
+        });
+
+        $(".Menu").on("click", "li", function () {
+            var sId = $(this).data("id");//获取data-id的值
+            if (sId != null) {
+                window.location.hash = sId;
+                loacdInner(sId);
+            }
+
+        });
+
+        function loacdInner(sId) {
+            var sId = window.location.hash;
+            var pathn, i;
+
+            switch (sId) {
+                case "#area":
+                    pathn = "@(Url.Action("AreaIndex", "Area"))",
+                        i = 0;
+                    break;
+                case "#kind":
+                    pathn = "@(Url.Action("KindIndex", "Kind"))",
+                        i = 0;
+                    break;
+                case "#fill":
+                    pathn = "@(Url.Action("RepairIndex", "Repair"))",
+                        i = 0;
+                    break;
+                case "#charge":
+                    pathn = "@(Url.Action("DirectorIndex", "Director"))",
+                        i = 0;
+                    break;
+                case "#status":
+                    pathn = "@(Url.Action("StateIndex", "State"))",
+                        i = 0;
+                    break;
+                case "#areaMatch":
+                    pathn = "@(Url.Action("AreaMatchIndex", "Area"))",
+                        i = 0;
+                    break;
+                case "#kindMatch":
+                    pathn = "@(Url.Action("KindMatchIndex", "Kind"))",
+                        i = 0;
+                    break;
+                case "#fillQuestion":
+                    pathn = "@(Url.Action("RepairIndex", "Repair"))",
+                        i = 0;
+                    break;
+                case "#personalProblem":
+                    pathn = "@(Url.Action("RersonalProblemIndex", "Repair"))",
+                        i = 0;
+                    break;
+                case "#replyProblem":
+                    pathn = "@(Url.Action("ReplyRepairIndex", "Repair"))",
+                        i = 0;
+                    break;
+                case "#listProblem":
+                    pathn = "@(Url.Action("ProblemListIndex", "Repair"))",
+                        i = 0;
+                    break;
+                case "#ProblemRepair":
+                    pathn = "@(Url.Action("ProblemAllVw", "Repair"))",
+                        i = 0;
+                    break;
+                default:
+                    pathn = "@(Url.Action("RepairIndex", "Repair"))",
+                        i = 0;
+                    break;
+            }
+            $("#content").load(pathn);//加载相应内容
+           // $(".MenuChild dd").eq(i).addClass("current").siblings().removeClass("current");//当前列表高亮
+
+        }
+
+        var sId = window.location.hash;
+        loacdInner(sId);
+
+        $("#btn_logout").on("click", function () {
+            $.ajax({
+                url: "@(Url.Action("LoginOut", "Login"))",
+                type: "post",
+                dataType: "json",
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        var url = '@Url.Action("LoginIndex", "Login")';
+                         window.location.href = url;
+                    } else
+                    {
+                         alert(result.Msg);
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+

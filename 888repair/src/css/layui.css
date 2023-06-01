@@ -267,7 +267,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-layout-admin .layui-footer{position: fixed; left: 200px; right: 0; bottom: 0; z-index: 990; height: 44px; line-height: 44px; padding: 0 15px; box-shadow: -1px 0 4px rgb(0 0 0 / 12%); background-color: #FAFAFA;}
 .layui-layout-admin .layui-logo{position: absolute; left: 0; top: 0; width: 200px; height: 100%; line-height: 60px; text-align: center; color: #009688; font-size: 16px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 15%);}
 .layui-layout-admin .layui-header .layui-nav{background: #cc6699;}
-.layui-layout-left{position: absolute !important; left: 200px; top: 0;}
+.layui-layout-left{position: absolute !important; left: 20%; top: 0;}
 .layui-layout-right{position: absolute !important; right: 0; top: 0;}
 
 

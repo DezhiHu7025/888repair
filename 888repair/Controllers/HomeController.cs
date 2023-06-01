@@ -14,6 +14,11 @@ namespace _888repair.Controllers
             return View();
         }
 
+        public ActionResult MobileIndex()
+        {
+            return View();
+        }
+        
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

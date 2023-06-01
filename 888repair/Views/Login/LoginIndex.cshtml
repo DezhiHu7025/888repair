@@ -67,7 +67,7 @@
                     <br />
                     <div style="color:purple">
                         <span>PassWord (密码):	</span>
-                        <input type="password" id="Password" placeholder="Password">
+                        <input type="password" id="Password" placeholder="Password" autocomplete="off">
                     </div>
                     <br />
                     <button type="button" style="color:purple;margin-left:110px" id="btn_login">登录 Login</button>
@@ -102,7 +102,7 @@
                     <input style="width:90%;height:30px" type="password" id="Password2" placeholder="密码" autocomplete="off">
                 </div>
                 <br />
-                <button type="button" style="color:purple;margin-left:110px" id="btn_login2">登录 Login</button>
+                <button type="button" style="color:white;margin-right:15%;width:100%;background-color:purple" id="btn_login2">登录 Login</button>
                 <br /><br /><br />
 
             </form>
@@ -237,13 +237,14 @@
                     if (result.IsSuccess) {
                         var url = '@Url.Action("Index", "Home")';
                         if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
-                            url = '@Url.Action("Index", "Home")';
+                           // url = '@Url.Action("Index", "Home")';
+                            url = '@Url.Action("MobileIndex", "Home")';
                             window.location.href = url;
                         }
                         else
                         {
                             alert("移动端开发中,请PC端登录");
-                            url = '@Url.Action("LoginIndex", "Login")';
+                          //  url = '@Url.Action("MobileIndex", "Home")';
                             window.location.href = url;
                         }
                     } else
@@ -283,8 +284,8 @@
                         }
                         else
                         {
-                             alert("移动端开发中,请PC端登录");
-                             url = '@Url.Action("LoginIndex", "Login")';
+                            // alert("移动端开发中,请PC端登录");
+                             url = '@Url.Action("MobileIndex", "Home")';
                              window.location.href = url;
                         }
                     } else
