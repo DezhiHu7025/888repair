@@ -165,14 +165,14 @@
                         <div class="layui-upload-list" style="max-width: 1000px;">
                             <table class="layui-table">
                                 <colgroup>
-                                    @*<col>*@
+                                    <col>
                                     <col width="150">
                                     @*<col width="150">*@
                                     <col width="50">
                                 </colgroup>
                                 <thead>
                                     <tr>
-                                        @*<th field="fileName">文件名</th>*@
+                                        <th field="fileName">文件名</th>
                                         <th>预览图</th>
                                         @*<th>大小</th>*@
                                         <th>操作</th>
@@ -469,7 +469,7 @@
                 obj.preview(function (index, file, result) {
 
                     var tr = $(['<tr id="upload-' + index + '">'
-                      //  , '<td>' + datetime + '_' + empno + "_" + file.name + '</td>'
+                        , '<td>' + datetime + '_' + empno + "_" + file.name + '</td>'
                        // , '<td>' + file.name + '</td>'
                         , '<td>' + '<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">' + '</td>'
                        // , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
@@ -485,13 +485,13 @@
                     });
 
                     //判断上传每个图片大小
-                    if (file.size > 1024 * 1024) {
-                        delete files[index];             //过大删除指定图片
-                        layer.msg('文件大小不得超过1M', { icon: 2, shift: 6 });
-                         var id = "upload-" + index;
-                        var tr = $("tr[id=" + id + "]");
-                        tr.remove();
-                    }
+                    //if (file.size > 1024 * 1024) {
+                    //    delete files[index];             //过大删除指定图片
+                    //    layer.msg('文件大小不得超过1M', { icon: 2, shift: 6 });
+                    //     var id = "upload-" + index;
+                    //    var tr = $("tr[id=" + id + "]");
+                    //    tr.remove();
+                    //}
 
                     var trMumber = $("#demoList").find("tr").length + 1;
                     if (trMumber > 3) {

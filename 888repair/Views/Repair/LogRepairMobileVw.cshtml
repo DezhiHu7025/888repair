@@ -494,13 +494,13 @@
                     });
 
                     //判断上传每个图片大小
-                    if (file.size > 1024 * 1024) {
-                        delete files[index];             //过大删除指定图片
-                        layer.msg('文件大小不得超过1M', { icon: 2, shift: 6 });
-                         var id = "upload-" + index;
-                        var tr = $("tr[id=" + id + "]");
-                        tr.remove();
-                    }
+                    //if (file.size > 1024 * 1024) {
+                    //    delete files[index];             //过大删除指定图片
+                    //    layer.msg('文件大小不得超过1M', { icon: 2, shift: 6 });
+                    //     var id = "upload-" + index;
+                    //    var tr = $("tr[id=" + id + "]");
+                    //    tr.remove();
+                    //}
 
                     var trMumber = $("#demoList").find("tr").length + 1;
                     if (trMumber > 3) {
