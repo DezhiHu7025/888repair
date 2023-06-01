@@ -185,18 +185,18 @@
     function loadImg() {
         //遍历图片 PhotoPath
         if (localStorage.getItem("PhotoPath") != null && localStorage.getItem("PhotoPath") != '' && localStorage.getItem("PhotoPath") != 'null') {
-            var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
+          //  var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
             var PhotoPathS = localStorage.getItem("PhotoPath");
             PhotoPathS = PhotoPathS.substring(0, PhotoPathS.length - 1);
             var files = PhotoPathS.split(";");
             var imgId = document.getElementById("imgId");
-            var url = root;
+           // var url = root;
             for (var i = 0; i < files.length; i++) {
                 var name = files[i];
                 var img = document.createElement("img");
                 img.style = "width:120px;height:120px;";
                 img.className = "imgview";
-                img.src = url + name;
+                img.src = "../" + name;
                 imgId.appendChild(img);
             }
         }
