@@ -55,17 +55,15 @@
                     <ul class="layui-nav layui-nav-tree Menu" lay-filter="test" id="Menu"">
                         <li class="layui-nav-item current">
                             <a href="javascript:;">
-                                <img style="width:40px" src="../src/user1.jpg"><span id="username" style="color:lightyellow">&nbsp;&nbsp;</span>
+                                <img style="width:40px" src="../src/user1.jpg">&nbsp;&nbsp;<span id="username" style="color:lightyellow"></span>
                             </a>
                             <dl class="layui-nav-child">
-                                <dd><a id="btn_logout">Sign out</a></dd>
+                                <dd><a id="btn_logout" style="color:lightyellow">退出登录&nbsp;Sign out</a></dd>
                             </dl>
                         </li>
                         <li class="layui-nav-item current" data-id="fill"><a class="layui-nav-item ">填写问题</a></li>
                         <li class="layui-nav-item current" data-id="personalProblem"><a class="layui-nav-item ">个人问题列表</a></li>
-                        <li id="replyProblem" class="layui-nav-item current" data-id="replyProblem"><a class="layui-nav-item ">回复问题</a></li>
-                        <li id="listProblem" class="layui-nav-item current" data-id="listProblem"><a class="layui-nav-item ">问题列表</a></li>
-                        <li id="ProblemRepair" class="layui-nav-item current" data-id="ProblemRepair"><a class="layui-nav-item ">问题列表维护</a></li>
+                        @*<li id="replyProblem" class="layui-nav-item current" data-id="replyProblem"><a class="layui-nav-item ">回复问题</a></li>*@
                     </ul>
                 </div>
             </div>
@@ -182,12 +180,6 @@
         var logmanager = '@(Session["Manager"])';
         var logviewer = '@(Session["Viewer"])';
 
-        if (logusername == "") {
-            $('#leftmenu').hide();
-        } else {
-            $('#leftmenu').show();
-        }
-
        // alert(logusername);
         $("#username").html(logusername == "" ? "未登录" : logusername);
 
@@ -268,7 +260,7 @@
                         i = 0;
                     break;
                 case "#fill":
-                    pathn = "@(Url.Action("RepairIndex", "Repair"))",
+                    pathn = "@(Url.Action("RepairMobileIndex", "Repair"))",
                         i = 0;
                     break;
                 case "#charge":
@@ -308,11 +300,17 @@
                         i = 0;
                     break;
                 default:
-                    pathn = "@(Url.Action("RepairIndex", "Repair"))",
+                    pathn = "@(Url.Action("RepairMobileIndex", "Repair"))",
                         i = 0;
                     break;
             }
             $("#content").load(pathn);//加载相应内容
+            var btn = $("#leftEnumIcon");
+            btn.removeClass('layui-nav-bar').addClass('layui-icon-shrink-right');
+            $(".layui-side").animate({ width: 'toggle' }); //toggle如果原来div是隐藏的就会把元素显示，如果原来是显示则隐藏
+            $(".zq-logo").animate({ width: 'toggle' });
+            $(".layui-body").animate({ left: '0px' });
+            $(".layui-footer").animate({ left: '0px' });
            // $(".MenuChild dd").eq(i).addClass("current").siblings().removeClass("current");//当前列表高亮
 
         }

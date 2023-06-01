@@ -110,21 +110,6 @@ namespace _888repair.Controllers
             {
                 sql += " and SystemCategory = @keyWord";
             }
-            var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
-            if (!string.IsNullOrEmpty(group))
-            {
-                switch (group)
-                {
-                    case "资讯":
-                        sql += " and SystemCategory = 'IT(资讯类)' ";
-                        break;
-                    case "后勤":
-                        sql += " and SystemCategory = 'Logistics(总务后勤类)'";
-                        break;
-                    default:
-                        break;
-                }
-            }
             sql += " order by sort asc";
             var list = db.Query<KindModel>(sql, new { keyWord }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
@@ -137,21 +122,6 @@ namespace _888repair.Controllers
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and SystemCategory = @keyWord";
-            }
-            var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
-            if (!string.IsNullOrEmpty(group))
-            {
-                switch (group)
-                {
-                    case "资讯":
-                        sql += " and SystemCategory = 'IT(资讯类)' ";
-                        break;
-                    case "后勤":
-                        sql += " and SystemCategory = 'Logistics(总务后勤类)'";
-                        break;
-                    default:
-                        break;
-                }
             }
             var list = db.Query<DirectorModel>(sql, new { keyWord }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);

@@ -18,12 +18,31 @@ namespace _888repair.Controllers
     [App_Start.AuthFilter]
     public class RepairController : Controller
     {
+        /// <summary>
+        /// 移动端
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult RepairMobileIndex()
+        {
+            return View();
+        }
+
+        public ActionResult LogRepairMobileVw()
+        {
+            return View();
+        }
+
+        public ActionResult ITRepairMobileVw()
+        {
+            return View();
+        }
+
         // GET: Repair 填写问题
         public ActionResult RepairIndex()
         {
             return View();
         }
-
+        
         /// <summary>
         /// 总务后勤类报修
         /// </summary>

@@ -19,26 +19,31 @@
             <!-- 头部区域（可配合layui 已有的水平导航） -->
             @*<ul class="layui-nav" lay-filter="layadmin-layout-right">
 
-                <li class="layui-nav-item layui-btn-warm" lay-unselect style="margin-left:1300px">
-                    <a href="javascript:;">
-                        <cite id="languageStatus">中文</cite>
-                    </a>
-                    <dl class="layui-nav-child">
-                        <dd onclick="changeLanguage('ch')"><a>中文</a></dd>
-                        <dd onclick="changeLanguage('en')"><a>English</a></dd>
-                    </dl>
-                </li>
-            </ul>*@
-            <ul class="layui-nav layui-layout-left" id="PCtitle">
-                 移动端显示 
-
-                <li style="padding-top:5%">
-                    <a style="font-family:Cambria;font-size:x-large;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
+            <li class="layui-nav-item layui-btn-warm" lay-unselect style="margin-left:1300px">
+                <a href="javascript:;">
+                    <cite id="languageStatus">中文</cite>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd onclick="changeLanguage('ch')"><a>中文</a></dd>
+                    <dd onclick="changeLanguage('en')"><a>English</a></dd>
+                </dl>
+            </li>
+        </ul>*@
+            <ul class="layui-nav layui-layout-left" id="phonetitle">
+                <li style="padding-top:5%;padding-left:0">
+                    <a style="font-family:Cambria;font-size:larger;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
                 </li>
             </ul>
-            <div id="phonetitle"> 
-            <a style="font-family:Cambria;font-size:x-large;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
-            </div>
+            <ul class="layui-nav layui-layout-left" id="PCtitle">
+                移动端显示
+
+                <li style="padding-top:5%">
+                    <a style="font-family:Cambria;font-size:large;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
+                </li>
+            </ul>
+            @*<div id="phonetitle">
+                <a style="font-family:Cambria;font-size:larger;color:white;width:100%">昆山康桥学校-报修系统(北)</a>
+            </div>*@
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item layui-hide layui-show-md-inline-block">
                     <a href="javascript:;">
@@ -51,7 +56,7 @@
             </ul>
         </div>
 
-        <div class="layui-body" style="margin-bottom:100px">
+        <div class="layui-body" style="margin-bottom:100px" hidden="hidden">
             <!-- 内容主体区域 -->
             <div style="padding: 15%;" id="PC">
                 <form style="margin-left:150px">
@@ -85,24 +90,33 @@
             </div>
         </div>
 
-        <div id="phone" style="padding-top:20%;padding-left:15%">
+        <div id="phone" style="padding-top:20%;padding-left:15%" hidden="hidden">
             <form>
-                <div style="color:purple">
-                    <span style="font-size:large">Domain Name:	&nbsp;&nbsp;&nbsp;</span><br />
-                    <input style="width:90%;height:30px" type="email" id="Domain2" placeholder="kcis" readonly disabled>
+                <div class="layui-form-item">
+                    <label style="padding-left:0;line-height:30px;color:black;font-size:large">Domain Name:	&nbsp;&nbsp;&nbsp;</label>
+                    <div style="height:38px;width:300px;font-size:large">
+                        <input type="text" id="Domain2" placeholder="kcis" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                    </div>
                 </div>
                 <br />
-                <div style="color:purple">
-                    <span style="font-size:large">UserName (账号):</span><br />
-                    <input style="width:90%;height:30px" type="email" id="Account2" placeholder="账号" autocomplete="off">
+                <div class="layui-form-item">
+                    <div style="height:38px;width:300px;font-size:large">
+                        <span style="padding-left:0;line-height:30px;color:black;font-size:large">UserName (账号):</span><br />
+                        <input type="email" id="Account2" placeholder="UserName" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-                <br />
-                <div style="color:purple;width:100%">
-                    <span style="font-size:large">PassWord (密码):	</span><br />
-                    <input style="width:90%;height:30px" type="password" id="Password2" placeholder="密码" autocomplete="off">
+                <br /><br />
+                <div class="layui-form-item">
+                    <div style="height:38px;width:300px;font-size:large">
+                        <span style="padding-left:0;line-height:30px;color:black;font-size:large">PassWord (密码):	</span><br />
+                        <input type="password" id="Password2" placeholder="PassWord" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-                <br />
-                <button type="button" style="color:white;margin-right:15%;width:100%;background-color:purple" id="btn_login2">登录 Login</button>
+                    
+                <br /><br /><br />
+                    
+                <div id="btn_login2"><button type="button" style="color:white;margin-left:0%;width:90%;height:5%;background-color:cadetblue">登录 Login</button></div>
+                    
                 <br /><br /><br />
 
             </form>
@@ -186,8 +200,8 @@
                         else
                         {
                             alert("移动端开发中,请PC端登录");
-                            url = '@Url.Action("LoginIndex", "Login")';
-                            window.location.href = url;
+                            @*url = '@Url.Action("LoginIndex", "Login")';
+                            window.location.href = url;*@
                         }
                     } else
                     {
@@ -237,14 +251,14 @@
                     if (result.IsSuccess) {
                         var url = '@Url.Action("Index", "Home")';
                         if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
-                           // url = '@Url.Action("Index", "Home")';
-                            url = '@Url.Action("MobileIndex", "Home")';
+                            url = '@Url.Action("Index", "Home")';
+                          //  url = '@Url.Action("MobileIndex", "Home")';
                             window.location.href = url;
                         }
                         else
                         {
-                            alert("移动端开发中,请PC端登录");
-                          //  url = '@Url.Action("MobileIndex", "Home")';
+                           // alert("移动端开发中,请PC端登录");
+                            url = '@Url.Action("MobileIndex", "Home")';
                             window.location.href = url;
                         }
                     } else

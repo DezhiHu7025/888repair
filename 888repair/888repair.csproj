@@ -242,6 +242,9 @@
     <Content Include="Views\Repair\ProblemAllDetailVw.cshtml" />
     <Content Include="Views\Login\LoginIndex.cshtml" />
     <Content Include="Views\Home\MobileIndex.cshtml" />
+    <Content Include="Views\Repair\RepairMobileIndex.cshtml" />
+    <Content Include="Views\Repair\ITRepairMobileVw.cshtml" />
+    <Content Include="Views\Repair\LogRepairMobileVw.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

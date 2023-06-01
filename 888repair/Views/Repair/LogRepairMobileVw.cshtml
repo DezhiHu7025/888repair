@@ -1,0 +1,551 @@
+﻿
+@{
+    ViewBag.Title = "LogRepairMobileVw";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>填写问题</title>
+    <style>
+        body {
+            padding: 32px; /*overflow-y: scroll;*/
+        }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
+
+        .layui-form-select dl {
+            max-height: 1000%;
+            max-width: 60%;
+        }
+
+            .layui-form-select dl dd, .layui-form-select dl dt {
+                white-space: pre-wrap;
+                overflow: visible;
+                text-overflow: ellipsis;
+            }
+    </style>
+</head>
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="font-size:large">Fill in the problem 填写问题<br/>&nbsp;&nbsp;&nbsp;&nbsp;(Logistics总务后勤类)</legend>
+    </fieldset>
+    <table style="border:medium double #000000;border-spacing: 1px;" border="1">
+        <tr>
+            <td>
+                EmpNo(员工编号)：
+            </td>
+            <td>
+                Name(员工姓名)：
+            </td>
+            <td>
+                Category(系统类别)：
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span id="logempno"></span>
+            </td>
+            <td>
+                <span id="logusername"></span>
+            </td>
+            <td>
+                Logistics(总务后勤类)
+            </td>
+        </tr>
+    </table>
+    <br />
+    @*<a type="button" class="layui-btn" href="javascript:;"><i class="layui-icon"></i>Add New Problem 新增问题</a>*@
+    <br />
+    <hr />
+    <div id="fillQuestion">
+        <form class="layui-form" action="" lay-filter="example">
+            <br />
+            <label style="color:red;font-size:large">
+                Do not upload photos with the same name, or they will be overwritten
+                /
+                ※上传照片请勿有相同名称，不然会覆盖之前的上传照片
+            </label>
+            <br /><br /><br />
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label style="padding-left:0;line-height:30px;color:purple">Category(问题的类别)：</label>
+                    <div style="height:38px;width:300px">
+                        <select ID="OpAreaCategory" name="OpAreaCategory" lay-filter="OpAreaCategory" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label style="padding-left:0;line-height:30px;color:purple">Location(问题的区域)：</label>
+                    <div style="height:38px;width:300px" id="checkSC">
+                        <select ID="OpLocation" name="OpLocation" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label style="padding-left:0;line-height:30px;color:purple">RoomNum(问题的空间编号)：</label>
+                <div style="height:38px;width:300px">
+                    <input type="text" id="RoomNum" name="RoomNum" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label style="padding-left:0;line-height:30px;color:purple">Description(问题描述)：</label>
+                    <div>
+                        <textarea id="Description" name="Description" style="width:100%;height:10%" lay-verify="required" placeholder="Please input description(请输入问题的描述)" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <a style="color:cadetblue">
+                        Only one question is filled in this column. If there are multiple questions,
+                        please fill out a question, send it out, re-enter the "Filling in the problem" page, and fill out the repair form again<br />
+                        本栏位仅填写一项问题，如有多项问题需回报，请填报一项问题后，送出后，重新进入填写问题页面，再次填写报修单。
+                    </a>
+
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label style="padding-left:0;line-height:30px;color:purple">Category(问题的类别)：</label>
+                    <div style="height:38px;width:300px">
+                        <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label id="remark" style="height:38px;width:400px"></label>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label style="padding-left:0;line-height:30px;color:purple">Damage Reason(损坏原因):</label>
+                    <div>
+                        <input type="radio" lay-filter="DamageReason" name="DamageReason" value="natural cause(自然)" title="natural cause(自然)" checked="">
+                        <input type="radio" lay-filter="DamageReason" name="DamageReason" value="human causes(人为)" title="human causes(人为)">
+                    </div>
+                </div>
+                <div class="layui-inline" id="DamageText">
+                    <label style="padding-left:0;line-height:30px;color:purple">Class/Unit(班级/单位)：</label>
+                    <div>
+                        <input type="text" id="ClassUnit" name="ClassUnit" autocomplete="off" class="layui-input" style="height:38px;width:300px">
+                    </div>
+                    <label style="padding-left:0;line-height:30px;color:purple">Name(姓名)：</label>
+                    <div>
+                        <input type="text" id="EmpName" name="EmpName" autocomplete="off" class="layui-input" style="height:38px;width:300px">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label style="padding-left:0;line-height:30px;color:purple">repair time(维护时间)：</label>
+                    <div>
+                        <textarea id="RepairTime" name="RepairTime" style="width:100%;height:10%" lay-verify="required" 
+                                  placeholder="For example:The firsr class on Tuesday or the fifth class on Thursday,or enter'holiday'or 'no specific time'(例如：星期2的第1节 星期4的第5节 或者输入'假日'或者'无特定时间')" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label style="padding-left:0;line-height:30px;color:purple">Tel-Ext/联络分机：</label>
+                <div>
+                    <input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input demo-phone" placeholder="Please input Tel-Ext(请输入联络分机或手机)">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label style="padding-left:0;line-height:30px;color:purple">Upload photos(照片上传)：</label>
+                <div>
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn" id="testList">选择多文件</button>
+                        <div class="layui-upload-list" style="max-width: 1000px;">
+                            <table class="layui-table">
+                                <colgroup>
+                                    @*<col>*@
+                                    <col width="150">
+                                    @*<col width="150">*@
+                                    <col width="50">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        @*<th field="fileName">文件名</th>*@
+                                        <th>预览图</th>
+                                        @*<th>大小</th>*@
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="demoList"></tbody>
+                            </table>
+                        </div>
+                        <div id="buttonDiv" hidden="hidden">
+                            <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+                        </div>
+                    </div>
+                    <label>
+                        Photos help with processing speed, file size up to 1MB, format qualified JPG, JPEG, PNG, GIF,Limit the number of uploads 3
+                        <br />
+                        ※照片有助于处理速度，档案大小最多为 1MB(1024KB)，格式限定JPG、JPEG、PNG、GIF，限制上传数量 3
+                    </label>
+                    <br />
+                    <br />
+                    <label style="color:red">
+                        Do not upload photos with the same name, or they will be overwritten,The file name should not be too long
+                        <br />
+                        ※上传照片请勿有相同名称，不然会覆盖之前的上传照片,文件名不宜过长
+                    </label>
+                </div>
+            </div>
+            <div style="padding-left:15%">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="sendout">送出 Send out</button>
+                <button type="button" id="btn_back" class="layui-btn">返回 Back</button>
+            </div>
+
+        </form>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+    </div>
+</body>
+<script>
+    layui.use(['upload', 'element', 'layer', 'form', 'util', 'laydate'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var util = layui.util;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+        var element = layui.element;
+        var table = layui.table;
+
+        reloadDate();
+
+        var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHHmmss");
+
+        var username = '@(Session["fullname"])';
+        var empno = '@(Session["EmpNo"])';
+        $("#logusername").html(username == "" ? "未登录" : username);
+        $("#logempno").html(empno == "" ? "未登录" : empno);
+
+        ////自定义验证规则
+        //form.verify({
+        //    title: function (value) {
+        //        if (value.length < 5) {
+        //            return '标题至少得5个字符啊';
+        //        }
+        //    }
+        //    , pass: [
+        //        /^[\S]{6,12}$/
+        //        , '密码必须6到12位，且不能出现空格'
+        //    ]
+        //});
+
+
+        ////判断上传图片是否成功
+        //var uploadFlag = true;
+
+        //提交事件
+        form.on('submit(demo1)', function (data) {
+
+            var filesUpload = $("#buttonDiv");
+            var filesUploadBtn = filesUpload.find('button')[0];
+            filesUploadBtn.click();
+
+            var data = form.val('example');
+            var filesUploadDemo = $("#demoList");
+            var fileNames = '';
+            if (filesUploadDemo != null && filesUploadDemo != undefined) {
+                var str = filesUploadDemo[0].innerText;
+                if (str != null && str !='') {
+                    var files = str.split("\n");
+                    for (var i = 0; i < files.length; i++) {
+                        var names = files[i].split("\t");
+                        var fileName = names[0];
+                        fileNames += fileName + ";";
+                    }
+                }
+            }
+            //将页面全部复选框选中的值拼接到一个数组中
+            var RepairTimeText = [];
+            $('input[type=checkbox]:checked').each(function () {
+                RepairTimeText.push($(this).val());
+            });
+            var RepairTimeStr = RepairTimeText.join('\n');
+
+            var model = {
+                AreaCategory: data.OpAreaCategory,
+                AreaId: data.OpLocation,
+                KindId: data.OpKindCategory,
+                SystemCategory: "Logistics(总务后勤类)",
+                Building: document.getElementById("OpAreaCategory").options[document.getElementById("OpAreaCategory").selectedIndex].text,
+                Loaction: document.getElementById("OpLocation").options[document.getElementById("OpLocation").selectedIndex].text,
+                Category: document.getElementById("OpKindCategory").options[document.getElementById("OpKindCategory").selectedIndex].text,
+                ResponseContent: data.Description,
+                PhotoPath: fileNames,
+                RoomNum: data.RoomNum,
+                RepairTime: data.RepairTime,
+                Telephone: data.phone,
+                DamageReason: data.DamageReason,
+                DamageClass: data.ClassUnit,
+                DamageName: data.EmpName,
+            }
+
+            $.ajax({
+                type: 'post',
+                url: "@(Url.Action("ITRepairSave", "Repair"))",
+                data: JSON.stringify(model),
+                async: false,
+                dataType: "json",
+                processData: false,
+                contentType: 'application/json',
+                beforeSend: function () {
+                    // 禁用按钮防止重复提交
+                    $('#sendout').addClass("layui-btn-disabled").attr("disabled", true);
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        alert("成功送出 Successfully");
+                        reloadDate();
+                        var url = "@(Url.Action("RepairMobileIndex", "Repair"))";
+                        $("#content").load(url);
+                    }
+                    else {
+                        alert(result.Msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+        function reloadDate() {
+            //问题类别(业管 kind)
+            $("#OpKindCategory").empty();
+            $.ajax({
+                type: "post",
+                url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                data: { "keyWord": "Logistics(总务后勤类)" },
+                dataType: "json",
+                success: function (result) {
+                    $('#OpKindCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpKindCategory").append(`<option value="${result[i].KindID}">${result[i].KindCategory}</option>`);
+                    }
+                    form.render();
+                }, error: function () {
+                    layer.alert('请求失败');
+                }
+            });
+
+            //问题的类别( 辖区 area Building)
+            $("#OpAreaCategory").empty();
+            $.ajax({
+                type: "post",
+                url: "@(Url.Action("getBuildingBySystemCategory", "DDL"))",
+                data: { "keyWord": "Logistics(总务后勤类)" },
+                dataType: "json",
+                success: function (result) {
+                    $('#OpAreaCategory').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                        $("#OpAreaCategory").append(`<option value="${result[i].Building}">${result[i].Building}</option>`);
+                    }
+                    form.render();
+                }, error: function () {
+                    layer.alert('请求失败');
+                }
+            });
+        }
+
+        $("#checkSC").on('click', function () {
+            if ($("#OpAreaCategory").val() == null || $("#OpAreaCategory").val() == "") {
+                $("#OpLocation").empty();
+                form.render();
+                alert("请先选择 Category(问题的类别) ");
+            }
+        });
+
+        form.on('select(OpAreaCategory)', function (data) {
+            $("#OpLocation").empty();
+            var AreaCategory = data.value;
+            if (OpAreaCategory == null || OpAreaCategory == "") {
+                $("#OpLocation").empty();
+                form.render();
+                return false;
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getLoactionByBuilding", "DDL"))",
+                    data: { "keyWord": AreaCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpLocation').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++) {
+                            $("#OpLocation").append(`<option value="${result[i].AreaId}">${result[i].Location}</option>`);
+                        }
+                        if (len = result.length == 1) {
+                            //设置选中数据
+                            $('select[name=OpLocation]').val(result[0].AreaId);
+                        }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        })
+
+        form.on('select(OpKindCategory)', function (data) {
+            $("#remark").html("");
+            var KindCategory = data.value;
+            if (OpKindCategory == null || OpKindCategory == "") {
+                return false;
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getKindEvery", "DDL"))",
+                    data: { "keyWord": KindCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $("#remark").html("");
+                        if (!(result[0].Remark == null || result[0].Remark =='')) {
+                            //设置选中数据
+                            $("#remark").html("备注：" + result[0].Remark);
+                        }
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        })
+
+
+        //隐藏div
+        $("#DamageText").hide();
+
+        //监听radio
+        form.on('radio(DamageReason)', function (data) {
+            if (data.value == "natural cause(自然)") {
+                $("#DamageText").hide();
+                $('#ClassUnit').removeAttr('lay-verify', 'required');
+                $('#EmpName').removeAttr('lay-verify', 'required');
+                $('#ClassUnit').val('');
+                $('#EmpName').val('');
+            }
+            else {
+                $("#DamageText").show();
+                $('#ClassUnit').attr('lay-verify', 'required');
+                $('#EmpName').attr('lay-verify', 'required');
+            }
+        })
+
+        function getJsonLength(jsonData) {
+            var jsonLength = 0;
+            for (var item in jsonData) {
+                jsonLength++;
+            }
+            return jsonLength;
+        }
+
+        //演示多文件列表
+        var uploadListIns = upload.render({
+            elem: '#testList'
+            , elemList: $('#demoList') //列表元素对象
+            , url: "@(Url.Action("ITRepairPicUpload", "Repair"))"
+            , accept: 'file'
+            , exts: 'JPG|JPEG|PNG|GIF' //只允许上传压缩文件
+            , multiple: true
+           // , number: 3
+          //  , size: 1024 //限制文件大小，单位 KB
+            , auto: false
+            , bindAction: '#testListAction'
+            , choose: function (obj) {
+                var that = this;
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function (index, file, result) {
+
+                    var tr = $(['<tr id="upload-' + index + '">'
+                      //  , '<td>' + datetime + '_' + empno + "_" + file.name + '</td>'
+                       // , '<td>' + file.name + '</td>'
+                        , '<td>' + '<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">' + '</td>'
+                      //  , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
+                        , '<td>'
+                        , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                        , '</td>'
+                        , '</tr>'].join(''));
+
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function () {
+                        obj.upload(index, file);
+                    });
+
+                    //判断上传每个图片大小
+                    if (file.size > 1024 * 1024) {
+                        delete files[index];             //过大删除指定图片
+                        layer.msg('文件大小不得超过1M', { icon: 2, shift: 6 });
+                         var id = "upload-" + index;
+                        var tr = $("tr[id=" + id + "]");
+                        tr.remove();
+                    }
+
+                    var trMumber = $("#demoList").find("tr").length + 1;
+                    if (trMumber > 3) {
+                        delete files[index];
+                        var id = "upload-" + index;
+                        var tr = $("tr[id=" + id + "]");
+                        tr.remove();
+                        layer.msg('文件个数不得超过3个', { icon: 2, shift: 6 });
+                    }
+
+                    //删除
+                    tr.find('.demo-delete').on('click', function () {
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    that.elemList.append(tr);
+                    element.render('progress'); //渲染新加的进度条组件
+
+                });
+            }
+            , done: function (res, index, upload) { //成功的回调
+                var that = this;
+                var tr = that.elemList.find('tr#upload-' + index)
+                    , tds = tr.children();
+                tds.eq(3).html(''); //清空操作
+                delete this.files[index]; //删除文件队列已经上传成功的文件
+                return;
+                this.error(index, upload);
+            }
+            , allDone: function (obj) { //多文件上传完毕后的状态回调
+            }
+            , error: function (index, upload) { //错误回调
+                var that = this;
+                var tr = that.elemList.find('tr#upload-' + index)
+                    , tds = tr.children();
+                //tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+         $("#btn_back").on("click", function () {
+             var url = "@(Url.Action("RepairMobileIndex", "Repair"))";
+             $("#content").load(url);
+        });
+
+    });
+</script>
