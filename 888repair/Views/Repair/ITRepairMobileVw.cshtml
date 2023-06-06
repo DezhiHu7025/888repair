@@ -274,6 +274,9 @@
                         var fileName = names[0];
                         fileNames += fileName + ";";
                     }
+                    if (fileNames.substring(fileNames.length - 2) == ";;") {
+                        fileNames = fileNames.substring(0, fileNames.length - 1);
+                    }
                 }
             }
 

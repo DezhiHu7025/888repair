@@ -167,14 +167,14 @@
                         <div class="layui-upload-list" style="max-width: 1000px;">
                             <table class="layui-table">
                                 <colgroup>
-                                    @*<col>*@
+                                    <col>
                                     <col width="150">
                                     @*<col width="150">*@
                                     <col width="50">
                                 </colgroup>
                                 <thead>
                                     <tr>
-                                        @*<th field="fileName">文件名</th>*@
+                                        <th field="fileName">文件名</th>
                                         <th>预览图</th>
                                         @*<th>大小</th>*@
                                         <th>操作</th>
@@ -234,7 +234,7 @@
 
         reloadDate();
 
-        var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHHmmss");
+        var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHH");
 
         var username = '@(Session["fullname"])';
         var empno = '@(Session["EmpNo"])';
@@ -268,14 +268,19 @@
             var data = form.val('example');
             var filesUploadDemo = $("#demoList");
             var fileNames = '';
+           // console.log(filesUploadDemo);
             if (filesUploadDemo != null && filesUploadDemo != undefined) {
                 var str = filesUploadDemo[0].innerText;
+              //  console.log(str);
                 if (str != null && str !='') {
                     var files = str.split("\n");
                     for (var i = 0; i < files.length; i++) {
                         var names = files[i].split("\t");
                         var fileName = names[0];
                         fileNames += fileName + ";";
+                    }
+                    if (fileNames.substring(fileNames.length - 2) == ";;") {
+                        fileNames = fileNames.substring(0, fileNames.length - 1);
                     }
                 }
             }
@@ -303,7 +308,8 @@
                 DamageClass: data.ClassUnit,
                 DamageName: data.EmpName,
             }
-
+            //alert(model.PhotoPath);
+           // console.log(model);
             $.ajax({
                 type: 'post',
                 url: "@(Url.Action("ITRepairSave", "Repair"))",
@@ -478,7 +484,7 @@
                 obj.preview(function (index, file, result) {
 
                     var tr = $(['<tr id="upload-' + index + '">'
-                      //  , '<td>' + datetime + '_' + empno + "_" + file.name + '</td>'
+                        , '<td>' + datetime + '_' + empno + "_" + file.name + '</td>'
                        // , '<td>' + file.name + '</td>'
                         , '<td>' + '<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">' + '</td>'
                       //  , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
