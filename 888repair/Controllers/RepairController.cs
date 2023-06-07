@@ -217,6 +217,24 @@ namespace _888repair.Controllers
         }
 
         /// <summary>
+        /// 个人问题列表VW移动端
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult RPMobileIndex()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 报修单详情移动端
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult RepairDetailMobileVw()
+        {
+            return View();
+        }
+
+        /// <summary>
         /// 个人问题列表
         /// </summary>
         /// <param name="model"></param>

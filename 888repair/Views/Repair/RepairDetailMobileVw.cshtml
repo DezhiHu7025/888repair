@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewBag.Title = "RepairDetailMobileVw";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>报修单详情</title>
+    <style>
+        body {
+            padding: 32px; /*overflow-y: scroll;*/
+        }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
+
+        .layui-form-select dl {
+            max-height: 1000%;
+            max-width: 60%;
+        }
+
+            .layui-form-select dl dd, .layui-form-select dl dt {
+                white-space: pre-wrap;
+                overflow: visible;
+                text-overflow: ellipsis;
+            }
+    </style>
+</head>
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>Repair Problem Details 报修单详情</legend>
+    </fieldset>
+    <br />
+    <hr />
+    <div id="fillQuestion">
+
+        <div style="font-size:small;color:purple;">
+            ID(请修编号)：
+            <span> <label style="color:black" id="RepairId"></label> </span>
+            <br /><br />
+            SystemCategory(系统类别)：
+            <span> <label style="color:black" id="SystemCategory"></label> </span>
+            <br /><br />
+            Building(大楼别)：
+            <span> <label style="color:black" id="Building"></label> </span>
+            <br /><br />
+            Loaction(位置)：
+            <span> <label style="color:black" id="Loaction"></label> </span>
+            <br /><br />
+            RoomNum(空间编号)：
+            <span> <label style="color:black" id="RoomNum"></label> </span>
+            <br /><br />
+            Repairer(负责人)：
+            <span> <label style="color:black" id="ChargeEmpname"></label> </span>
+            <br /><br />
+            Contacts(反应人)：
+            <span> <label style="color:black" id="ResponseEmpname"></label> </span>
+            <br /><br />
+            Tel-Ext(联络分机)：
+            <span> <label style="color:black" id="Telephone"></label> </span>
+            <br /><br />
+            repair time(维护时间)：
+            <span> <textarea style="width:100%;height:80px" id="RepairTime" readonly></textarea> </span>
+            <br /><br />
+            Category(类别)：
+            <span> <label style="color:black" id="Category"></label> </span>
+            <br /><br />
+            Damage Reason(损坏原因)：
+            <span> <label style="color:black" id="DamageReason"></label> </span>
+            <br /><br />
+            <div id="DamageText1" hidden="hidden">
+                Class/Unit(班级/单位)：
+                <span> <label style="color:black" id="DamageClass"></label> </span>
+            </div>
+            <br />
+            <div id="DamageText2" hidden="hidden">
+                Name(姓名)：
+                <span> <label style="color:black" id="DamageName"></label> </span>
+            </div>
+            <br />
+            Fill-in Date(填表时间)：
+            <span> <label style="color:black" id="CreatTime"></label> </span>
+            <br /><br />
+            <div>
+                Description(反应内容)：
+                <span> <textarea style="width:100%;height:80px" id="ResponseContent" readonly></textarea> </span>
+                <div id="imgId"></div>
+            </div>
+            <br /><br />
+            ReplyContent(过去回应内容)：
+            <span> <textarea style="width:100%;height:80px" id="ReplyContent" readonly></textarea> </span>
+            <br /><br />
+            <div style="display: inline-block;">
+                <label>Status(执行状态)：</label>
+                <div class="layui-form layui-form-pane" style="display: inline-block;">
+                    <div class="layui-input-inline">
+                        <select ID="OpStatus" name="OpStatus" disabled="disabled">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+            Finish Time(完单时间)：
+            <span> <label style="color:black" id="FinishTime"></label> </span>
+            <br /><br />
+        </div>
+    </div>
+    <br /><br /><br />
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="margin-left:50%">
+            <button type="button" id="btn_back" class="layui-btn">返回 Back</button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+    </div>
+</body>
+<script>
+
+    function loadImg() {
+        //遍历图片 PhotoPath
+        if (localStorage.getItem("PhotoPath") != null && localStorage.getItem("PhotoPath") != '' && localStorage.getItem("PhotoPath") != 'null') {
+          //  var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
+            var PhotoPathS = localStorage.getItem("PhotoPath");
+            PhotoPathS = PhotoPathS.substring(0, PhotoPathS.length - 1);
+            var files = PhotoPathS.split(";");
+            var imgId = document.getElementById("imgId");
+           // var url = root;
+            for (var i = 0; i < files.length; i++) {
+                var name = files[i];
+                var img = document.createElement("img");
+                img.style = "width:120px;height:120px;";
+                img.className = "imgview";
+                img.src = "../"+ name;
+                imgId.appendChild(img);
+            }
+        }
+    }
+
+    layui.use(['upload', 'element', 'layer', 'laydate','form'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var util = layui.util;
+        var laydate = layui.laydate;
+
+        loadOption();
+
+        loadImg();
+
+        $("body").on("click", ".imgview", function (e) {
+            layer.photos({ photos: { "data": [{ "src": e.target.src }] } });
+        });
+
+        function loadOption() {
+            $("#OpStatus").empty();
+            var SystemCategory = localStorage.getItem("SystemCategory");
+            if (SystemCategory == null || SystemCategory == "") {
+                loadOption();
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getStatusEvery", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpStatus').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++)
+                        {
+                            $("#OpStatus").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                        }
+                        $('select[name=OpStatus]').val(localStorage.getItem("Status"));
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        }
+
+        //隐藏div
+        $("#DamageText1").hide();
+        $("#DamageText2").hide();
+
+        if (localStorage.getItem("DamageReason") =="natural cause(自然)") {
+            $("#DamageText1").hide();
+            $("#DamageTex2").hide();
+        } else{
+            $("#DamageText1").show();
+            $("#DamageText2").show();
+        }
+
+        $("#RepairId").html(localStorage.getItem("RepairId"));
+        $("#ResponseContent").html(localStorage.getItem("ResponseContent") == "null" ? '' : localStorage.getItem("ResponseContent"));
+        $("#SystemCategory").html(localStorage.getItem("SystemCategory"));
+        $("#Building").html(localStorage.getItem("Building"));
+        $("#Loaction").html(localStorage.getItem("Loaction"));
+        $("#ChargeEmpname").html(localStorage.getItem("ChargeEmpname"));
+        $("#RoomNum").html(localStorage.getItem("RoomNum"));
+        $("#ResponseEmpname").html(localStorage.getItem("ResponseEmpname"));
+        $("#Telephone").html(localStorage.getItem("Telephone"));
+        $("#RepairTime").html(localStorage.getItem("RepairTime") == "null" ? '' : localStorage.getItem("RepairTime"));
+        $("#Category").html(localStorage.getItem("Category"));
+        $("#DamageReason").html(localStorage.getItem("DamageReason"));
+        $("#DamageClass").html(localStorage.getItem("DamageClass"));
+        $("#DamageName").html(localStorage.getItem("DamageName"));
+        $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
+        $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
+        $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
+       // localStorage.clear();
+
+         $("#btn_back").on("click", function () {
+             var url = "@(Url.Action("RPMobileIndex", "Repair"))";
+             $("#content").load(url);
+        });
+    });
+</script>
+

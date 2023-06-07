@@ -197,7 +197,7 @@
             } else {
                 $.ajax({
                     type: "post",
-                     url: "@(Url.Action("getStatus", "DDL"))",
+                     url: "@(Url.Action("getStatusEvery", "DDL"))",
                     data: { "keyWord": SystemCategory },
                     dataType: "json",
                     success: function (result) {

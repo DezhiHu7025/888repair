@@ -251,8 +251,8 @@
                     if (result.IsSuccess) {
                         var url = '@Url.Action("Index", "Home")';
                         if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
-                            url = '@Url.Action("Index", "Home")';
-                          //  url = '@Url.Action("MobileIndex", "Home")';
+                          //  url = '@Url.Action("Index", "Home")';
+                            url = '@Url.Action("MobileIndex", "Home")';
                             window.location.href = url;
                         }
                         else
@@ -293,7 +293,7 @@
                     if (result.IsSuccess) {
                         var url = '@Url.Action("Index", "Home")';
                         if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
-                            url = '@Url.Action("Index", "Home")';
+                            url = '@Url.Action("MobileIndex", "Home")';
                             window.location.href = url;
                         }
                         else
