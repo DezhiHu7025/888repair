@@ -92,6 +92,7 @@
             <br /><br />
             ReplyContent(过去回应内容)：
             <span> <textarea style="width:100%;height:80px" id="ReplyContent" readonly></textarea> </span>
+            <div id="imgId2"></div>
             <br /><br />
             <div style="display: inline-block;">
                 <label>Status(执行状态)：</label>
@@ -147,6 +148,23 @@
                 img.className = "imgview";
                 img.src = "../"+ name;
                 imgId.appendChild(img);
+            }
+        }
+
+        if (localStorage.getItem("ReplyPhoto") != null && localStorage.getItem("ReplyPhoto") != '' && localStorage.getItem("ReplyPhoto") != 'null') {
+            // var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
+            var ReplyPhotoS = localStorage.getItem("ReplyPhoto");
+            ReplyPhotoS = ReplyPhotoS.substring(0, ReplyPhotoS.length - 1);
+            var files2 = ReplyPhotoS.split(";");
+            var imgId2 = document.getElementById("imgId2");
+            // var url = root;
+            for (var i = 0; i < files2.length; i++) {
+                var name2 = files2[i];
+                var img2 = document.createElement("img");
+                img2.style = "width:120px;height:120px;";
+                img2.className = "imgview";
+                img2.src = "../" + name2;
+                imgId2.appendChild(img2);
             }
         }
     }

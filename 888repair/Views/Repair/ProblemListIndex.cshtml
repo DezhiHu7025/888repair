@@ -153,6 +153,7 @@
                  localStorage.setItem("DamageReason", res.DamageReason);
                  localStorage.setItem("DamageClass", res.DamageClass);
                  localStorage.setItem("DamageName", res.DamageName);
+                 localStorage.setItem("ReplyPhoto", res.ReplyPhoto);
                  //原窗口打开新页面
                  var url = "@(Url.Action("ProblemDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
                  $("#content").load(url);

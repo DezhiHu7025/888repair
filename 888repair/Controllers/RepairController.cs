@@ -204,6 +204,40 @@ namespace _888repair.Controllers
             }
             return Json(new FlagTips { IsSuccess = true });
         }
+
+        /// <summary>
+        /// 完修图片上传
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ReplyPicUpload()
+        {
+            HttpPostedFileBase httpPostedFileBase = Request.Files["file"];
+            ControllerContext.HttpContext.Request.ContentEncoding = Encoding.GetEncoding("UTF-8");
+            ControllerContext.HttpContext.Response.Charset = "UTF-8";
+            RepairRecordModel model = new RepairRecordModel();
+            string Stu_Empno = Session["EmpNo"].ToString();
+            if (httpPostedFileBase != null)
+            {
+                try
+                {
+                    string fileName = Path.GetFileName(httpPostedFileBase.FileName);//原始文件名称
+                    if (!Directory.Exists(Server.MapPath("~/ReplyPhoto")))
+                    {
+                        Directory.CreateDirectory(Server.MapPath("~/ReplyPhoto"));
+                    }
+                    string prefix = DateTime.Now.ToString("yyyyMMddHH_") + Stu_Empno + "_";
+                    fileName = prefix + fileName;
+                    var path = Path.Combine(Server.MapPath("~/ReplyPhoto"), fileName);
+                    httpPostedFileBase.SaveAs(path);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new FlagTips { IsSuccess = false, Msg = ex.Message });
+                }
+
+            }
+            return Json(new FlagTips { IsSuccess = true });
+        }
         #endregion
 
         #region 个人问题列表
@@ -413,7 +447,7 @@ namespace _888repair.Controllers
                     string sql = string.Format(@"SELECT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,a.Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
+                                               a.ResponseEmpname,a.FinishTime,a.ReplyPhoto from [888_KsNorth].[dbo].[record] a 
                                                where 1= 1");
                     if (!string.IsNullOrEmpty(RepairId))
                     {
@@ -559,6 +593,17 @@ namespace _888repair.Controllers
 
             model.EmpNo = Session["EmpNo"].ToString();
             model.FullName = Session["fullname"].ToString();
+            if (!string.IsNullOrEmpty(model.ReplyPhoto))
+            {
+                model.ReplyPhoto = model.ReplyPhoto.Substring(0, model.ReplyPhoto.Length - 1);
+                string[] photos = model.ReplyPhoto.Split(';');
+                string paths = null;
+                foreach (var photo in photos)
+                {
+                    paths += "/ReplyPhoto/" + photo + ";";
+                }
+                model.ReplyPhoto = paths;
+            }
 
             StepRecordModel stepModel = new StepRecordModel();
             stepModel.GUID = Guid.NewGuid().ToString();
@@ -584,7 +629,7 @@ namespace _888repair.Controllers
                 model.CreatTime = DateTime.Now;
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime where repair_id = @RepairId ";
+                    string sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime,ReplyPhoto=@ReplyPhoto where repair_id = @RepairId ";
 
                     string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[OPINION],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@OPINION,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";

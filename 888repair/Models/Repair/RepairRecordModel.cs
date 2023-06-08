@@ -146,5 +146,10 @@ namespace _888repair.Models.Repair
         /// 新增回应内容
         /// </summary>
         public string NewReplyContent { get; set; }
+
+        /// <summary>
+        /// 完修图片
+        /// </summary>
+        public string ReplyPhoto { get; set; }
     }
 }

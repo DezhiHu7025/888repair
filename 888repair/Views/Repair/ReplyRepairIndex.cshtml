@@ -147,7 +147,8 @@
                  localStorage.setItem("Telephone", res.Telephone);
                  localStorage.setItem("DamageReason", res.DamageReason);
                  localStorage.setItem("DamageClass", res.DamageClass);
-                 localStorage.setItem("DamageName", res.DamageName);
+                 localStorage.setItem("DamageName", res.DamageName); 
+                 localStorage.setItem("ReplyPhoto", res.ReplyPhoto);
                  //原窗口打开新页面
                  var url = "@(Url.Action("ReplyRepairDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
                  $("#content").load(url);
