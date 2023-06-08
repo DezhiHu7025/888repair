@@ -114,6 +114,13 @@
     <table class="layui-hide" lay-filter="user" id="RersonalProblemTable"></table>
 
 </body>
+<script type="text/html" id="ID-table-demo-css-user">
+    <ul>
+        <li><strong style="font-weight:400">【SystemCategory系统类别】: {{= d.SystemCategory }}</strong> </li>
+        <li><strong style="font-weight:400">【Building大楼别】:{{= d.Building }}</strong> </li>
+        <li><strong style="font-weight:400">【Loaction位置】:{{= d.Loaction }}</strong> </li>
+    </ul>
+</script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" onclick=queryDetail('{{d.RepairId}}')>查看</a>
 </script>
@@ -228,13 +235,18 @@
                             //,skin: 'line'
                             //,size: 'lg'
                             , toolbar: true
+                            , lineStyle: 'height: 100px;', // 定义表格的多行样式
+                            css: [ // 直接给当前表格主容器重置 css 样式
+                                '.layui-table-page{text-align: center;}' // 让分页栏居中
+                            ].join('')
                             , cols: [[
                                // { type: 'checkbox', LAY_CHECKED: false},
                                 { fixed: 'left', title: '操作', width: 80, minWidth: 80, toolbar: '#barDemo' },
                                 { field: 'RepairId', title: '请修编号(RepairID)', width: 180 },
-                                { field: 'SystemCategory', title: 'SystemCategory(系统类别)', width: 210 },
-                                { field: 'Building', title: 'Building(大楼别)', width: 210 },
-                                { field: 'Loaction', title: 'Loaction(位置)', width: 210 },
+                                { field: 'username', width: 380, title: 'SystemClass(分类项目)', templet: '#ID-table-demo-css-user' },
+                                //{ field: 'SystemCategory', title: 'SystemCategory(系统类别)', width: 210 },
+                                //{ field: 'Building', title: 'Building(大楼别)', width: 210 },
+                                //{ field: 'Loaction', title: 'Loaction(位置)', width: 210 },
                                 { field: 'Category', title: 'Category(类别)', width: 210 },
                                 { field: 'ChargeEmpname', title: 'Repairer(负责人姓名)', width: 170 },
                                 { field: 'ResponseContent', title: 'Description(反应内容)', width: 300 },
