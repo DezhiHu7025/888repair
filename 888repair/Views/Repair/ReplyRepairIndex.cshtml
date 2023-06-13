@@ -126,46 +126,9 @@
 </script>
 <script>
      function queryDetail(RepairId) {
-         $.ajax({
-             url: "@(Url.Action("getRepairDetail", "Repair"))",   // 要提交的URL路径
-             type: "post",    // 发送请求的方式
-             data: { RepairId: RepairId },
-                dataType: "JSON",     // 指定传输的数据格式
-             success: function (res) {
-                 //取到的数据存储到localStorage
-                 localStorage.clear();
-                 localStorage.setItem("RepairId", res.RepairId);
-                 localStorage.setItem("Stu_Name", res.Stu_Name);
-                 localStorage.setItem("SystemCategory", res.SystemCategory);
-                 localStorage.setItem("Building", res.Building);
-                 localStorage.setItem("Loaction", res.Loaction);
-                 localStorage.setItem("ChargeEmpno", res.ChargeEmpno);
-                 localStorage.setItem("ChargeEmpname", res.ChargeEmpname);
-                 localStorage.setItem("Category", res.Category);
-                 localStorage.setItem("ResponseContent", res.ResponseContent);
-                 localStorage.setItem("ResponseEmpname", res.ResponseEmpname);
-                 localStorage.setItem("ReplyContent", res.ReplyContent);
-                 localStorage.setItem("Status", res.Status);
-                 localStorage.setItem("CreatTime", res.CreatTime);
-                 localStorage.setItem("FinishTime", res.FinishTime);
-                 localStorage.setItem("PhotoPath", res.PhotoPath);
-                 localStorage.setItem("RoomNum", res.RoomNum);
-                 localStorage.setItem("RepairTime", res.RepairTime);
-                 localStorage.setItem("Telephone", res.Telephone);
-                 localStorage.setItem("DamageReason", res.DamageReason);
-                 localStorage.setItem("DamageClass", res.DamageClass);
-                 localStorage.setItem("DamageName", res.DamageName); 
-                 localStorage.setItem("ReplyPhoto", res.ReplyPhoto);
-                 //原窗口打开新页面
-                 var url = "@(Url.Action("ReplyRepairDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
-                 $("#content").load(url);
-             },
-             error: function () {
-                 console.log("失败");
-                 alert(res.Msg);
-             }
-
-         });
+         //原窗口打开新页面
+         var url = "@(Url.Action("ReplyRepairDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
+         $("#content").load(url);
      }
 
     layui.use(['table', 'dropdown', 'form', 'laydate'], function () {

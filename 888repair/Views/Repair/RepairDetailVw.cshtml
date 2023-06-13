@@ -157,7 +157,67 @@
 </body>
 <script>
 
+    function queryDetailVw(RepairId) {
+         $.ajax({
+             url: "@(Url.Action("getRepairDetail", "Repair"))",   // 要提交的URL路径
+             type: "post",    // 发送请求的方式
+             data: { RepairId: RepairId },
+                dataType: "JSON",     // 指定传输的数据格式
+             success: function (res) {
+                 //取到的数据存储到localStorage
+                 localStorage.clear();
+                 localStorage.setItem("RepairId", res.RepairId);
+                 localStorage.setItem("Stu_Name", res.Stu_Name);
+                 localStorage.setItem("SystemCategory", res.SystemCategory);
+                 localStorage.setItem("Building", res.Building);
+                 localStorage.setItem("Loaction", res.Loaction);
+                 localStorage.setItem("ChargeEmpno", res.ChargeEmpno);
+                 localStorage.setItem("ChargeEmpname", res.ChargeEmpname);
+                 localStorage.setItem("Category", res.Category);
+                 localStorage.setItem("ResponseContent", res.ResponseContent);
+                 localStorage.setItem("ResponseEmpname", res.ResponseEmpname);
+                 localStorage.setItem("ReplyContent", res.ReplyContent);
+                 localStorage.setItem("Status", res.Status);
+                 localStorage.setItem("CreatTime", res.CreatTime);
+                 localStorage.setItem("FinishTime", res.FinishTime);
+                 localStorage.setItem("PhotoPath", res.PhotoPath);
+                 localStorage.setItem("RoomNum", res.RoomNum);
+                 localStorage.setItem("RepairTime", res.RepairTime);
+                 localStorage.setItem("Telephone", res.Telephone);
+                 localStorage.setItem("DamageReason", res.DamageReason);
+                 localStorage.setItem("DamageClass", res.DamageClass);
+                 localStorage.setItem("DamageName", res.DamageName);
+                 localStorage.setItem("ReplyPhoto", res.ReplyPhoto);
+
+                 $("#RepairId").html(localStorage.getItem("RepairId"));
+                 $("#ResponseContent").html(localStorage.getItem("ResponseContent") == "null" ? '' : localStorage.getItem("ResponseContent"));
+                 $("#SystemCategory").html(localStorage.getItem("SystemCategory"));
+                 $("#Building").html(localStorage.getItem("Building"));
+                 $("#Loaction").html(localStorage.getItem("Loaction"));
+                 $("#ChargeEmpname").html(localStorage.getItem("ChargeEmpname"));
+                 $("#RoomNum").html(localStorage.getItem("RoomNum"));
+                 $("#ResponseEmpname").html(localStorage.getItem("ResponseEmpname"));
+                 $("#Telephone").html(localStorage.getItem("Telephone"));
+                 $("#RepairTime").html(localStorage.getItem("RepairTime") == "null" ? '' : localStorage.getItem("RepairTime"));
+                 $("#Category").html(localStorage.getItem("Category"));
+                 $("#DamageReason").html(localStorage.getItem("DamageReason"));
+                 $("#DamageClass").html(localStorage.getItem("DamageClass"));
+                 $("#DamageName").html(localStorage.getItem("DamageName"));
+                 $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
+                 $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
+                 $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss')); 
+                 console.log(localStorage);
+             },
+             error: function () {
+                 // 请求失败后要执行的代码
+                 console.log("失败");
+                 alert(res.Msg);
+             }
+         });
+    }
+
     function loadImg() {
+
         //遍历图片 PhotoPath
         if (localStorage.getItem("PhotoPath") != null && localStorage.getItem("PhotoPath") != '' && localStorage.getItem("PhotoPath") != 'null') {
           //  var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
@@ -204,6 +264,13 @@
 
         loadImg();
 
+        var newURL = '@(Session["URL"])';
+        var dd = newURL.split('?');
+        var dd1 = dd[1];
+        queryDetailVw(dd1);
+
+       
+
         $("body").on("click", ".imgview", function (e) {
             layer.photos({ photos: { "data": [{ "src": e.target.src }] } });
         });
@@ -246,23 +313,7 @@
             $("#DamageText2").show();
         }
         
-        $("#RepairId").html(localStorage.getItem("RepairId"));
-        $("#ResponseContent").html(localStorage.getItem("ResponseContent") == "null" ? '' : localStorage.getItem("ResponseContent"));
-        $("#SystemCategory").html(localStorage.getItem("SystemCategory"));
-        $("#Building").html(localStorage.getItem("Building"));
-        $("#Loaction").html(localStorage.getItem("Loaction"));
-        $("#ChargeEmpname").html(localStorage.getItem("ChargeEmpname"));
-        $("#RoomNum").html(localStorage.getItem("RoomNum"));
-        $("#ResponseEmpname").html(localStorage.getItem("ResponseEmpname"));
-        $("#Telephone").html(localStorage.getItem("Telephone"));
-        $("#RepairTime").html(localStorage.getItem("RepairTime") == "null" ? '' : localStorage.getItem("RepairTime"));
-        $("#Category").html(localStorage.getItem("Category"));
-        $("#DamageReason").html(localStorage.getItem("DamageReason"));
-        $("#DamageClass").html(localStorage.getItem("DamageClass"));
-        $("#DamageName").html(localStorage.getItem("DamageName"));
-        $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
-        $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
-        $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));   
+        
        // localStorage.clear();
         
          $("#btn_back").on("click", function () {

@@ -259,7 +259,7 @@
                                 url = "@(Url.Action("Index", "Home"))?" + dd1;
                                 window.location.href = url;
                             } else {
-                                 alert("url"+url);
+                               //  alert("url"+url);
                            // url = '@Url.Action("MobileIndex", "Home")';
                             window.location.href = url;
                             }
@@ -302,17 +302,17 @@
                     if (result.IsSuccess) {
                         var url = '@Url.Action("Index", "Home")';
                         var newURL = '@(Session["URL"])';
-                        alert("1111newURL"+newURL);
+                        //alert("1111newURL"+newURL);
                         if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
                           //  url = '@Url.Action("MobileIndex", "Home")';
                             if (newURL != null && newURL != '') {
                                 var dd = sId2.split('?');
-                                alert(dd);
+                                //alert(dd);
                                 var dd1 = dd[1];
-                                alert(dd1);
+                               // alert(dd1);
                                 url == '@Url.Action("Index", "Home")?' + dd1;
                             }
-                            alert("url"+url);
+                           // alert("url"+url);
                             window.location.href = url;
                         }
                         else
