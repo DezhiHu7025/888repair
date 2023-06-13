@@ -837,11 +837,12 @@
                             $('#OpEmpNo').append(new Option());
                             for (let i = 0, len = result.length; i < len; i++)
                             {
-                                if (result[i].FullName == localStorage.getItem("ChargeEmpname")) {
-                                    $("#OpEmpNo").append(`<option value="${result[i].EmpNo}" disabled="">${result[i].FullName}</option>`);
-                                } else {
-                                    $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
-                                }
+                                //if (result[i].FullName == localStorage.getItem("ChargeEmpname")) {
+                                //    $("#OpEmpNo").append(`<option value="${result[i].EmpNo}" disabled="">${result[i].FullName}</option>`);
+                                //} else {
+                                //    $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                                //}
+                                $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
                             }
                             form.render();
                         }, error: function () {

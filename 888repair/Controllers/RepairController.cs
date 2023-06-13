@@ -153,10 +153,21 @@ namespace _888repair.Controllers
                     stepModel.UpdateTime = model.CreatTime;
                     string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
-                    Dictionary<string, object> trans = new Dictionary<string, object>();
-                    trans.Add(sql, model);
-                    trans.Add(stepSQL, stepModel);
-                    db.DoExtremeSpeedTransaction(trans);
+
+                    SendMailService sendMailService = new SendMailService();
+                    bool mailFlag = sendMailService.newMail(model.AreaId,model.KindId, model.RepairId);
+                    if (mailFlag)
+                    {
+                        Dictionary<string, object> trans = new Dictionary<string, object>();
+                        trans.Add(sql, model);
+                        trans.Add(stepSQL, stepModel);
+                        db.DoExtremeSpeedTransaction(trans);
+                    }
+                    else
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = "邮件通知异常，送出报修单失败" });
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -633,11 +644,20 @@ namespace _888repair.Controllers
 
                     string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[OPINION],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@OPINION,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
-
-                    Dictionary<string, object> trans = new Dictionary<string, object>();
-                    trans.Add(sql, model);
-                    trans.Add(stepSQL, stepModel);
-                    db.DoExtremeSpeedTransaction(trans);
+                    SendMailService sendMailService = new SendMailService();
+                    bool mailFlag = sendMailService.replyMail(model.RepairId, model.Status);
+                    if (mailFlag)
+                    {
+                        Dictionary<string, object> trans = new Dictionary<string, object>();
+                        trans.Add(sql, model);
+                        trans.Add(stepSQL, stepModel);
+                        db.DoExtremeSpeedTransaction(trans);
+                    }
+                    else
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = "邮件通知异常，回应报修单失败" });
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -683,11 +703,19 @@ namespace _888repair.Controllers
                     string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[OPINION],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@STEP,@OPINION,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
 
-
-                    Dictionary<string, object> trans = new Dictionary<string, object>();
-                    trans.Add(sql, model);
-                    trans.Add(stepSQL, stepModel);
-                    db.DoExtremeSpeedTransaction(trans);
+                    SendMailService sendMailService = new SendMailService();
+                    bool mailFlag = sendMailService.transferMail(model.RepairId, model.ChargeEmpno);
+                    if (mailFlag)
+                    {
+                        Dictionary<string, object> trans = new Dictionary<string, object>();
+                        trans.Add(sql, model);
+                        trans.Add(stepSQL, stepModel);
+                        db.DoExtremeSpeedTransaction(trans);
+                    }
+                    else
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = "邮件通知异常，转派报修单失败" });
+                    }
                 }
             }
             catch (Exception ex)
@@ -750,10 +778,21 @@ namespace _888repair.Controllers
 
                     model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "驳回任务给-" + model.ChargeEmpname + "\r\n\r\n";
 
-                    Dictionary<string, object> trans = new Dictionary<string, object>();
-                    trans.Add(sql, model);
-                    trans.Add(stepSQL, stepModel);
-                    db.DoExtremeSpeedTransaction(trans);
+                    SendMailService sendMailService = new SendMailService();
+                    //报修单号  原来的负责人  原来转派的人 
+                    bool mailFlag = sendMailService.rejectMail(model.RepairId, chargeModel.ChargeEmpno, chargeModel.UpdateEmpNo, model.FullName);
+                    if (mailFlag)
+                    {
+                        Dictionary<string, object> trans = new Dictionary<string, object>();
+                        trans.Add(sql, model);
+                        trans.Add(stepSQL, stepModel);
+                        db.DoExtremeSpeedTransaction(trans);
+                    }
+                    else
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = "邮件通知异常，驳回任务失败" });
+                    }
+                   
                 }
             }
             catch (Exception ex)
@@ -801,11 +840,20 @@ namespace _888repair.Controllers
                     string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[OPINION],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@STEP,@OPINION,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
 
-
-                    Dictionary<string, object> trans = new Dictionary<string, object>();
-                    trans.Add(sql, model);
-                    trans.Add(stepSQL, stepModel);
-                    db.DoExtremeSpeedTransaction(trans);
+                    SendMailService sendMailService = new SendMailService();
+                    bool mailFlag = sendMailService.rejectEndMail(model.RepairId);
+                    if (mailFlag)
+                    {
+                        Dictionary<string, object> trans = new Dictionary<string, object>();
+                        trans.Add(sql, model);
+                        trans.Add(stepSQL, stepModel);
+                        db.DoExtremeSpeedTransaction(trans);
+                    }
+                    else
+                    {
+                        return Json(new FlagTips { IsSuccess = false, Msg = "邮件通知异常，驳回任务失败" });
+                    }
+                    
                 }
             }
             catch (Exception ex)

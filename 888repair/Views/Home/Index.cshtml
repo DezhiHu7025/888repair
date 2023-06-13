@@ -204,7 +204,25 @@
         function loacdInner(sId) {
             var sId = window.location.hash;
             var pathn, i;
-
+            if (sId == null || sId == '') {
+                var sId2 = window.location.href;
+                var dd = sId2.split('?');
+                var dd1 = dd[1];
+                sId = "#" + dd1;
+                var newId = sId.substring(0, 9);
+                var repairID = null;
+                if (newId == "#RPDetail" || newId == "#PPDetail" || newId == "#APDetail") {
+                    var ss = sId.split('-');
+                    repairID = ss[1];
+                    sId = newId;
+                }
+            } else {
+                var sId2 = window.location.href;
+                var dd = sId2.split('?');
+                var dd1 = dd[0];
+                history.replaceState(null, null, dd1);
+            }
+           
             switch (sId) {
                 case "#area":
                     pathn = "@(Url.Action("AreaIndex", "Area"))",
@@ -252,6 +270,18 @@
                     break; 
                 case "#ProblemRepair":
                     pathn = "@(Url.Action("ProblemAllVw", "Repair"))",
+                        i = 0;
+                    break; 
+                case "#RPDetail"://回复问题详情
+                    pathn = "@(Url.Action("ReplyRepairDetailVw", "Repair"))?" + repairID,
+                        i = 0;
+                    break; 
+                case "#PPDetail"://个人问题列表详情
+                    pathn = "@(Url.Action("RepairDetailVw", "Repair"))?" + repairID,
+                        i = 0;
+                    break; 
+                case "#APDetail"://问题列表维护详情
+                    pathn = "@(Url.Action("ProblemAllDetailVw", "Repair"))?" + repairID,
                         i = 0;
                     break; 
                 default:

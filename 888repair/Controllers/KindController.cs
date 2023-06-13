@@ -164,6 +164,7 @@ namespace _888repair.Controllers
                                                          ON a.area_id = b.kind_id
 		                                                  LEFT JOIN [888_KsNorth].[dbo].[charge] c
                                                          ON a.charge_emp = c.EmpNo
+                                                          and a.SystemCategory = c.SystemCategory
                                                  WHERE 1 = 1 and match_type= 'KindMatch' ");
                     if (!string.IsNullOrEmpty(model.SystemCategory))
                     {

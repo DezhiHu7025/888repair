@@ -267,6 +267,10 @@
         
          $("#btn_back").on("click", function () {
              var url = "@(Url.Action("RersonalProblemIndex", "Repair"))";
+             var sId2 = window.location.href;
+             var dd = sId2.split('?');
+             var dd1 = dd[0];
+             history.replaceState(null, null, dd1);
              $("#content").load(url);
         });
     });
