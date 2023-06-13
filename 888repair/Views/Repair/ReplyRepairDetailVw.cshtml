@@ -266,7 +266,7 @@
              url: "@(Url.Action("getRepairDetail", "Repair"))",   // 要提交的URL路径
              type: "post",    // 发送请求的方式
              data: { RepairId: RepairId },
-                dataType: "JSON",     // 指定传输的数据格式
+             dataType: "JSON",     // 指定传输的数据格式
              success: function (res) {
                  //取到的数据存储到localStorage
                  localStorage.clear();
@@ -313,7 +313,8 @@
                  $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
                  $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
                  $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
-        //localStorage.clear();
+
+                 //localStorage.clear();
              },
              error: function () {
                  console.log("失败");

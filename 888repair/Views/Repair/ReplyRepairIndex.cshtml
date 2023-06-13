@@ -127,7 +127,7 @@
 <script>
      function queryDetail(RepairId) {
          //原窗口打开新页面
-         var url = "@(Url.Action("ReplyRepairDetailVw", "Repair"))" + "?RepairId=" + RepairId;;
+         var url = "@(Url.Action("ReplyRepairDetailVw", "Repair"))" + "?" + RepairId;;
          $("#content").load(url);
      }
 

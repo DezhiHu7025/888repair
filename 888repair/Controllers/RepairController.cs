@@ -770,6 +770,12 @@ namespace _888repair.Controllers
                     string findCharge = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsNorth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
                                              AND a.sort < (select TOP(1) sort from [888_KsNorth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' AND charge_empno = @ChargeEmpno order by sort desc )  order by sort desc ";
                     var chargeModel = db.Query<StepRecordModel>(findCharge, new { RepairId = model.RepairId , ChargeEmpno  = model.ChargeEmpno}).FirstOrDefault();
+
+                    //抓取原来的转派人
+                    string findTransfer = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsNorth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
+                                             AND a.sort = (select TOP(1) sort from [888_KsNorth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' order by sort desc )  order by sort desc ";
+                    var transferModel = db.Query<StepRecordModel>(findTransfer, new { RepairId = model.RepairId}).FirstOrDefault();
+
                     stepModel.ChargeEmpno = chargeModel.ChargeEmpno;
                     stepModel.ChargeEmpname = chargeModel.ChargeEmpname;
 
@@ -780,7 +786,7 @@ namespace _888repair.Controllers
 
                     SendMailService sendMailService = new SendMailService();
                     //报修单号  原来的负责人  原来转派的人 
-                    bool mailFlag = sendMailService.rejectMail(model.RepairId, chargeModel.ChargeEmpno, chargeModel.UpdateEmpNo, model.FullName);
+                    bool mailFlag = sendMailService.rejectMail(model.RepairId, chargeModel.ChargeEmpno, transferModel.UpdateEmpNo, model.FullName);
                     if (mailFlag)
                     {
                         Dictionary<string, object> trans = new Dictionary<string, object>();

@@ -84,9 +84,10 @@ WHERE a.repair_id = @RepairId ";
                     string findStatus = @"SELECT b.StatusText
 FROM [888_KsNorth].dbo.record a
     LEFT JOIN [888_KsNorth].dbo.state b
-        ON a.Status = b.StatusValue
+        ON a.SystemCategory = b.SystemCategory
+		AND b.StatusValue = @Status
 WHERE a.repair_id =@RepairId";
-                    var StatusText = db.Query<string>(findStatus, new { RepairId }).FirstOrDefault();
+                    var StatusText = db.Query<string>(findStatus, new { RepairId, Status }).FirstOrDefault();
                     EmailModel emailModel = new EmailModel();
                     emailModel.pid = "sys_flowengin";
                     emailModel.emailid = Convert.ToString(System.Guid.NewGuid());
