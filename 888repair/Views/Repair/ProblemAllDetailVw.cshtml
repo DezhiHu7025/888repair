@@ -221,12 +221,14 @@
 <script>
 
     function queryDetailVw(RepairId) {
+        var loading = layer.msg('页面加载中......');
          $.ajax({
              url: "@(Url.Action("getRepairDetail", "Repair"))",
              type: "post",
              data: { RepairId: RepairId },
                 dataType: "JSON",
              success: function (res) {
+                
                  //取到的数据存储到localStorage
                  localStorage.clear();
                  localStorage.setItem("RepairId", res.RepairId);
@@ -272,7 +274,7 @@
                  $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
                  $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
                  $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
-        //localStorage.clear();
+                 layer.close(loading);
              },
              error: function () {
                  console.log("失败");

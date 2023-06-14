@@ -248,6 +248,7 @@
             $("#DamageText2").show();
         }
 
+        var loading = layer.msg('页面加载中......');
         $("#RepairId").html(localStorage.getItem("RepairId"));
         $("#ResponseContent").html(localStorage.getItem("ResponseContent") == "null" ? '' : localStorage.getItem("ResponseContent"));
         $("#SystemCategory").html(localStorage.getItem("SystemCategory"));
@@ -266,7 +267,8 @@
         $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
         $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
        // localStorage.clear();
-        
+        layer.close(loading);
+
          $("#btn_back").on("click", function () {
              var url = "@(Url.Action("ProblemListIndex", "Repair"))";
              $("#content").load(url);

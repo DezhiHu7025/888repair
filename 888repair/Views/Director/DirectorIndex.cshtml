@@ -82,7 +82,7 @@
 <script>
 
     layui.use(['table','dropdown'], function () {
-
+        var loading = layer.msg('页面加载中......');
         var $ = layui.$;
         var table = layui.table;
 
@@ -146,7 +146,10 @@
                                     field: 'UpdateTime', title: '操作时间',
                                     templet: "<div>{{ formatDate(d.UpdateTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
                                 }
-                            ]]
+                            ]],
+                            done: function () {
+                                layer.close(loading);
+                            }
                         });
                     });
                 } else {

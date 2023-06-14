@@ -262,6 +262,7 @@
 </div>
 <script>
     function queryDetailVw(RepairId) {
+        var loading = layer.msg('页面加载中......');
          $.ajax({
              url: "@(Url.Action("getRepairDetail", "Repair"))",   // 要提交的URL路径
              type: "post",    // 发送请求的方式
@@ -313,7 +314,7 @@
                  $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
                  $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
                  $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
-
+                 layer.close(loading);
                  //localStorage.clear();
              },
              error: function () {

@@ -230,7 +230,7 @@
     }
 
     layui.use(['table', 'dropdown', 'form', 'laydate'], function () {
-
+        var loading = layer.msg('页面加载中......');
         var $ = layui.$;
         var table = layui.table;
         var form = layui.form;
@@ -321,7 +321,10 @@
                                 },
                                 { fixed: 'right', title: '操作', width: 130, minWidth: 80, toolbar: '#barDemo' },
 
-                            ]]
+                            ]],
+                            done: function(){
+                                layer.close(loading);
+                            }
                         });
                     });
                 } else {
