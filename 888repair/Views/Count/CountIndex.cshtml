@@ -1,0 +1,527 @@
+﻿
+@{
+    ViewBag.Title = "CountIndex";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>统计</title>
+    <style>
+        body {
+            padding: 32px; /*overflow-y: scroll;*/
+        }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
+    </style>
+</head>
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>统计</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">系统类别</label>
+                <div class="layui-input-inline">
+                    <select ID="SystemCategory" name="SystemCategory">
+                        <option value=""></option>
+                        @*<option value="IT(资讯类)">IT(资讯类)</option>
+                            <option value="Logistics(总务后勤类)">
+                                Logistics(总务后勤类)
+                            </option>*@
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">统计类别</label>
+                <div class="layui-input-inline">
+                    <select ID="QueryType" name="QueryType">
+                        <option value=""></option>
+                        <option value="charge">负责人统计</option>
+                        <option value="response">反应人统计</option>
+                        <option value="area">辖区统计</option>
+                        <option value="kind">业管统计</option>
+                        <option value="department">部门统计</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-inline" id="test6">
+                    <label class="layui-form-label">起始日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="StartDate">
+                    </div>
+                    <div class="layui-form-label">-终止日期</div>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="EndDate">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="layui-btn-group" style="margin-left:1250px">
+        <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
+        <button class="layui-btn layui-btn-sm" id="btn_export"><i class="layui-icon">导出&nbsp;&#xe67d;</i></button>
+    </div>
+    <br />
+    <table class="layui-hide" lay-filter="user" id="CountTable"></table>
+
+</body>
+<script>
+
+    layui.use(['table', 'dropdown', 'form', 'laydate'], function () {
+        var loading = layer.msg('无查询结果......');
+        var $ = layui.$;
+        var table = layui.table;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        render();
+
+        //墨绿主题
+        laydate.render({
+            elem: '#startDate'
+            , theme: 'molv'
+        });
+
+        laydate.render({
+            elem: '#endDate'
+            , theme: 'molv'
+        });
+
+        var logGroupName = '@(Session["GroupName"])'
+        if (logGroupName == "资讯") {
+            $("#SystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $('select[name=SystemCategory]').val('IT(资讯类)');
+        } else if (logGroupName == "后勤") {
+            $("#SystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+            $('select[name=SystemCategory]').val('Logistics(总务后勤类)');
+        } else if (logGroupName == "管理者") {
+            $("#SystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $("#addSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+        }
+
+        function loadDepartmentCount()
+        {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                QueryType: $('#QueryType').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+            }
+
+            $.ajax({
+                url: "@(Url.Action("getCountList", "Count"))",  // 要提交的URL路径
+                type: "post",    // 发送请求的方式
+                data: model,
+                dataType: "JSON",     // 指定传输的数据格式
+                beforeSend: function () {     //请求之前的方法
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        let d = result;
+                        layui.use(['form', 'jquery', 'table', 'layer'], function () {
+                            var form = layui.form;
+                            var $ = layui.jquery;
+                            var table = layui.table;
+                            var layer = layui.layer;
+
+                            table.render({
+                                elem: '#CountTable',
+                                type: "post",
+                                data: d.data,
+                                id: "CountTableID",
+                                contentType: 'application/json', // 参数为 json 格式传递
+                                page: !0 || { //详细参数可参考 laypage 组件文档
+                                    curr: 5,
+                                    groups: 1,
+                                    first: false,
+                                    last: false,
+                                    layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                                }
+                                , height: 523
+                                , cellMinWidth: 80
+                                , toolbar: true
+                                , cols: [[
+                                    { field: 'Department', title: '反应人部门', width: 200 },
+                                    { field: 'TotalCount', title: '总数', width: 100 },
+                                    { field: 'FinishCount', title: '完成', width: 100 },
+                                    { field: 'NotFinishCount', title: '未完成', width: 100 },
+                                    { field: 'CompletionRate', title: '执行率', width: 100 },
+                                ]],
+                                done: function () {
+                                    layer.close(loading);
+                                }
+                            });
+                        });
+                    } else {
+                        alert(result.Msg);
+                    }
+                },
+                error: function () {
+                    console.log("失败");
+                    alert(result.Msg);
+                }
+            });
+        };
+
+        function loadChargeCount()
+        {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                QueryType: $('#QueryType').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+            }
+
+            $.ajax({
+                url: "@(Url.Action("getCountList", "Count"))",  // 要提交的URL路径
+                type: "post",    // 发送请求的方式
+                data: model,
+                dataType: "JSON",     // 指定传输的数据格式
+                beforeSend: function () {     //请求之前的方法
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        let d = result;
+                        layui.use(['form', 'jquery', 'table', 'layer'], function () {
+                            var form = layui.form;
+                            var $ = layui.jquery;
+                            var table = layui.table;
+                            var layer = layui.layer;
+
+                            table.render({
+                                elem: '#CountTable',
+                                type: "post",
+                                data: d.data,
+                                id: "CountTableID",
+                                contentType: 'application/json', // 参数为 json 格式传递
+                                page: !0 || { //详细参数可参考 laypage 组件文档
+                                    curr: 5,
+                                    groups: 1,
+                                    first: false,
+                                    last: false,
+                                    layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                                }
+                                , height: 523
+                                , cellMinWidth: 80
+                                , toolbar: true
+                                , cols: [[
+                                    { field: 'ChargeName', title: '负责人姓名', width: 200 },
+                                    { field: 'TotalCount', title: '总数', width: 100 },
+                                    { field: 'FinishCount', title: '完成', width: 100 },
+                                    { field: 'NotFinishCount', title: '未完成', width: 100 },
+                                    { field: 'CompletionRate', title: '执行率', width: 100 },
+                                ]],
+                                done: function () {
+                                    layer.close(loading);
+                                }
+                            });
+                        });
+                    } else {
+                        alert(result.Msg);
+                    }
+                },
+                error: function () {
+                    console.log("失败");
+                    alert(result.Msg);
+                }
+            });
+        };
+
+        function loadResponseCount()
+        {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                QueryType: $('#QueryType').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+            }
+
+            $.ajax({
+                url: "@(Url.Action("getCountList", "Count"))",  // 要提交的URL路径
+                type: "post",    // 发送请求的方式
+                data: model,
+                dataType: "JSON",     // 指定传输的数据格式
+                beforeSend: function () {     //请求之前的方法
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        let d = result;
+                        layui.use(['form', 'jquery', 'table', 'layer'], function () {
+                            var form = layui.form;
+                            var $ = layui.jquery;
+                            var table = layui.table;
+                            var layer = layui.layer;
+
+                            table.render({
+                                elem: '#CountTable',
+                                type: "post",
+                                data: d.data,
+                                id: "CountTableID",
+                                contentType: 'application/json', // 参数为 json 格式传递
+                                page: !0 || { //详细参数可参考 laypage 组件文档
+                                    curr: 5,
+                                    groups: 1,
+                                    first: false,
+                                    last: false,
+                                    layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                                }
+                                , height: 523
+                                , cellMinWidth: 80
+                                , toolbar: true
+                                , cols: [[
+                                    { field: 'ResponseName', title: '反应人姓名', width: 200 },
+                                    { field: 'TotalCount', title: '总数', width: 100 },
+                                    { field: 'FinishCount', title: '完成', width: 100 },
+                                    { field: 'NotFinishCount', title: '未完成', width: 100 },
+                                    { field: 'CompletionRate', title: '执行率', width: 100 },
+                                ]],
+                                done: function () {
+                                    layer.close(loading);
+                                }
+                            });
+                        });
+                    } else {
+                        alert(result.Msg);
+                    }
+                },
+                error: function () {
+                    console.log("失败");
+                    alert(result.Msg);
+                }
+            });
+        };
+
+
+        function loadAreaCount()
+        {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                QueryType: $('#QueryType').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+            }
+
+            $.ajax({
+                url: "@(Url.Action("getCountList", "Count"))",  // 要提交的URL路径
+                type: "post",    // 发送请求的方式
+                data: model,
+                dataType: "JSON",     // 指定传输的数据格式
+                beforeSend: function () {     //请求之前的方法
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        let d = result;
+                        layui.use(['form', 'jquery', 'table', 'layer'], function () {
+                            var form = layui.form;
+                            var $ = layui.jquery;
+                            var table = layui.table;
+                            var layer = layui.layer;
+
+                            table.render({
+                                elem: '#CountTable',
+                                type: "post",
+                                data: d.data,
+                                id: "CountTableID",
+                                contentType: 'application/json', // 参数为 json 格式传递
+                                page: !0 || { //详细参数可参考 laypage 组件文档
+                                    curr: 5,
+                                    groups: 1,
+                                    first: false,
+                                    last: false,
+                                    layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                                }
+                                , height: 523
+                                , cellMinWidth: 80
+                                , toolbar: true
+                                , cols: [[
+                                    { field: 'Building', title: '大楼别', width: 400 },
+                                    { field: 'Location', title: '位置', width: 400 },
+                                    { field: 'ChargeName', title: '辖区负责人', width: 200 },
+                                    { field: 'TotalCount', title: '总数', width: 100 },
+                                    { field: 'FinishCount', title: '完成', width: 100 },
+                                    { field: 'NotFinishCount', title: '未完成', width: 100 },
+                                    { field: 'CompletionRate', title: '执行率', width: 100 },
+                                ]],
+                                done: function () {
+                                    layer.close(loading);
+                                }
+                            });
+                        });
+                    } else {
+                        alert(result.Msg);
+                    }
+                },
+                error: function () {
+                    console.log("失败");
+                    alert(result.Msg);
+                }
+            });
+        };
+        
+        function loadKindCount()
+        {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                QueryType: $('#QueryType').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+            }
+
+            $.ajax({
+                url: "@(Url.Action("getCountList", "Count"))",  // 要提交的URL路径
+                type: "post",    // 发送请求的方式
+                data: model,
+                dataType: "JSON",     // 指定传输的数据格式
+                beforeSend: function () {     //请求之前的方法
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        let d = result;
+                        layui.use(['form', 'jquery', 'table', 'layer'], function () {
+                            var form = layui.form;
+                            var $ = layui.jquery;
+                            var table = layui.table;
+                            var layer = layui.layer;
+
+                            table.render({
+                                elem: '#CountTable',
+                                type: "post",
+                                data: d.data,
+                                id: "CountTableID",
+                                contentType: 'application/json', // 参数为 json 格式传递
+                                page: !0 || { //详细参数可参考 laypage 组件文档
+                                    curr: 5,
+                                    groups: 1,
+                                    first: false,
+                                    last: false,
+                                    layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                                }
+                                , height: 523
+                                , cellMinWidth: 80
+                                , toolbar: true
+                                , cols: [[
+                                    { field: 'Category', title: '类别', width: 400 },
+                                    { field: 'ChargeName', title: '业管负责人', width: 200 },
+                                    { field: 'TotalCount', title: '总数', width: 100 },
+                                    { field: 'FinishCount', title: '完成', width: 100 },
+                                    { field: 'NotFinishCount', title: '未完成', width: 100 },
+                                    { field: 'CompletionRate', title: '执行率', width: 100 },
+                                ]],
+                                done: function () {
+                                    layer.close(loading);
+                                }
+                            });
+                        });
+                    } else {
+                        alert(result.Msg);
+                    }
+                },
+                error: function () {
+                    console.log("失败");
+                    alert(result.Msg);
+                }
+            });
+        };
+        
+        function reloadDate() {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                QueryType: $('#QueryType').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+            }
+            if (model.QueryType == '' || model.StartDate == '' || model.EndDate == '') {
+                alert("请先选择统计类别和起止日期再点击查询");
+                return false;
+            }
+            if (model.QueryType == "department") {
+                loadDepartmentCount();
+            }
+            else if (model.QueryType == "charge") {
+                loadChargeCount();
+            }
+            else if (model.QueryType == "response") {
+                loadResponseCount();
+            }
+            else if (model.QueryType == "area") {
+                loadAreaCount();
+            }
+            else if (model.QueryType == "kind") {
+                loadKindCount();
+            }
+        }
+
+        $('#btn_search').click(function () {
+            reloadDate();
+        });
+
+        $('#btn_export').click(function () {
+            request();
+        });
+
+        function request() {
+            var model = {
+                SystemCategory: $('#SystemCategory').val(),
+                QueryType: $('#QueryType').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+            }
+            var fileName = '';
+            if (model.QueryType == "department") {
+                fileName = "部门统计";
+            }
+            else if (model.QueryType == "charge") {
+                fileName = "负责人统计";
+            }
+            else if (model.QueryType == "response") {
+                fileName = "反应人统计";
+            }
+            else if (model.QueryType == "area") {
+                fileName = "辖区统计";
+            }
+            else if (model.QueryType == "kind") {
+                fileName = "业管统计";
+            }
+
+            fetch("@(Url.Action("CountExport", "Count"))", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(model),
+            })
+                .then(res => res.blob())
+                .then(data => {
+                    if (data.size == 0) {
+                        layui.use('layer', function () {
+                            var layer = layui.layer;
+                            layer.msg("下载失败！");
+                        });
+                    } else {
+                        let blobUrl = window.URL.createObjectURL(data);
+                       // window.location = blobUrl;
+                        const a = document.createElement('a');
+                        var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHHmmss");
+                        console.log(datetime);
+                        a.download = fileName + "_" + datetime + ".xlsx";
+                        a.href = blobUrl;
+                        a.click();
+                        //download(blobUrl);
+                    }
+                });
+        }
+
+        function render() {
+            // 封装函数-表单更新渲染
+            layui.use('form', function () {
+                var form = layui.form;
+                form.render('select');
+            })
+        }
+    });
+</script>
+

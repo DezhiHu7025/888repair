@@ -153,6 +153,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AreaController.cs" />
+    <Compile Include="Controllers\CountController.cs" />
     <Compile Include="Controllers\DDLController.cs" />
     <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
@@ -168,6 +169,9 @@
     </Compile>
     <Compile Include="Models\Area\AreaMatchModel.cs" />
     <Compile Include="Models\Area\AreaModel.cs" />
+    <Compile Include="Models\Count\CountExcelModel.cs" />
+    <Compile Include="Models\Count\CountModel.cs" />
+    <Compile Include="Models\Count\QueryCountModel.cs" />
     <Compile Include="Models\Director\DirectorModel.cs" />
     <Compile Include="Models\Director\UserModel.cs" />
     <Compile Include="Models\FlagTips.cs" />
@@ -249,6 +253,7 @@
     <Content Include="Views\Repair\LogRepairMobileVw.cshtml" />
     <Content Include="Views\Repair\RPMobileIndex.cshtml" />
     <Content Include="Views\Repair\RepairDetailMobileVw.cshtml" />
+    <Content Include="Views\Count\CountIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

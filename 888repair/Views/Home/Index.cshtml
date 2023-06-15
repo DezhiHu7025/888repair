@@ -66,6 +66,7 @@
                             <dd data-id="status"><a class="layui-nav-item ">状态维护</a></dd>
                         </dl>
                     </li>
+                    <li id="count" class="layui-nav-item" data-id="count"><a class="layui-nav-item ">统计</a></li>
                 </ul>
             </div>
         </div>
@@ -270,6 +271,10 @@
                     break; 
                 case "#ProblemRepair":
                     pathn = "@(Url.Action("ProblemAllVw", "Repair"))",
+                        i = 0;
+                    break; 
+                 case "#count":
+                    pathn = "@(Url.Action("CountIndex", "Count"))",
                         i = 0;
                     break; 
                 case "#RPDetail"://回复问题详情
