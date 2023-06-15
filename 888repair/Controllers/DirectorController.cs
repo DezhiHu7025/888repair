@@ -103,8 +103,8 @@ namespace _888repair.Controllers
                     string MsgUser = null;
                     foreach (var cmodel in deleteList)
                     {
-                        string check1 = @"SELECT * FROM  [888_KsNorth].[dbo].[match] WHERE  charge_emp = @charge_emp ";
-                        var checkList = db.Query<KindMatchModel>(check1, new { charge_emp = cmodel.EmpNo }).ToList();
+                        string check1 = @"SELECT * FROM  [888_KsNorth].[dbo].[match] WHERE  charge_emp = @charge_emp and  SystemCategory = @SystemCategory ";
+                        var checkList = db.Query<KindMatchModel>(check1, new { charge_emp = cmodel.EmpNo, SystemCategory = cmodel.SystemCategory }).ToList();
                         if (checkList.Count() != 0)
                         {
                             MsgUser += "  " + cmodel.FullName;
