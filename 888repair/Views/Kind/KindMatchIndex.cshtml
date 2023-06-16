@@ -55,7 +55,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">姓名</label>
                 <div class="layui-input-inline">
-                    <select ID="OpEmpNo" name="OpEmpNo" lay-verify="required">
+                    <select ID="OpEmpNo" name="OpEmpNo" lay-verify="required" lay-search="">
                         <option value=""></option>
                     </select>
                 </div>
@@ -130,9 +130,13 @@
         if (logGroupName == "资讯") {
             $("#OpSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
             $("#addSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $('select[name=OpSystemCategory]').val('IT(资讯类)');
+            $('select[name=addSystemCategory]').val('IT(资讯类)');
         } else if (logGroupName == "后勤") {
             $("#OpSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
             $("#addSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+            $('select[name=OpSystemCategory]').val('Logistics(总务后勤类)');
+            $('select[name=addSystemCategory]').val('Logistics(总务后勤类)');
         } else if (logGroupName == "管理者") {
             $("#OpSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
             $("#OpSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);

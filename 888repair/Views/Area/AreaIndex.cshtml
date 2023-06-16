@@ -105,9 +105,13 @@
         if (logGroupName == "资讯") {
             $("#SystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
             $("#addSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $('select[name=SystemCategory]').val('IT(资讯类)');
+            $('select[name=addSystemCategory]').val('IT(资讯类)');
         } else if (logGroupName == "后勤") {
             $("#SystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
             $("#addSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+            $('select[name=SystemCategory]').val('Logistics(总务后勤类)');
+            $('select[name=addSystemCategory]').val('Logistics(总务后勤类)');
         } else if (logGroupName == "管理者") {
             $("#SystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
             $("#SystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
