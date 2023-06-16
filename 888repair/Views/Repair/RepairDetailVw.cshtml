@@ -118,7 +118,9 @@
                 </td>
             </tr>
             <tr>
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Status(执行状态)：</label></td>
+                <td align="right" width="40%" style="background-color:lightgrey">
+                    <label style="font-size:large;color:purple;">Status(执行状态)：</label>
+                </td>
                 <td width="60%">
                     <div class="layui-form layui-form-pane" style="margin-left:20px">
                         <div class="layui-input-inline">
@@ -156,7 +158,18 @@
     </div>
 </body>
 <script>
-
+    
+    layui.use(['upload', 'element', 'layer', 'laydate','form'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var util = layui.util;
+        var laydate = layui.laydate;
+        
+        var newURL = '@(Session["URL"])';
+        var dd = newURL.split('?');
+        var dd1 = dd[1];
+        queryDetailVw(dd1);
+        
     function queryDetailVw(RepairId) {
         var loading = layer.msg('页面加载中......');
          $.ajax({
@@ -165,50 +178,29 @@
              data: { RepairId: RepairId },
                 dataType: "JSON",     // 指定传输的数据格式
              success: function (res) {
-                 //取到的数据存储到localStorage
-                 localStorage.clear();
-                 localStorage.setItem("RepairId", res.RepairId);
-                 localStorage.setItem("Stu_Name", res.Stu_Name);
-                 localStorage.setItem("SystemCategory", res.SystemCategory);
-                 localStorage.setItem("Building", res.Building);
-                 localStorage.setItem("Loaction", res.Loaction);
-                 localStorage.setItem("ChargeEmpno", res.ChargeEmpno);
-                 localStorage.setItem("ChargeEmpname", res.ChargeEmpname);
-                 localStorage.setItem("Category", res.Category);
-                 localStorage.setItem("ResponseContent", res.ResponseContent);
-                 localStorage.setItem("ResponseEmpname", res.ResponseEmpname);
-                 localStorage.setItem("ReplyContent", res.ReplyContent);
-                 localStorage.setItem("Status", res.Status);
-                 localStorage.setItem("CreatTime", res.CreatTime);
-                 localStorage.setItem("FinishTime", res.FinishTime);
-                 localStorage.setItem("PhotoPath", res.PhotoPath);
-                 localStorage.setItem("RoomNum", res.RoomNum);
-                 localStorage.setItem("RepairTime", res.RepairTime);
-                 localStorage.setItem("Telephone", res.Telephone);
-                 localStorage.setItem("DamageReason", res.DamageReason);
-                 localStorage.setItem("DamageClass", res.DamageClass);
-                 localStorage.setItem("DamageName", res.DamageName);
-                 localStorage.setItem("ReplyPhoto", res.ReplyPhoto);
+                 $("#RepairId").html(res.RepairId);
+                 $("#ResponseContent").html(res.ResponseContent == "null" ? '' : res.ResponseContent);
+                 $("#SystemCategory").html(res.SystemCategory);
+                 $("#Building").html(res.Building);
+                 $("#Loaction").html(res.Loaction);
+                 $("#ChargeEmpname").html(res.ChargeEmpname);
+                 $("#RoomNum").html(res.RoomNum);
+                 $("#ResponseEmpname").html(res.ResponseEmpname);
+                 $("#Telephone").html(res.Telephone);
+                 $("#RepairTime").html(res.RepairTime == "null" ? '' : res.RepairTime);
+                 $("#Category").html(res.Category);
+                 $("#DamageReason").html(res.DamageReason);
+                 $("#DamageClass").html(res.DamageClass);
+                 $("#DamageName").html(res.DamageName);
+                 $("#CreatTime").html(formatDate(res.CreatTime, 'yyyy-MM-dd HH:mm:ss'));
+                 $("#ReplyContent").html(res.ReplyContent == "null" ? '' : res.ReplyContent);
+                 $("#FinishTime").html(res.FinishTime == "null" ? '' : formatDate(res.FinishTime, 'yyyy-MM-dd HH:mm:ss')); 
+               //  console.log(localStorage);
 
-                 $("#RepairId").html(localStorage.getItem("RepairId"));
-                 $("#ResponseContent").html(localStorage.getItem("ResponseContent") == "null" ? '' : localStorage.getItem("ResponseContent"));
-                 $("#SystemCategory").html(localStorage.getItem("SystemCategory"));
-                 $("#Building").html(localStorage.getItem("Building"));
-                 $("#Loaction").html(localStorage.getItem("Loaction"));
-                 $("#ChargeEmpname").html(localStorage.getItem("ChargeEmpname"));
-                 $("#RoomNum").html(localStorage.getItem("RoomNum"));
-                 $("#ResponseEmpname").html(localStorage.getItem("ResponseEmpname"));
-                 $("#Telephone").html(localStorage.getItem("Telephone"));
-                 $("#RepairTime").html(localStorage.getItem("RepairTime") == "null" ? '' : localStorage.getItem("RepairTime"));
-                 $("#Category").html(localStorage.getItem("Category"));
-                 $("#DamageReason").html(localStorage.getItem("DamageReason"));
-                 $("#DamageClass").html(localStorage.getItem("DamageClass"));
-                 $("#DamageName").html(localStorage.getItem("DamageName"));
-                 $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
-                 $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
-                 $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss')); 
+                 loadImg(res.PhotoPath, res.ReplyPhoto);
+                 loadOption(res.SystemCategory,res.Status);
+
                  layer.close(loading);
-                 //console.log(localStorage);
              },
              error: function () {
                  // 请求失败后要执行的代码
@@ -218,12 +210,11 @@
          });
     }
 
-    function loadImg() {
-
+    function loadImg(PhotoPath, ReplyPhoto) {
         //遍历图片 PhotoPath
-        if (localStorage.getItem("PhotoPath") != null && localStorage.getItem("PhotoPath") != '' && localStorage.getItem("PhotoPath") != 'null') {
+        if (PhotoPath != null && PhotoPath != '' && PhotoPath != 'null') {
           //  var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
-            var PhotoPathS = localStorage.getItem("PhotoPath");
+            var PhotoPathS = PhotoPath;
             PhotoPathS = PhotoPathS.substring(0, PhotoPathS.length - 1);
             var files = PhotoPathS.split(";");
             var imgId = document.getElementById("imgId");
@@ -238,9 +229,9 @@
             }
         }
 
-        if (localStorage.getItem("ReplyPhoto") != null && localStorage.getItem("ReplyPhoto") != '' && localStorage.getItem("ReplyPhoto") != 'null') {
+        if (ReplyPhoto != null && ReplyPhoto != '' && ReplyPhoto != 'null') {
             // var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
-            var ReplyPhotoS = localStorage.getItem("ReplyPhoto");
+            var ReplyPhotoS = ReplyPhoto;
             ReplyPhotoS = ReplyPhotoS.substring(0, ReplyPhotoS.length - 1);
             var files2 = ReplyPhotoS.split(";");
             var imgId2 = document.getElementById("imgId2");
@@ -255,33 +246,16 @@
             }
         }
     }
-    
-    layui.use(['upload', 'element', 'layer', 'laydate','form'], function () {
-        var form = layui.form;
-        var layer = layui.layer;
-        var util = layui.util;
-        var laydate = layui.laydate;
-
-        loadOption();
-
-        loadImg();
-
-        var newURL = '@(Session["URL"])';
-        var dd = newURL.split('?');
-        var dd1 = dd[1];
-        queryDetailVw(dd1);
-
-       
-
+        
         $("body").on("click", ".imgview", function (e) {
             layer.photos({ photos: { "data": [{ "src": e.target.src }] } });
         });
+        
 
-        function loadOption() {     
+        function loadOption(SystemCategory,Status) {  
             $("#OpStatus").empty();
-            var SystemCategory = localStorage.getItem("SystemCategory");
             if (SystemCategory == null || SystemCategory == "") {
-                loadOption();
+                alert("执行状态请求异常");
             } else {
                 $.ajax({
                     type: "post",
@@ -294,7 +268,7 @@
                         {
                             $("#OpStatus").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
                         }
-                        $('select[name=OpStatus]').val(localStorage.getItem("Status"));
+                        $('select[name=OpStatus]').val(Status);
                         form.render();
                     }, error: function () {
                         layer.alert('请求失败');
@@ -315,9 +289,6 @@
             $("#DamageText2").show();
         }
         
-        
-       // localStorage.clear();
-        
          $("#btn_back").on("click", function () {
              var url = "@(Url.Action("RersonalProblemIndex", "Repair"))";
              var sId2 = window.location.href;
@@ -327,5 +298,6 @@
              $("#content").load(url);
         });
     });
+
 </script>
 
