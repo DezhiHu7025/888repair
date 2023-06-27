@@ -62,7 +62,7 @@ namespace _888repair.Controllers
                         {
                             using (RepairDb db = new RepairDb())
                             {
-                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsNorth].[dbo].[match] where charge_emp = @EmpNo ";
+                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsNorth].[dbo].[charge] where EmpNo = @EmpNo ";
                                 var list = db.Query<AreaMatchModel>(permissionCheck, new { EmpNo = model.EmpNo }).ToList();
                                 if (list.Count() == 1 && list.FirstOrDefault().SystemCategory == "IT(资讯类)")
                                 {
@@ -72,9 +72,13 @@ namespace _888repair.Controllers
                                 {
                                     Session["OPGroup"] = "后勤";
                                 }
-                                else
+                                else if (list.Count() == 2)
                                 {
                                     Session["OPGroup"] = "管理者";
+                                }
+                                else
+                                {
+                                    Session["OPGroup"] = "无权限";
                                 }
 
                             }
@@ -219,7 +223,7 @@ where a.AccountID = @Account";
                         {
                             using (RepairDb db = new RepairDb())
                             {
-                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsNorth].[dbo].[match] where charge_emp = @EmpNo ";
+                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsNorth].[dbo].[charge] where EmpNo = @EmpNo ";
                                 var list = db.Query<AreaMatchModel>(permissionCheck, new { EmpNo = model.EmpNo }).ToList();
                                 if (list.Count() == 1 && list.FirstOrDefault().SystemCategory == "IT(资讯类)")
                                 {
@@ -229,9 +233,13 @@ where a.AccountID = @Account";
                                 {
                                     Session["OPGroup"] = "后勤";
                                 }
-                                else
+                                else if (list.Count() == 2)
                                 {
                                     Session["OPGroup"] = "管理者";
+                                }
+                                else
+                                {
+                                    Session["OPGroup"] = "无权限";
                                 }
 
                             }

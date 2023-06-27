@@ -219,7 +219,7 @@ WHERE b.EmpNo = @ChargeEmpno ";
                         emailModel.toname = pModel.fullname;
                         emailModel.strSystem = "888报修系统(北)";
                         emailModel.subject = "888报修系统(北)--您转派的报修单被驳回给上一任负责人";
-                        emailModel.body = string.Format(@"A repair order:{0} has been transferred to you.Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?APDetail-{0}' target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
+                        emailModel.body = string.Format(@"The repair report:{0} you transferred has been rejected by the previous person in charge.Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?APDetail-{0}' target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
                           您转派的报修单:{0}被{1}驳回给上一任负责人{2}。请您进入<a href='http://192.168.80.148/888repair_ksnorth/Home/Index?APDetail-{0}' target='_blank' >[888报修系统(北)]</a> 尽快处理，谢谢！", RepairId, FullName, pModel2.fullname);
                         string mailSql = string.Format(@"Insert into [Common].[dbo].[oa_emaillog](pid,emailid ,actiontype ,toaddr,toname ,fromaddr ,fromname,subject,body
                                   , attch , remark ,createdate ) 
