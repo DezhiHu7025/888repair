@@ -68,11 +68,14 @@
                 Do not upload photos with the same name, or they will be overwritten
                 /
                 ※上传照片请勿有相同名称，不然会覆盖之前的上传照片
+                <br>
+                Fields marked with * are required or selected /
+                &nbsp;&nbsp;带*号的栏位为必填或必选
             </label>
             <br /><br /><br />
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：</label>
+                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="height:38px;width:300px">
                         <select ID="OpAreaCategory" name="OpAreaCategory" lay-filter="OpAreaCategory" lay-verify="required">
                             <option value=""></option>
@@ -80,7 +83,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline">Location(问题的区域)：</label>
+                    <label class="layui-form-label layui-input-inline">Location(问题的区域)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="height:38px;width:300px" id="checkSC">
                         <select ID="OpLocation" name="OpLocation"  lay-verify="required" >
                             <option value=""></option>
@@ -89,14 +92,14 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label layui-input-inline">RoomNum(问题的空间编号)：</label>
+                <label class="layui-form-label layui-input-inline" style="width:195px">RoomNum(问题的空间编号)：<span style="color:red">*</span></label>
                 <div class="layui-input-inline" style="height:38px;width:300px">
                     <input type="text" id="RoomNum" name="RoomNum" lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline">Description(问题描述)：</label>
+                    <label class="layui-form-label layui-input-inline">Description(问题描述)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline">
                         <textarea id="Description" name="Description" style="width:450%;height:10%" lay-verify="required" />
                     </div>
@@ -112,7 +115,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：</label>
+                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="height:38px;width:300px">
                         <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory" lay-verify="required">
                             <option value=""></option>
@@ -125,18 +128,18 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline" style="width:45%">
-                    <label class="layui-form-label layui-input-inline">Damage Reason(损坏原因):</label>
+                    <label class="layui-form-label layui-input-inline">Damage Reason(损坏原因):<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="width:60%">
                         <input type="radio"  lay-filter="DamageReason" name="DamageReason" value="natural cause(自然)" title="natural cause(自然)" checked="">
                         <input type="radio"  lay-filter="DamageReason" name="DamageReason" value="human causes(人为)" title="human causes(人为)">
                     </div>
                 </div>
                 <div class="layui-inline" style="width:50%" id="DamageText">
-                    <label class="layui-form-label  layui-input-inline" style="width:25%">Class/Unit(班级/单位)：</label>
+                    <label class="layui-form-label  layui-input-inline" style="width:25%">Class/Unit(班级/单位)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="width:20%">
                         <input type="text" id="ClassUnit" name="ClassUnit" autocomplete="off" class="layui-input">
                     </div>
-                    <label class="layui-form-label  layui-input-inline" style="width:15%">Name(姓名)：</label>
+                    <label class="layui-form-label  layui-input-inline" style="width:15%">Name(姓名)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="width:25%">
                         <input type="text" id="EmpName" name="EmpName" autocomplete="off" class="layui-input">
                     </div>
@@ -198,7 +201,7 @@
             </div>
             <div class="layui-form-item" style="height:18px" pane="">
                 <div class="layui-inline" style="width:200%">
-                    <label class="layui-form-label layui-input-inline">repair time(维护时段)：</label>
+                    <label class="layui-form-label layui-input-inline">repair time(维护时段)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="width:60%;margin-left:0">
                         <label class="layui-form-label layui-input-inline">Mon(period)星期四(节次)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <input type="checkbox" name="repairTime" value="星期4的第1节" lay-skin="primary" title="One">
@@ -251,7 +254,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label layui-input-inline">Tel-Ext/联络分机：</label>
+                <label class="layui-form-label layui-input-inline">Tel-Ext/联络分机：<span style="color:red">*</span></label>
                 <div class="layui-input-inline">
                     <input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input demo-phone">
                 </div>
