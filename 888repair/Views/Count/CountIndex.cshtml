@@ -101,6 +101,8 @@
         } else if (logGroupName == "管理者") {
             $("#SystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
             $("#addSystemCategory").append(`<option value="IT(资讯类)">IT(资讯类)</option>`);
+            $("#SystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
+            $('select[name=SystemCategory]').val('Logistics(总务后勤类)');
         }
 
         function loadDepartmentCount()
