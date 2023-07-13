@@ -26,7 +26,7 @@ namespace _888repair.Controllers
                 using (RepairDb db = new RepairDb())
                 {
                     string sql = string.Format(@"SELECT area_id AreaId,SystemCategory,Buliding Building,Location,
-                                                  UpdateUser,UpdateTime  FROM [888_KsNorth].[dbo].[area]
+                                                  UpdateUser,UpdateTime  FROM [888_KsSouth].[dbo].[area]
                                                 where 1=1");
                     if (!string.IsNullOrEmpty(model.SystemCategory))
                     {
@@ -78,13 +78,13 @@ namespace _888repair.Controllers
                 {
                     if (string.IsNullOrEmpty(model.AreaId))
                     {
-                        Int32 seq = db.Query<Int32>("SELECT MAX(sortno) FROM [888_KsNorth].[dbo].[area] ").FirstOrDefault();
+                        Int32 seq = db.Query<Int32>("SELECT MAX(sortno) FROM [888_KsSouth].[dbo].[area] ").FirstOrDefault();
                         model.SortNo = seq + 1;
-                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[area] (SystemCategory,Buliding,Location,SortNo,UpdateUser,UpdateTime)VALUES(@SystemCategory,@Building,@Location,@SortNo,@UpdateUser,@UpdateTime)");
+                        sql = string.Format(@" INSERT INTO  [888_KsSouth].[dbo].[area] (SystemCategory,Buliding,Location,SortNo,UpdateUser,UpdateTime)VALUES(@SystemCategory,@Building,@Location,@SortNo,@UpdateUser,@UpdateTime)");
                     }
                     else
                     {
-                        sql = string.Format(@" update [888_KsNorth].[dbo].[area] set SystemCategory = @SystemCategory,Buliding = @Building,Location=@Location,UpdateUser=@UpdateUser,UpdateTime = @UpdateTime where area_id = @AreaId ");
+                        sql = string.Format(@" update [888_KsSouth].[dbo].[area] set SystemCategory = @SystemCategory,Buliding = @Building,Location=@Location,UpdateUser=@UpdateUser,UpdateTime = @UpdateTime where area_id = @AreaId ");
                     }
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
@@ -110,7 +110,7 @@ namespace _888repair.Controllers
                     {
                         var deleteModel = new AreaModel();
                         deleteModel.AreaId = model.AreaId;
-                        string checkSql = "SELECT * FROM  [888_KsNorth].[dbo].match WHERE match_type = 'AreaMatch' AND area_id = @AreaId ";
+                        string checkSql = "SELECT * FROM  [888_KsSouth].[dbo].match WHERE match_type = 'AreaMatch' AND area_id = @AreaId ";
                         var list = db.Query<AreaModel>(checkSql, new { AreaId = model.AreaId });
                         if (list.Count() != 0)
                         {
@@ -128,7 +128,7 @@ namespace _888repair.Controllers
                         deleteModel.AreaId = model.AreaId;
                         deleteModel.SystemCategory = model.SystemCategory;
                         deleteModel.Building = model.Building;
-                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[area]  WHERE area_id = @AreaId ");
+                        string sql = string.Format(@" DELETE FROM [888_KsSouth].[dbo].[area]  WHERE area_id = @AreaId ");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);
@@ -167,10 +167,10 @@ namespace _888repair.Controllers
                                                         a.sort,
                                                         a.UpdateUser,
                                                         a.UpdateTime,a.SystemCategory
-                                                 FROM [888_KsNorth].[dbo].[match] a
-                                                     LEFT JOIN [888_KsNorth].[dbo].[area] b
+                                                 FROM [888_KsSouth].[dbo].[match] a
+                                                     LEFT JOIN [888_KsSouth].[dbo].[area] b
                                                          ON a.area_id = b.area_id
-		                                                  LEFT JOIN [888_KsNorth].[dbo].[charge] c
+		                                                  LEFT JOIN [888_KsSouth].[dbo].[charge] c
                                                          ON a.charge_emp = c.EmpNo
                                                           and a.SystemCategory = c.SystemCategory
                                                  WHERE 1 = 1 and match_type= 'AreaMatch' ");
@@ -225,19 +225,19 @@ namespace _888repair.Controllers
                     model.UpdateTime = DateTime.Now;
                     if (string.IsNullOrEmpty(model.MatchId))
                     {
-                        string checkSql = @"select * from [888_KsNorth].[dbo].[match] where area_id = @AreaId and charge_emp = @EmpNo and match_type = 'AreaMatch' and SystemCategory = @SystemCategory ";
+                        string checkSql = @"select * from [888_KsSouth].[dbo].[match] where area_id = @AreaId and charge_emp = @EmpNo and match_type = 'AreaMatch' and SystemCategory = @SystemCategory ";
                         var list = db.Query<AreaMatchModel>(checkSql, model).ToList();
                         if (list.Count() != 0)
                         {
                             return Json(new FlagTips { IsSuccess = false, Msg = "该辖区已维护负责人，请勿重复维护" }, JsonRequestBehavior.AllowGet);
                         }
-                        Int32 seq = db.Query<Int32>("SELECT ISNULL(MAX(sortno),'2000') FROM [888_KsNorth].[dbo].[match] WHERE match_type = 'AreaMatch' and SystemCategory = @SystemCategory ", new { model.SystemCategory }).FirstOrDefault();
+                        Int32 seq = db.Query<Int32>("SELECT ISNULL(MAX(sortno),'2000') FROM [888_KsSouth].[dbo].[match] WHERE match_type = 'AreaMatch' and SystemCategory = @SystemCategory ", new { model.SystemCategory }).FirstOrDefault();
                         model.SortNo = seq + 1;
-                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[match] (SystemCategory,match_type,area_id,charge_emp,Sort,SortNo,UpdateUser,UpdateTime)VALUES(@SystemCategory,@MatchType,@AreaId,@EmpNo,@Sort,@SortNo,@UpdateUser,@UpdateTime)");
+                        sql = string.Format(@" INSERT INTO  [888_KsSouth].[dbo].[match] (SystemCategory,match_type,area_id,charge_emp,Sort,SortNo,UpdateUser,UpdateTime)VALUES(@SystemCategory,@MatchType,@AreaId,@EmpNo,@Sort,@SortNo,@UpdateUser,@UpdateTime)");
                     }
                     else
                     {
-                        sql = string.Format(@" update [888_KsNorth].[dbo].[match] set SystemCategory = @SystemCategory,area_id = @AreaId,charge_emp=@EmpNo,Sort=@Sort,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where area_id = @AreaId  and match_type = 'AreaMatch'");
+                        sql = string.Format(@" update [888_KsSouth].[dbo].[match] set SystemCategory = @SystemCategory,area_id = @AreaId,charge_emp=@EmpNo,Sort=@Sort,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where area_id = @AreaId  and match_type = 'AreaMatch'");
                     }
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
@@ -263,7 +263,7 @@ namespace _888repair.Controllers
                         var deleteModel = new AreaMatchModel();
                         deleteModel.MatchId = model.MatchId;
                         deleteModel.SystemCategory = model.SystemCategory;
-                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[match]  WHERE match_id = @MatchId and match_type = 'AreaMatch' and SystemCategory = @SystemCategory  ");
+                        string sql = string.Format(@" DELETE FROM [888_KsSouth].[dbo].[match]  WHERE match_id = @MatchId and match_type = 'AreaMatch' and SystemCategory = @SystemCategory  ");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);

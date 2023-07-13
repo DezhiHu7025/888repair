@@ -62,7 +62,7 @@ namespace _888repair.Controllers
                         {
                             using (RepairDb db = new RepairDb())
                             {
-                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsNorth].[dbo].[charge] where EmpNo = @EmpNo ";
+                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsSouth].[dbo].[charge] where EmpNo = @EmpNo ";
                                 var list = db.Query<AreaMatchModel>(permissionCheck, new { EmpNo = model.EmpNo }).ToList();
                                 if (list.Count() == 1 && list.FirstOrDefault().SystemCategory == "IT(资讯类)")
                                 {
@@ -142,7 +142,7 @@ namespace _888repair.Controllers
 FROM [Common].[dbo].[kcis_account] a
     LEFT JOIN [Common].[dbo].[AFS_Dept] B
         ON a.deptid2 = B.DeptID_eip
-    LEFT JOIN [888_KsNorth].[dbo].[admin] c
+    LEFT JOIN [888_KsSouth].[dbo].[admin] c
         ON a.EmpNo = c.EmpNo
 where a.AccountID = @Account";
                 user = db.Query<UserModel>(userSql, new { Account }).FirstOrDefault();
@@ -167,7 +167,7 @@ where a.AccountID = @Account";
             string chekMum = null;
             using (RepairDb db = new RepairDb())
             {
-                string checkSql = @"SELECT * FROM [888_KsNorth].[dbo].[charge] WHERE EmpNo = @EmpNo ";
+                string checkSql = @"SELECT * FROM [888_KsSouth].[dbo].[charge] WHERE EmpNo = @EmpNo ";
                 var user = db.Query<DirectorModel>(checkSql, new { EmpNo }).ToList();
                 if (user.Count() > 0)
                 {
@@ -223,7 +223,7 @@ where a.AccountID = @Account";
                         {
                             using (RepairDb db = new RepairDb())
                             {
-                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsNorth].[dbo].[charge] where EmpNo = @EmpNo ";
+                                string permissionCheck = @"SELECT DISTINCT SystemCategory  FROM  [888_KsSouth].[dbo].[charge] where EmpNo = @EmpNo ";
                                 var list = db.Query<AreaMatchModel>(permissionCheck, new { EmpNo = model.EmpNo }).ToList();
                                 if (list.Count() == 1 && list.FirstOrDefault().SystemCategory == "IT(资讯类)")
                                 {

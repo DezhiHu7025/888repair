@@ -31,7 +31,7 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@"SELECT SystemCategory,state_id ID,StatusValue,StatusText,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[state]
+                    string sql = string.Format(@"SELECT SystemCategory,state_id ID,StatusValue,StatusText,UpdateUser,UpdateTime FROM [888_KsSouth].[dbo].[state]
                                                 where 1=1");
                     if (!string.IsNullOrEmpty(model.StatusText))
                     {
@@ -79,11 +79,11 @@ namespace _888repair.Controllers
                     model.UpdateTime = DateTime.Now;
                     if (string.IsNullOrEmpty(model.ID))
                     {
-                        sql = string.Format(@" INSERT INTO  [888_KsNorth].[dbo].[state] (SystemCategory,StatusValue,StatusText,UpdateUser,UpdateTime)VALUES(@SystemCategory,@StatusValue,@StatusText,@UpdateUser,@UpdateTime)");
+                        sql = string.Format(@" INSERT INTO  [888_KsSouth].[dbo].[state] (SystemCategory,StatusValue,StatusText,UpdateUser,UpdateTime)VALUES(@SystemCategory,@StatusValue,@StatusText,@UpdateUser,@UpdateTime)");
                     }
                     else
                     {
-                        sql = string.Format(@" update [888_KsNorth].[dbo].[state] set StatusValue = @StatusValue,StatusText=@StatusText,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where state_id = @ID");
+                        sql = string.Format(@" update [888_KsSouth].[dbo].[state] set StatusValue = @StatusValue,StatusText=@StatusText,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where state_id = @ID");
                     }
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
@@ -110,7 +110,7 @@ namespace _888repair.Controllers
                         deleteModel.ID = model.ID;
                         deleteModel.StatusValue = model.StatusValue;
 
-                        string sql = string.Format(@" DELETE FROM [888_KsNorth].[dbo].[state]  WHERE state_id = @ID AND StatusValue = @StatusValue");
+                        string sql = string.Format(@" DELETE FROM [888_KsSouth].[dbo].[state]  WHERE state_id = @ID AND StatusValue = @StatusValue");
 
                         Dictionary<string, object> trans = new Dictionary<string, object>();
                         trans.Add(sql, deleteModel);

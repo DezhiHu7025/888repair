@@ -92,8 +92,8 @@ namespace _888repair.Controllers
                     {
                         string findChargeSql = @"SELECT a.charge_emp EmpNo,
                                                         b.FullName
-                                                FROM[888_KsNorth].[dbo].[match] a
-                                                LEFT JOIN[888_KsNorth].[dbo].[charge] b
+                                                FROM[888_KsSouth].[dbo].[match] a
+                                                LEFT JOIN[888_KsSouth].[dbo].[charge] b
                                                 ON a.charge_emp = b.EmpNo
                                                 WHERE a.match_type = 'AreaMatch'
                                                       AND a.SystemCategory = 'IT(资讯类)'
@@ -105,8 +105,8 @@ namespace _888repair.Controllers
                     {
                         string findChargeSql = @"SELECT a.charge_emp EmpNo,
                                                         b.FullName
-                                                FROM[888_KsNorth].[dbo].[match] a
-                                                LEFT JOIN[888_KsNorth].[dbo].[charge] b
+                                                FROM[888_KsSouth].[dbo].[match] a
+                                                LEFT JOIN[888_KsSouth].[dbo].[charge] b
                                                 ON a.charge_emp = b.EmpNo
                                                 WHERE a.match_type = 'KindMatch'
                                                       AND a.SystemCategory = 'Logistics(总务后勤类)'
@@ -132,7 +132,7 @@ namespace _888repair.Controllers
                     model.ChargeEmpno = chargeModel.EmpNo;
                     model.ChargeEmpname = chargeModel.FullName;
 
-                    sql = @"insert into [888_KsNorth].[dbo].[record] (repair_id,area_id,kind_id,SystemCategory,Building,Loaction,
+                    sql = @"insert into [888_KsSouth].[dbo].[record] (repair_id,area_id,kind_id,SystemCategory,Building,Loaction,
                                                charge_empno,charge_empname,Category,ResponseContent,ReplyContent,Status,CreatTime,
                                                PhotoPath,RoomNum,repairTime,Telephone,DamageReason,DamageClass,DamageName,ResponseEmpno,
                                                ResponseEmpname,FinishTime) 
@@ -151,7 +151,7 @@ namespace _888repair.Controllers
                     stepModel.UpdateEmpNo = model.ResponseEmpno;
                     stepModel.UpdateEmpName = model.ResponseEmpname;
                     stepModel.UpdateTime = model.CreatTime;
-                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                    string stepSQL = @"insert into [888_KsSouth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
 
                     SendMailService sendMailService = new SendMailService();
@@ -295,8 +295,8 @@ namespace _888repair.Controllers
                     string sql = string.Format(@"SELECT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
-                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory where 1= 1");
+                                               a.ResponseEmpname,a.FinishTime from [888_KsSouth].[dbo].[record] a 
+                                               left join [888_KsSouth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory where 1= 1");
                     if (!string.IsNullOrEmpty(model.SystemCategory))
                     {
                         sql += " and a.SystemCategory =@SystemCategory ";
@@ -341,8 +341,8 @@ namespace _888repair.Controllers
                     string sql = string.Format(@"SELECT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
-                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory where 1= 1");
+                                               a.ResponseEmpname,a.FinishTime from [888_KsSouth].[dbo].[record] a 
+                                               left join [888_KsSouth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory where 1= 1");
                     if (!string.IsNullOrEmpty(model.SystemCategory))
                     {
                         sql += " and a.SystemCategory =@SystemCategory ";
@@ -458,7 +458,7 @@ namespace _888repair.Controllers
                     string sql = string.Format(@"SELECT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,a.Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime,a.ReplyPhoto from [888_KsNorth].[dbo].[record] a 
+                                               a.ResponseEmpname,a.FinishTime,a.ReplyPhoto from [888_KsSouth].[dbo].[record] a 
                                                where 1= 1");
                     if (!string.IsNullOrEmpty(RepairId))
                     {
@@ -510,12 +510,12 @@ namespace _888repair.Controllers
                     string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
-                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
-											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+                                               a.ResponseEmpname,a.FinishTime from [888_KsSouth].[dbo].[record] a 
+                                               left join [888_KsSouth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
 											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo)");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
@@ -640,9 +640,9 @@ namespace _888repair.Controllers
                 model.CreatTime = DateTime.Now;
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime,ReplyPhoto=@ReplyPhoto where repair_id = @RepairId ";
+                    string sql = @" update [888_KsSouth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime,ReplyPhoto=@ReplyPhoto where repair_id = @RepairId ";
 
-                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[OPINION],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                    string stepSQL = @"insert into [888_KsSouth].[dbo].[steprecord] ([guid],[repair_id],[status],[OPINION],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@OPINION,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
                     SendMailService sendMailService = new SendMailService();
                     bool mailFlag = sendMailService.replyMail(model.RepairId, model.Status);
@@ -696,11 +696,11 @@ namespace _888repair.Controllers
                 string sql = "";
                 using (RepairDb db = new RepairDb())
                 {
-                    string findStatusSql = @"SELECT Status FROM  [888_KsNorth].[dbo].[record] WHERE repair_id = @RepairId";
+                    string findStatusSql = @"SELECT Status FROM  [888_KsSouth].[dbo].[record] WHERE repair_id = @RepairId";
                     stepModel.STATUS = db.Query<string>(findStatusSql, new { RepairId = model.RepairId }).FirstOrDefault();
-                    sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),charge_empno = @ChargeEmpno,charge_empname = @ChargeEmpname where repair_id = @RepairId ";
+                    sql = @" update [888_KsSouth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),charge_empno = @ChargeEmpno,charge_empname = @ChargeEmpname where repair_id = @RepairId ";
 
-                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[OPINION],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                    string stepSQL = @"insert into [888_KsSouth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[OPINION],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@STEP,@OPINION,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
 
                     SendMailService sendMailService = new SendMailService();
@@ -754,26 +754,26 @@ namespace _888repair.Controllers
                 string sql = "";
                 using (RepairDb db = new RepairDb())
                 {
-                    sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent), Status = @Status,FinishTime = @FinishTime,charge_empno = @ChargeEmpno,charge_empname = @ChargeEmpname where repair_id = @RepairId ";
+                    sql = @" update [888_KsSouth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent), Status = @Status,FinishTime = @FinishTime,charge_empno = @ChargeEmpno,charge_empname = @ChargeEmpname where repair_id = @RepairId ";
 
-                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[OPINION],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                    string stepSQL = @"insert into [888_KsSouth].[dbo].[steprecord] ([guid],[repair_id],[status],[OPINION],[step],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@OPINION,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
 
                     //判断是否为转派单，否则无法驳回任务
-                    string checkTransSql = @" select * from [888_KsNorth].[dbo].[steprecord] where step = '转派报修单' and charge_empno =@ChargeEmpno and repair_id = @RepairId ";
+                    string checkTransSql = @" select * from [888_KsSouth].[dbo].[steprecord] where step = '转派报修单' and charge_empno =@ChargeEmpno and repair_id = @RepairId ";
                     var checkModel = db.Query<StepRecordModel>(checkTransSql, new { ChargeEmpno = model.ChargeEmpno, RepairId = model.RepairId }).ToList();
                     if (checkModel.Count() == 0)
                     {
                         return Json(new FlagTips { IsSuccess = false, Msg = "此单并非为转派单，无法驳回任务" });
                     }
                     //抓取原来的负责人
-                    string findCharge = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsNorth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
-                                             AND a.sort < (select TOP(1) sort from [888_KsNorth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' AND charge_empno = @ChargeEmpno order by sort desc )  order by sort desc ";
+                    string findCharge = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsSouth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
+                                             AND a.sort < (select TOP(1) sort from [888_KsSouth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' AND charge_empno = @ChargeEmpno order by sort desc )  order by sort desc ";
                     var chargeModel = db.Query<StepRecordModel>(findCharge, new { RepairId = model.RepairId , ChargeEmpno  = model.ChargeEmpno}).FirstOrDefault();
 
                     //抓取原来的转派人
-                    string findTransfer = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsNorth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
-                                             AND a.sort = (select TOP(1) sort from [888_KsNorth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' order by sort desc )  order by sort desc ";
+                    string findTransfer = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsSouth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
+                                             AND a.sort = (select TOP(1) sort from [888_KsSouth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' order by sort desc )  order by sort desc ";
                     var transferModel = db.Query<StepRecordModel>(findTransfer, new { RepairId = model.RepairId}).FirstOrDefault();
 
                     stepModel.ChargeEmpno = chargeModel.ChargeEmpno;
@@ -841,9 +841,9 @@ namespace _888repair.Controllers
                 model.CreatTime = DateTime.Now;
                 using (RepairDb db = new RepairDb())
                 {
-                    sql = @" update [888_KsNorth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime where repair_id = @RepairId ";
+                    sql = @" update [888_KsSouth].[dbo].[record]  set ReplyContent = concat(ReplyContent,@NewReplyContent),Status = @Status,FinishTime = @FinishTime where repair_id = @RepairId ";
 
-                    string stepSQL = @"insert into [888_KsNorth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[OPINION],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
+                    string stepSQL = @"insert into [888_KsSouth].[dbo].[steprecord] ([guid],[repair_id],[status],[step],[OPINION],[charge_empno],[charge_empname],[UpdateEmpNo],[UpdateEmpName],[UpdateTime]) 
                                             values (@GUID,@RepairId,@STATUS,@STEP,@OPINION,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
 
                     SendMailService sendMailService = new SendMailService();
@@ -897,12 +897,12 @@ namespace _888repair.Controllers
                     string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
-                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
-											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+                                               a.ResponseEmpname,a.FinishTime from [888_KsSouth].[dbo].[record] a 
+                                               left join [888_KsSouth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
 											  ");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
@@ -1001,12 +1001,12 @@ namespace _888repair.Controllers
                     string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
-                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
-											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+                                               a.ResponseEmpname,a.FinishTime from [888_KsSouth].[dbo].[record] a 
+                                               left join [888_KsSouth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
 											  ");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
@@ -1152,7 +1152,7 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@" select a.*,a.repair_id RepairId,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname  from [888_KsNorth].[dbo].[steprecord]  a
+                    string sql = string.Format(@" select a.*,a.repair_id RepairId,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname  from [888_KsSouth].[dbo].[steprecord]  a
 											       WHERE a.repair_id= @RepairId ORDER BY a.sort asc");                   
                     
                     list = db.Query<StepRecordModel>(sql, new { RepairId }).ToList();
@@ -1191,12 +1191,12 @@ namespace _888repair.Controllers
                     string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
-                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
-                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
-											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
-											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+                                               a.ResponseEmpname,a.FinishTime from [888_KsSouth].[dbo].[record] a 
+                                               left join [888_KsSouth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
 											  ");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))

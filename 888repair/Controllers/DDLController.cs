@@ -23,7 +23,7 @@ namespace _888repair.Controllers
         public ActionResult getBuilding(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT distinct SystemCategory,Buliding  Building FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            string sql = "SELECT distinct SystemCategory,Buliding  Building FROM[888_KsSouth].[dbo].[area] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and Buliding = @keyWord";
@@ -50,7 +50,7 @@ namespace _888repair.Controllers
         public ActionResult getChargePerson(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT charge_id, EmpNo, FullName ,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[charge] where 1=1 ";
+            string sql = "SELECT charge_id, EmpNo, FullName ,UpdateUser,UpdateTime FROM [888_KsSouth].[dbo].[charge] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and EmpNo = @keyWord";
@@ -77,7 +77,7 @@ namespace _888repair.Controllers
         public ActionResult getKind(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsNorth].[dbo].[kind] where 1=1 ";
+            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsSouth].[dbo].[kind] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and kind_id = @keyWord";
@@ -105,7 +105,7 @@ namespace _888repair.Controllers
         public ActionResult getKindBySystemCategory(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsNorth].[dbo].[kind] where 1=1 ";
+            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsSouth].[dbo].[kind] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and SystemCategory = @keyWord";
@@ -133,7 +133,7 @@ namespace _888repair.Controllers
         public ActionResult getChargePersonBySystemCategory(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT SystemCategory,charge_id, EmpNo, FullName ,UpdateUser,UpdateTime FROM [888_KsNorth].[dbo].[charge] where 1=1 ";
+            string sql = "SELECT SystemCategory,charge_id, EmpNo, FullName ,UpdateUser,UpdateTime FROM [888_KsSouth].[dbo].[charge] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and SystemCategory = @keyWord";
@@ -145,7 +145,7 @@ namespace _888repair.Controllers
         public ActionResult getBuildingBySystemCategory(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT distinct SystemCategory,Buliding Building FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            string sql = "SELECT distinct SystemCategory,Buliding Building FROM[888_KsSouth].[dbo].[area] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and SystemCategory = @keyWord";
@@ -172,7 +172,7 @@ namespace _888repair.Controllers
         public ActionResult getLoactionByBuilding(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT area_id AreaId,SystemCategory,Buliding,Location FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            string sql = "SELECT area_id AreaId,SystemCategory,Buliding,Location FROM[888_KsSouth].[dbo].[area] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and Buliding = @keyWord";
@@ -199,7 +199,7 @@ namespace _888repair.Controllers
         public ActionResult getLoaction(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT area_id AreaId,SystemCategory,Buliding,Location FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            string sql = "SELECT area_id AreaId,SystemCategory,Buliding,Location FROM[888_KsSouth].[dbo].[area] where 1=1 ";
             var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
             if (!string.IsNullOrEmpty(group))
             {
@@ -222,7 +222,7 @@ namespace _888repair.Controllers
         public ActionResult getKindByKindCategory(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsNorth].[dbo].[kind] where 1=1 ";
+            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsSouth].[dbo].[kind] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and KindCategory = @keyWord";
@@ -250,7 +250,7 @@ namespace _888repair.Controllers
         public ActionResult getStatus(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT distinct StatusValue,StatusText FROM [888_KsNorth].[dbo].[state] where 1=1 ";
+            string sql = "SELECT distinct StatusValue,StatusText FROM [888_KsSouth].[dbo].[state] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and SystemCategory = @keyWord";
@@ -277,7 +277,7 @@ namespace _888repair.Controllers
         public ActionResult getLocationAll(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT distinct Location FROM[888_KsNorth].[dbo].[area] where 1=1 ";
+            string sql = "SELECT distinct Location FROM[888_KsSouth].[dbo].[area] where 1=1 ";
             var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
             if (!string.IsNullOrEmpty(group))
             {
@@ -299,7 +299,7 @@ namespace _888repair.Controllers
         public ActionResult getLocationAllBySC(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT distinct Location FROM [888_KsNorth].[dbo].[area] where 1=1 ";
+            string sql = "SELECT distinct Location FROM [888_KsSouth].[dbo].[area] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and SystemCategory = @keyWord";
@@ -326,7 +326,7 @@ namespace _888repair.Controllers
         public ActionResult getKindEvery(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsNorth].[dbo].[kind] where 1=1 ";
+            string sql = "SELECT kind_id KindID,SystemCategory,Sort,KindCategory,Remark FROM[888_KsSouth].[dbo].[kind] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and kind_id = @keyWord";
@@ -339,7 +339,7 @@ namespace _888repair.Controllers
         public ActionResult getStatusEvery(string keyWord)
         {
             RepairDb db = new RepairDb();
-            string sql = "SELECT distinct StatusValue,StatusText FROM [888_KsNorth].[dbo].[state] where 1=1 ";
+            string sql = "SELECT distinct StatusValue,StatusText FROM [888_KsSouth].[dbo].[state] where 1=1 ";
             if (!string.IsNullOrEmpty(keyWord))
             {
                 sql += " and SystemCategory = @keyWord";

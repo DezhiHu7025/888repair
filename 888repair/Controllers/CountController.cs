@@ -81,7 +81,7 @@ namespace _888repair.Controllers
                          END
                      ) AS NotFinishCount,
        c.DeptName Department
-FROM [888_KsNorth].[dbo].[record] a 
+FROM [888_KsSouth].[dbo].[record] a 
 LEFT JOIN[Common].[dbo].[kcis_account] B
 ON A.ResponseEmpno = b.EmpNo
 LEFT JOIN [Common].[dbo].[AFS_Dept] c
@@ -99,7 +99,7 @@ SELECT S.FullName ChargeName,
 	  ISNULL(g.FinishCount,'0')  FinishCount,
 	  ISNULL(g.NotFinishCount,'0')  NotFinishCount,
 	  ISNULL(g.CompletionRate,'0%')  CompletionRate
-FROM [888_KsNorth].[dbo].[charge] S
+FROM [888_KsSouth].[dbo].[charge] S
     LEFT JOIN
     (
         SELECT SUM(   CASE a.Status
@@ -136,7 +136,7 @@ FROM [888_KsNorth].[dbo].[charge] S
                              ) AS NotFinishCount,
                a.charge_empno,
                a.SystemCategory
-        FROM [888_KsNorth].[dbo].[record] a
+        FROM [888_KsSouth].[dbo].[record] a
         WHERE 1 = 1
               AND a.SystemCategory = @SystemCategory
 			  AND a.CreatTime>= @StartDate
@@ -182,7 +182,7 @@ FROM [888_KsNorth].[dbo].[charge] S
                          END
                      ) AS NotFinishCount,
        a.ResponseEmpname ResponseName
-FROM [888_KsNorth].[dbo].[record] a
+FROM [888_KsSouth].[dbo].[record] a
 WHERE 1=1 
       AND a.SystemCategory = @SystemCategory
 	  AND a.CreatTime>= @StartDate
@@ -197,7 +197,7 @@ GROUP BY a.ResponseEmpname";
        ISNULL(G.FinishCount, '0') FinishCount,
        ISNULL(G.NotFinishCount, '0') NotFinishCount,
        ISNULL(G.CompletionRate, '0%') CompletionRate
-FROM [888_KsNorth].[dbo].[area] S
+FROM [888_KsSouth].[dbo].[area] S
     LEFT JOIN
     (
         SELECT SUM(   CASE a.Status
@@ -234,7 +234,7 @@ FROM [888_KsNorth].[dbo].[area] S
                              ) AS NotFinishCount,
                a.area_id,
                a.SystemCategory
-        FROM [888_KsNorth].[dbo].[record] a
+        FROM [888_KsSouth].[dbo].[record] a
         WHERE 1 = 1
               AND a.SystemCategory = @SystemCategory
 			  AND a.CreatTime>= @StartDate
@@ -244,11 +244,11 @@ FROM [888_KsNorth].[dbo].[area] S
     ) G
         ON S.area_id = G.area_id
            AND S.SystemCategory = G.SystemCategory
-    LEFT JOIN [888_KsNorth].[dbo].[match] M
+    LEFT JOIN [888_KsSouth].[dbo].[match] M
         ON S.area_id = M.area_id
            AND M.SystemCategory = S.SystemCategory
            AND M.match_type = 'AreaMatch'
-    LEFT JOIN [888_KsNorth].[dbo].[charge] E
+    LEFT JOIN [888_KsSouth].[dbo].[charge] E
         ON S.SystemCategory = E.SystemCategory
            AND M.charge_emp = E.EmpNo
 WHERE S.SystemCategory = @SystemCategory
@@ -262,7 +262,7 @@ ORDER BY S.area_id ASC";
        ISNULL(G.FinishCount, '0') FinishCount,
        ISNULL(G.NotFinishCount, '0') NotFinishCount,
        ISNULL(G.CompletionRate, '0%') CompletionRate
-FROM [888_KsNorth].[dbo].[kind] S
+FROM [888_KsSouth].[dbo].[kind] S
     LEFT JOIN
     (
         SELECT SUM(   CASE a.Status
@@ -299,7 +299,7 @@ FROM [888_KsNorth].[dbo].[kind] S
                              ) AS NotFinishCount,
                a.kind_id,
                a.SystemCategory
-        FROM [888_KsNorth].[dbo].[record] a
+        FROM [888_KsSouth].[dbo].[record] a
         WHERE 1 = 1
               AND a.SystemCategory = @SystemCategory
 			  AND a.CreatTime>= @StartDate
@@ -309,11 +309,11 @@ FROM [888_KsNorth].[dbo].[kind] S
     ) G
         ON S.kind_id = G.kind_id
            AND S.SystemCategory = G.SystemCategory
-    LEFT JOIN [888_KsNorth].[dbo].[match] M
+    LEFT JOIN [888_KsSouth].[dbo].[match] M
         ON S.kind_id = M.area_id
            AND M.SystemCategory = S.SystemCategory
            AND M.match_type = 'KindMatch'
-    LEFT JOIN [888_KsNorth].[dbo].[charge] E
+    LEFT JOIN [888_KsSouth].[dbo].[charge] E
         ON S.SystemCategory = E.SystemCategory
            AND M.charge_emp = E.EmpNo
 WHERE S.SystemCategory = @SystemCategory
@@ -380,7 +380,7 @@ ORDER BY S.kind_id ASC ";
                          END
                      ) AS NotFinishCount,
        c.DeptName Department
-FROM [888_KsNorth].[dbo].[record] a 
+FROM [888_KsSouth].[dbo].[record] a 
 LEFT JOIN[Common].[dbo].[kcis_account] B
 ON A.ResponseEmpno = b.EmpNo
 LEFT JOIN [Common].[dbo].[AFS_Dept] c
@@ -398,7 +398,7 @@ SELECT S.FullName ChargeName,
 	  ISNULL(g.FinishCount,'0')  FinishCount,
 	  ISNULL(g.NotFinishCount,'0')  NotFinishCount,
 	  ISNULL(g.CompletionRate,'0%')  CompletionRate
-FROM [888_KsNorth].[dbo].[charge] S
+FROM [888_KsSouth].[dbo].[charge] S
     LEFT JOIN
     (
         SELECT SUM(   CASE a.Status
@@ -435,7 +435,7 @@ FROM [888_KsNorth].[dbo].[charge] S
                              ) AS NotFinishCount,
                a.charge_empno,
                a.SystemCategory
-        FROM [888_KsNorth].[dbo].[record] a
+        FROM [888_KsSouth].[dbo].[record] a
         WHERE 1 = 1
               AND a.SystemCategory = @SystemCategory
 			  AND a.CreatTime>= @StartDate
@@ -481,7 +481,7 @@ FROM [888_KsNorth].[dbo].[charge] S
                          END
                      ) AS NotFinishCount,
        a.ResponseEmpname ResponseName
-FROM [888_KsNorth].[dbo].[record] a
+FROM [888_KsSouth].[dbo].[record] a
 WHERE 1=1 
       AND a.SystemCategory = @SystemCategory
 	  AND a.CreatTime>= @StartDate
@@ -496,7 +496,7 @@ GROUP BY a.ResponseEmpname";
        ISNULL(G.FinishCount, '0') FinishCount,
        ISNULL(G.NotFinishCount, '0') NotFinishCount,
        ISNULL(G.CompletionRate, '0%') CompletionRate
-FROM [888_KsNorth].[dbo].[area] S
+FROM [888_KsSouth].[dbo].[area] S
     LEFT JOIN
     (
         SELECT SUM(   CASE a.Status
@@ -533,7 +533,7 @@ FROM [888_KsNorth].[dbo].[area] S
                              ) AS NotFinishCount,
                a.area_id,
                a.SystemCategory
-        FROM [888_KsNorth].[dbo].[record] a
+        FROM [888_KsSouth].[dbo].[record] a
         WHERE 1 = 1
               AND a.SystemCategory = @SystemCategory
 			  AND a.CreatTime>= @StartDate
@@ -543,11 +543,11 @@ FROM [888_KsNorth].[dbo].[area] S
     ) G
         ON S.area_id = G.area_id
            AND S.SystemCategory = G.SystemCategory
-    LEFT JOIN [888_KsNorth].[dbo].[match] M
+    LEFT JOIN [888_KsSouth].[dbo].[match] M
         ON S.area_id = M.area_id
            AND M.SystemCategory = S.SystemCategory
            AND M.match_type = 'AreaMatch'
-    LEFT JOIN [888_KsNorth].[dbo].[charge] E
+    LEFT JOIN [888_KsSouth].[dbo].[charge] E
         ON S.SystemCategory = E.SystemCategory
            AND M.charge_emp = E.EmpNo
 WHERE S.SystemCategory = @SystemCategory
@@ -561,7 +561,7 @@ ORDER BY S.area_id ASC";
        ISNULL(G.FinishCount, '0') FinishCount,
        ISNULL(G.NotFinishCount, '0') NotFinishCount,
        ISNULL(G.CompletionRate, '0%') CompletionRate
-FROM [888_KsNorth].[dbo].[kind] S
+FROM [888_KsSouth].[dbo].[kind] S
     LEFT JOIN
     (
         SELECT SUM(   CASE a.Status
@@ -598,7 +598,7 @@ FROM [888_KsNorth].[dbo].[kind] S
                              ) AS NotFinishCount,
                a.kind_id,
                a.SystemCategory
-        FROM [888_KsNorth].[dbo].[record] a
+        FROM [888_KsSouth].[dbo].[record] a
         WHERE 1 = 1
               AND a.SystemCategory = @SystemCategory
 			  AND a.CreatTime>= @StartDate
@@ -608,11 +608,11 @@ FROM [888_KsNorth].[dbo].[kind] S
     ) G
         ON S.kind_id = G.kind_id
            AND S.SystemCategory = G.SystemCategory
-    LEFT JOIN [888_KsNorth].[dbo].[match] M
+    LEFT JOIN [888_KsSouth].[dbo].[match] M
         ON S.kind_id = M.area_id
            AND M.SystemCategory = S.SystemCategory
            AND M.match_type = 'KindMatch'
-    LEFT JOIN [888_KsNorth].[dbo].[charge] E
+    LEFT JOIN [888_KsSouth].[dbo].[charge] E
         ON S.SystemCategory = E.SystemCategory
            AND M.charge_emp = E.EmpNo
 WHERE S.SystemCategory = @SystemCategory
