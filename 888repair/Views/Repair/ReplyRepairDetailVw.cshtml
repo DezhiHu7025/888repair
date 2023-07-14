@@ -303,6 +303,22 @@
                  $("#FinishTime").html(res.FinishTime == "null" ? '' : formatDate(res.FinishTime, 'yyyy-MM-dd HH:mm:ss'));
                  //  console.log(localStorage);
 
+                 if (res.Status == "complete" || res.Status == "rejectend") {
+                     $('#OpStatus').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#TransferProblem').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#RejectTask').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#RejectEnd').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#btn_submit').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#NewReplyContent').addClass("layui-disabled").attr("readonly", "readonly");
+                 } else {
+                     $('#OpStatus').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#TransferProblem').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#RejectTask').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#RejectEnd').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#btn_submit').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                 }
+
                  loadImg(res.PhotoPath, res.ReplyPhoto);
                  loadOption(res.SystemCategory, res.Status, res.ChargeEmpname);
 
@@ -439,21 +455,21 @@
             }
         })
         
-        if (localStorage.getItem("Status") == "complete" || localStorage.getItem("Status") == "rejectend" ) {
-            $('#OpStatus').addClass("layui-disabled").attr("disabled", "disabled");
-            $('#TransferProblem').addClass("layui-disabled").attr("disabled", "disabled");
-            $('#RejectTask').addClass("layui-disabled").attr("disabled", "disabled");
-            $('#RejectEnd').addClass("layui-disabled").attr("disabled", "disabled");
-            $('#btn_submit').addClass("layui-disabled").attr("disabled", "disabled");
-            $('#NewReplyContent').addClass("layui-disabled").attr("readonly", "readonly");
-        } else {
-            $('#OpStatus').removeClass("layui-disabled").removeAttr("disabled", "disabled");
-            $('#TransferProblem').removeClass("layui-disabled").removeAttr("disabled", "disabled");
-            $('#RejectTask').removeClass("layui-disabled").removeAttr("disabled", "disabled");
-            $('#RejectEnd').removeClass("layui-disabled").removeAttr("disabled", "disabled");
-            $('#btn_submit').removeClass("layui-disabled").removeAttr("disabled", "disabled");
-            $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
-        }
+        //if (localStorage.getItem("Status") == "complete" || localStorage.getItem("Status") == "rejectend" ) {
+        //    $('#OpStatus').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#TransferProblem').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#RejectTask').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#RejectEnd').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#btn_submit').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#NewReplyContent').addClass("layui-disabled").attr("readonly", "readonly");
+        //} else {
+        //    $('#OpStatus').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#TransferProblem').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#RejectTask').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#RejectEnd').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#btn_submit').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //}
         
         //当前用户为负责人 则显示按钮组
         var logusername = '@(Session["fullname"])';
