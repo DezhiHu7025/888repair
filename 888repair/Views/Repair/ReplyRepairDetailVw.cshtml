@@ -284,6 +284,7 @@
              data: { RepairId: RepairId },
              dataType: "JSON",     // 指定传输的数据格式
              success: function (res) {
+                 localStorage.clear();
                  $("#RepairId").html(res.RepairId);
                  $("#ResponseContent").html(res.ResponseContent == "null" ? '' : res.ResponseContent);
                  $("#SystemCategory").html(res.SystemCategory);
@@ -303,6 +304,12 @@
                  $("#FinishTime").html(res.FinishTime == "null" ? '' : formatDate(res.FinishTime, 'yyyy-MM-dd HH:mm:ss'));
                  //  console.log(localStorage);
 
+                 localStorage.setItem("RepairId", res.RepairId);
+                 localStorage.setItem("ChargeEmpname", res.ChargeEmpname);
+                 localStorage.setItem("ChargeEmpno", res.ChargeEmpno);
+                 localStorage.setItem("Status", res.Status);
+                 localStorage.setItem("ResponseEmpname", res.ResponseEmpname);
+
                  if (res.Status == "complete" || res.Status == "rejectend") {
                      $('#OpStatus').addClass("layui-disabled").attr("disabled", "disabled");
                      $('#TransferProblem').addClass("layui-disabled").attr("disabled", "disabled");
@@ -318,6 +325,28 @@
                      $('#btn_submit').removeClass("layui-disabled").removeAttr("disabled", "disabled");
                      $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
                  }
+
+                 //隐藏div
+                 $("#DamageText1").hide();
+                 $("#DamageText2").hide();
+
+                 if (res.DamageReason == "natural cause(自然)") {
+                     $("#DamageText1").hide();
+                     $("#DamageTex2").hide();
+                 } else {
+                     $("#DamageText1").show();
+                     $("#DamageText2").show();
+                 }
+
+                 //当前用户为负责人 则显示按钮组
+                 var logusername = '@(Session["fullname"])';
+                 if (logusername == res.ChargeEmpname) {
+                     $("#btngroup").show();
+                 } else
+                 {
+                     $("#btngroup").hide();
+                 }
+        
 
                  loadImg(res.PhotoPath, res.ReplyPhoto);
                  loadOption(res.SystemCategory, res.Status, res.ChargeEmpname);
@@ -433,17 +462,7 @@
         }
 
 
-        //隐藏div
-        $("#DamageText1").hide();
-        $("#DamageText2").hide();
-
-        if (localStorage.getItem("DamageReason") =="natural cause(自然)") {
-            $("#DamageText1").hide();
-            $("#DamageTex2").hide();
-        } else{
-            $("#DamageText1").show();
-            $("#DamageText2").show();
-        }
+        
 
         //隐藏上传完修图片的div
         form.on('select(OpStatus)', function (data) {
@@ -471,14 +490,6 @@
         //    $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
         //}
         
-        //当前用户为负责人 则显示按钮组
-        var logusername = '@(Session["fullname"])';
-        if (logusername == localStorage.getItem("ChargeEmpname")) {
-            $("#btngroup").show();
-        } else
-        {
-            $("#btngroup").hide();
-        }
         
         form.on('submit(demo1)', function () {
             var filesUpload = $("#buttonDiv");
