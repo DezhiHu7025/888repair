@@ -266,6 +266,23 @@
                  localStorage.setItem("DamageName", res.DamageName);
                  localStorage.setItem("ReplyPhoto", res.ReplyPhoto);
 
+                 if (localStorage.getItem("Status") == "complete" || localStorage.getItem("Status") == "rejectend") {
+                     $('#OpStatus').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#TransferProblem').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#RejectTask').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#RejectEnd').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#btn_submit').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#NewReplyContent').addClass("layui-disabled").attr("readonly", "readonly");
+                 } else {
+                     $('#OpStatus').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#TransferProblem').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#RejectTask').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#RejectEnd').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#btn_submit').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                 }
+            
+
                  if (res.DamageReason == "natural cause(自然)") {
                      $("#DamageText1").hide();
                      $("#DamageTex2").hide();
