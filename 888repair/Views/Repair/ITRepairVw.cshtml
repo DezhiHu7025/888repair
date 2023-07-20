@@ -85,7 +85,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label layui-input-inline">Location(问题的区域)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="height:38px;width:300px" id="checkSC">
-                        <select ID="OpLocation" name="OpLocation"  lay-verify="required" >
+                        <select ID="OpLocation" name="OpLocation" lay-verify="required">
                             <option value=""></option>
                         </select>
                     </div>
@@ -95,6 +95,19 @@
                 <label class="layui-form-label layui-input-inline" style="width:195px">RoomNum(问题的空间编号)：<span style="color:red">*</span></label>
                 <div class="layui-input-inline" style="height:38px;width:300px">
                     <input type="text" id="RoomNum" name="RoomNum" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：<span style="color:red">*</span></label>
+                    <div class="layui-input-inline" style="height:38px;width:300px">
+                        <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline" id="remark" style="height:38px;width:400px"></label>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -114,24 +127,11 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：<span style="color:red">*</span></label>
-                    <div class="layui-input-inline" style="height:38px;width:300px">
-                        <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory" lay-verify="required">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline" id="remark" style="height:38px;width:400px"></label>
-                </div>
-            </div>
-            <div class="layui-form-item">
                 <div class="layui-inline" style="width:45%">
                     <label class="layui-form-label layui-input-inline">Damage Reason(损坏原因):<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="width:60%">
-                        <input type="radio"  lay-filter="DamageReason" name="DamageReason" value="natural cause(自然)" title="natural cause(自然)" checked="">
-                        <input type="radio"  lay-filter="DamageReason" name="DamageReason" value="human causes(人为)" title="human causes(人为)">
+                        <input type="radio" lay-filter="DamageReason" name="DamageReason" value="natural cause(自然)" title="natural cause(自然)" checked="">
+                        <input type="radio" lay-filter="DamageReason" name="DamageReason" value="human causes(人为)" title="human causes(人为)">
                     </div>
                 </div>
                 <div class="layui-inline" style="width:50%" id="DamageText">
@@ -274,7 +274,7 @@
                                 </colgroup>
                                 <thead>
                                     <tr>
-                                        <th field ="fileName">文件名</th>
+                                        <th field="fileName">文件名</th>
                                         <th>预览图</th>
                                         <th>大小</th>
                                         <th>操作</th>
@@ -302,7 +302,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-input-block"  style="margin-left:40%">
+                <div class="layui-input-block" style="margin-left:40%">
                     <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="sendout">送出 Send out</button>
                     <button type="button" id="btn_back" class="layui-btn">返回 Back</button>
                 </div>

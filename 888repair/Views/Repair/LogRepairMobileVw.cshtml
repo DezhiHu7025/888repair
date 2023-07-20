@@ -75,7 +75,7 @@
             <br /><br /><br />
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label style="padding-left:0;line-height:30px;color:purple">Category(问题的类别)：<span style="color:red">*</span></label>
+                    <label style="padding-left:0;line-height:30px;color:purple">Buliding(问题的大楼别)：<span style="color:red">*</span></label>
                     <div style="height:38px;width:300px">
                         <select ID="OpAreaCategory" name="OpAreaCategory" lay-filter="OpAreaCategory" lay-verify="required">
                             <option value=""></option>
@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label style="padding-left:0;line-height:30px;color:purple">Location(问题的区域)：<span style="color:red">*</span></label>
+                    <label style="padding-left:0;line-height:30px;color:purple">Location(问题的位置)：<span style="color:red">*</span></label>
                     <div style="height:38px;width:300px" id="checkSC">
                         <select ID="OpLocation" name="OpLocation" lay-verify="required">
                             <option value=""></option>
@@ -95,6 +95,19 @@
                 <label style="padding-left:0;line-height:30px;color:purple">RoomNum(问题的空间编号)：<span style="color:red">*</span></label>
                 <div style="height:38px;width:300px">
                     <input type="text" id="RoomNum" name="RoomNum" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label style="padding-left:0;line-height:30px;color:purple">Category(问题的类别)：<span style="color:red">*</span></label>
+                    <div style="height:38px;width:300px">
+                        <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label id="remark" style="height:38px;width:400px"></label>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -113,19 +126,6 @@
                         本栏位仅填写一项问题，如有多项问题需回报，请填报一项问题后，送出后，重新进入填写问题页面，再次填写报修单。
                     </a>
 
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label style="padding-left:0;line-height:30px;color:purple">Category(问题的类别)：<span style="color:red">*</span></label>
-                    <div style="height:38px;width:300px">
-                        <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory" lay-verify="required">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label id="remark" style="height:38px;width:400px"></label>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -151,7 +151,7 @@
                 <div class="layui-inline">
                     <label style="padding-left:0;line-height:30px;color:purple">repair time(维护时间)：<span style="color:red">*</span></label>
                     <div>
-                        <textarea id="RepairTime" name="RepairTime" style="width:100%;height:10%" lay-verify="required" 
+                        <textarea id="RepairTime" name="RepairTime" style="width:100%;height:10%" lay-verify="required"
                                   placeholder="For example:The firsr class on Tuesday or the fifth class on Thursday,or enter'holiday'or 'no specific time'(例如：星期2的第1节 星期4的第5节 或者输入'假日'或者'无特定时间')" />
                     </div>
                 </div>
@@ -382,7 +382,7 @@
             if ($("#OpAreaCategory").val() == null || $("#OpAreaCategory").val() == "") {
                 $("#OpLocation").empty();
                 form.render();
-                alert("请先选择 Category(问题的类别) ");
+                alert("请先选择 Buliding(问题的大楼别)");
             }
         });
 

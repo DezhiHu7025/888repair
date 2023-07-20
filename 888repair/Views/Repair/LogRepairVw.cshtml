@@ -77,7 +77,7 @@
             <br /><br /><br />
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：<span style="color:red">*</span></label>
+                    <label class="layui-form-label layui-input-inline">Buliding(问题的大楼别)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="height:38px;width:300px">
                         <select ID="OpAreaCategory" name="OpAreaCategory" lay-filter="OpAreaCategory" lay-verify="required">
                             <option value=""></option>
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline">Location(问题的区域)：<span style="color:red">*</span></label>
+                    <label class="layui-form-label layui-input-inline">Location(问题的位置)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline" style="height:38px;width:300px" id="checkSC">
                         <select ID="OpLocation" name="OpLocation" lay-verify="required">
                             <option value=""></option>
@@ -103,6 +103,19 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：<span style="color:red">*</span></label>
+                    <div class="layui-input-inline" style="height:38px;width:300px">
+                        <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-input-inline" id="remark" style="height:38px;width:400px"></label>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
                     <label class="layui-form-label layui-input-inline">Description(问题描述)：<span style="color:red">*</span></label>
                     <div class="layui-input-inline">
                         <textarea id="Description" name="Description" style="width:450%;height:10%" lay-verify="required" />
@@ -115,19 +128,6 @@
                     Only one question is filled in this column. If there are multiple questions,
                     please fill out a question, send it out, re-enter the "Filling in the problem" page, and fill out the repair form again<br />
                     本栏位仅填写一项问题，如有多项问题需回报，请填报一项问题后，送出后，重新进入填写问题页面，再次填写报修单。
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline">Category(问题的类别)：<span style="color:red">*</span></label>
-                    <div class="layui-input-inline" style="height:38px;width:300px">
-                        <select ID="OpKindCategory" name="OpKindCategory" lay-filter="OpKindCategory" lay-verify="required">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label layui-input-inline" id="remark" style="height:38px;width:400px"></label>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -479,7 +479,7 @@
             if ($("#OpAreaCategory").val() == null || $("#OpAreaCategory").val() == "") {
                 $("#OpLocation").empty();
                 form.render();
-                alert("请先选择 Category(问题的类别) ");
+                alert("请先选择 Buliding(问题的大楼别) ");
             }
         });
 
