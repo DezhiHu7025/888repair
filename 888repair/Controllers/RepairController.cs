@@ -42,7 +42,7 @@ namespace _888repair.Controllers
         {
             return View();
         }
-        
+
         /// <summary>
         /// 总务后勤类报修
         /// </summary>
@@ -155,7 +155,7 @@ namespace _888repair.Controllers
                                             values (@GUID,@RepairId,@STATUS,@STEP,@ChargeEmpno,@ChargeEmpname,@UpdateEmpNo,@UpdateEmpName,@UpdateTime)";
 
                     SendMailService sendMailService = new SendMailService();
-                    bool mailFlag = sendMailService.newMail(model.AreaId,model.KindId, model.RepairId);
+                    bool mailFlag = sendMailService.newMail(model.AreaId, model.KindId, model.RepairId);
                     if (mailFlag)
                     {
                         Dictionary<string, object> trans = new Dictionary<string, object>();
@@ -186,7 +186,7 @@ namespace _888repair.Controllers
             return Json(new FlagTips { IsSuccess = true });
         }
 
-        public ActionResult ITRepairPicUpload()
+        public ActionResult ITRepairPicUpload(string datestring)
         {
             HttpPostedFileBase httpPostedFileBase = Request.Files["file"];
             ControllerContext.HttpContext.Request.ContentEncoding = Encoding.GetEncoding("UTF-8");
@@ -202,7 +202,8 @@ namespace _888repair.Controllers
                     {
                         Directory.CreateDirectory(Server.MapPath("~/UploadFile"));
                     }
-                    string prefix = DateTime.Now.ToString("yyyyMMddHH_") + Stu_Empno + "_";
+                    // string prefix = DateTime.Now.ToString("yyyyMMddHH_") + Stu_Empno + "_";
+                    string prefix = datestring + "_" + Stu_Empno + "_";
                     fileName = prefix + fileName;
                     var path = Path.Combine(Server.MapPath("~/UploadFile"), fileName);
                     httpPostedFileBase.SaveAs(path);
@@ -220,7 +221,7 @@ namespace _888repair.Controllers
         /// 完修图片上传
         /// </summary>
         /// <returns></returns>
-        public ActionResult ReplyPicUpload()
+        public ActionResult ReplyPicUpload(string datestring)
         {
             HttpPostedFileBase httpPostedFileBase = Request.Files["file"];
             ControllerContext.HttpContext.Request.ContentEncoding = Encoding.GetEncoding("UTF-8");
@@ -236,7 +237,8 @@ namespace _888repair.Controllers
                     {
                         Directory.CreateDirectory(Server.MapPath("~/ReplyPhoto"));
                     }
-                    string prefix = DateTime.Now.ToString("yyyyMMddHH_") + Stu_Empno + "_";
+                    //string prefix = DateTime.Now.ToString("yyyyMMddHH_") + Stu_Empno + "_";
+                    string prefix = datestring + "_" + Stu_Empno + "_";
                     fileName = prefix + fileName;
                     var path = Path.Combine(Server.MapPath("~/ReplyPhoto"), fileName);
                     httpPostedFileBase.SaveAs(path);
@@ -657,7 +659,7 @@ namespace _888repair.Controllers
                     {
                         return Json(new FlagTips { IsSuccess = false, Msg = "邮件通知异常，回应报修单失败" });
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -690,7 +692,7 @@ namespace _888repair.Controllers
             stepModel.UpdateEmpName = model.FullName;
             stepModel.UpdateTime = DateTime.Now;
 
-            model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "转派给-" + model.ChargeEmpname + "\r\n\r\n";        
+            model.NewReplyContent = model.NewReplyContent + "\r\n-" + model.FullName + "于" + DateTime.Now + "转派给-" + model.ChargeEmpname + "\r\n\r\n";
             try
             {
                 string sql = "";
@@ -769,12 +771,12 @@ namespace _888repair.Controllers
                     //抓取原来的负责人
                     string findCharge = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsNorth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
                                              AND a.sort < (select TOP(1) sort from [888_KsNorth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' AND charge_empno = @ChargeEmpno order by sort desc )  order by sort desc ";
-                    var chargeModel = db.Query<StepRecordModel>(findCharge, new { RepairId = model.RepairId , ChargeEmpno  = model.ChargeEmpno}).FirstOrDefault();
+                    var chargeModel = db.Query<StepRecordModel>(findCharge, new { RepairId = model.RepairId, ChargeEmpno = model.ChargeEmpno }).FirstOrDefault();
 
                     //抓取原来的转派人
                     string findTransfer = @" SELECT a.*,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname FROM [888_KsNorth].[dbo].[steprecord] a WHERE a.repair_id = @RepairId
                                              AND a.sort = (select TOP(1) sort from [888_KsNorth].[dbo].[steprecord] where repair_id = @RepairId and STEP = '转派报修单' order by sort desc )  order by sort desc ";
-                    var transferModel = db.Query<StepRecordModel>(findTransfer, new { RepairId = model.RepairId}).FirstOrDefault();
+                    var transferModel = db.Query<StepRecordModel>(findTransfer, new { RepairId = model.RepairId }).FirstOrDefault();
 
                     stepModel.ChargeEmpno = chargeModel.ChargeEmpno;
                     stepModel.ChargeEmpname = chargeModel.ChargeEmpname;
@@ -798,7 +800,7 @@ namespace _888repair.Controllers
                     {
                         return Json(new FlagTips { IsSuccess = false, Msg = "邮件通知异常，驳回任务失败" });
                     }
-                   
+
                 }
             }
             catch (Exception ex)
@@ -859,7 +861,7 @@ namespace _888repair.Controllers
                     {
                         return Json(new FlagTips { IsSuccess = false, Msg = "邮件通知异常，驳回任务失败" });
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -1153,8 +1155,8 @@ namespace _888repair.Controllers
                 using (RepairDb db = new RepairDb())
                 {
                     string sql = string.Format(@" select a.*,a.repair_id RepairId,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname  from [888_KsNorth].[dbo].[steprecord]  a
-											       WHERE a.repair_id= @RepairId ORDER BY a.sort asc");                   
-                    
+											       WHERE a.repair_id= @RepairId ORDER BY a.sort asc");
+
                     list = db.Query<StepRecordModel>(sql, new { RepairId }).ToList();
                 }
                 return Json(new FlagTips { IsSuccess = true, code = 0, count = list.Count(), data = list }, JsonRequestBehavior.AllowGet);
