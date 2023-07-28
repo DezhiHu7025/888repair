@@ -36,92 +36,78 @@
     <br />
     <hr />
     <div id="fillQuestion">
-        <table width="70%" align="center" border="2">
-            <tr height="30px">
-                <td align="right" width="35%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">ID(请修编号)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="RepairId"></label> </td>
+        <table width="90%" align="center" border="1">
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">ID(请修编号)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="RepairId"></label> </td>
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">SystemCategory(系统类别)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="SystemCategory"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">SystemCategory(系统类别)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="SystemCategory"></label> </td>
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Building(大楼别)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="Building"></label> </td>
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Loaction(位置)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="Loaction"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Building(大楼别)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Building"></label> </td>
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">RoomNum(空间编号)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="RoomNum"></label> </td>
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Tel-Ext(联络分机)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="Telephone"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Loaction(位置)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Loaction"></label> </td>
-            </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">RoomNum(空间编号)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="RoomNum"></label> </td>
-            </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Repairer(负责人)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="ChargeEmpname"></label> </td>
-            </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Contacts(反应人)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="ResponseEmpname"></label> </td>
-            </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Tel-Ext(联络分机)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Telephone"></label> </td>
-            </tr>
-            <tr height="100px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">repair time(维护时间)：</label></td>
-                <td width="60%">
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">repair time(维护时间)：</label></td>
+                <td width="80%" colspan="3">
                     <div class="layui-input-inline">
-                        <textarea id="RepairTime" style="font-size:large;width:300%;height:80px" readonly />
+                        <textarea id="RepairTime" style="font-size:large;width:400%;height:80px" readonly />
                     </div>
                 </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Category(类别)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Category"></label> </td>
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Category(类别)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="Category"></label> </td>
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Damage Reason(损坏原因)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="DamageReason"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Damage Reason(损坏原因)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="DamageReason"></label> </td>
+            <tr height="35px" id="DamageText1" hidden="hidden">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Class/Unit(班级/单位)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="DamageClass"></label> </td>
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Name(姓名)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="DamageName"></label> </td>
             </tr>
-            <tr height="30px" id="DamageText1" hidden="hidden">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Class/Unit(班级/单位)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="DamageClass"></label> </td>
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Fill-in Date(填表时间)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="CreatTime"></label> </td>
             </tr>
-            <tr height="30px" id="DamageText2" hidden="hidden">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Name(姓名)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="DamageName"></label> </td>
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Repairer(负责人)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="ChargeEmpname"></label> </td>
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Contacts(反应人)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="ResponseEmpname"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Fill-in Date(填表时间)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="CreatTime"></label> </td>
-            </tr>
-            <tr height="200px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Description(反应内容)：</label></td>
-                <td width="60%">
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Description(反应内容)：</label></td>
+                <td width="80%" colspan="3">
                     <div class="layui-input-inline">
-                        <textarea id="ResponseContent" style="font-size:large;width:300%;height:170px" readonly />
+                        <textarea id="ResponseContent" style="font-size:large;width:400%;height:170px" readonly />
                     </div>
                     <div id="imgId">
                     </div>
                 </td>
             </tr>
-            <tr height="200px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">ReplyContent(过去回应内容)：</label></td>
-                <td width="60%">
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">ReplyContent(过去回应内容)：</label></td>
+                <td width="80%" colspan="3">
                     <div class="layui-input-inline">
-                        <textarea id="ReplyContent" style="font-size:large;width:300%;height:170px" readonly />
+                        <textarea id="ReplyContent" style="font-size:large;width:400%;height:170px" readonly />
                     </div>
                     <div id="imgId2">
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td align="right" width="40%" style="background-color:lightgrey">
-                    <label style="font-size:large;color:purple;">Status(执行状态)：</label>
-                </td>
-                <td width="60%">
+            <tr height="35px">
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Status(执行状态)：</label></td>
+                <td width="30%">
                     <div class="layui-form layui-form-pane" style="margin-left:20px">
                         <div class="layui-input-inline">
                             <select ID="OpStatus" name="OpStatus" disabled="disabled">
@@ -130,11 +116,48 @@
                         </div>
                     </div>
                 </td>
+                <td align="center" width="20%" style="background-color:#f1e6ee"><label style="font-size:large;color:#c83290;">Finish Time(完单时间)：</label></td>
+                <td width="30%"> <label style="font-size:large;margin-left:20px" id="FinishTime"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Finish Time(完单时间)：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="FinishTime"></label> </td>
-            </tr>
+            @*
+        <tr height="200px">
+            <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Description(反应内容)：</label></td>
+            <td width="60%">
+                <div class="layui-input-inline">
+                    <textarea id="ResponseContent" style="font-size:large;width:300%;height:170px" readonly />
+                </div>
+                <div id="imgId">
+                </div>
+            </td>
+        </tr>
+        <tr height="200px">
+            <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">ReplyContent(过去回应内容)：</label></td>
+            <td width="60%">
+                <div class="layui-input-inline">
+                    <textarea id="ReplyContent" style="font-size:large;width:300%;height:170px" readonly />
+                </div>
+                <div id="imgId2">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="40%" style="background-color:lightgrey">
+                <label style="font-size:large;color:purple;">Status(执行状态)：</label>
+            </td>
+            <td width="60%">
+                <div class="layui-form layui-form-pane" style="margin-left:20px">
+                    <div class="layui-input-inline">
+                        <select ID="OpStatus" name="OpStatus" disabled="disabled">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr height="30px">
+            <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">Finish Time(完单时间)：</label></td>
+            <td width="60%"> <label style="font-size:large;margin-left:20px" id="FinishTime"></label> </td>
+        </tr>*@
         </table>
     </div>
     <br /><br /><br />
@@ -196,6 +219,19 @@
                  $("#ReplyContent").html(res.ReplyContent == "null" ? '' : res.ReplyContent);
                  $("#FinishTime").html(res.FinishTime == "null" ? '' : formatDate(res.FinishTime, 'yyyy-MM-dd HH:mm:ss')); 
                //  console.log(localStorage);
+
+                 //隐藏div
+                 $("#DamageText1").hide();
+                 $("#DamageText2").hide();
+
+                 if (res.DamageReason == "natural cause(自然)") {
+                     $("#DamageText1").hide();
+                     $("#DamageTex2").hide();
+                 } else {
+                     $("#DamageText1").show();
+                     $("#DamageText2").show();
+                 }
+
 
                  loadImg(res.PhotoPath, res.ReplyPhoto);
                  loadOption(res.SystemCategory,res.Status);
@@ -276,19 +312,7 @@
                 });
             }
         }
-
-        //隐藏div
-        $("#DamageText1").hide();
-        $("#DamageText2").hide();
-
-        if (localStorage.getItem("DamageReason") =="natural cause(自然)") {
-            $("#DamageText1").hide();
-            $("#DamageTex2").hide();
-        } else{
-            $("#DamageText1").show();
-            $("#DamageText2").show();
-        }
-        
+    
          $("#btn_back").on("click", function () {
              var url = "@(Url.Action("RersonalProblemIndex", "Repair"))";
              var sId2 = window.location.href;
