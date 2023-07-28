@@ -458,7 +458,7 @@
 
             $("#OpCategory").empty();
             $.ajax({
-                url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                url: "@(Url.Action("getKind", "DDL"))",
                 type: "POST",
                 dataType: 'json',
                 success: function (result) {

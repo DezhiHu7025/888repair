@@ -443,8 +443,9 @@
 
             $("#OpCategory").empty();
             $.ajax({
-                url: "@(Url.Action("getKindBySystemCategory", "DDL"))",
+                url: "@(Url.Action("getKind", "DDL"))",
                 type: "POST",
+              //  data: { "keyWord": SystemCategory },
                 dataType: 'json',
                 success: function (result) {
                     $('#OpCategory').append(new Option());
