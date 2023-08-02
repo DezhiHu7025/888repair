@@ -20,17 +20,13 @@
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>回复问题</legend>
     </fieldset>
-    <form class="layui-form layui-form-pane" action="">
+    @*<form class="layui-form layui-form-pane" action="">
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">系统类别</label>
                 <div class="layui-input-inline">
                     <select ID="OpSystemCategory" name="OpSystemCategory" lay-filter="SystemCategory">
                         <option value=""></option>
-                        @*<option value="IT(资讯类)">IT(资讯类)</option>
-                        <option value="Logistics(总务后勤类)">
-                            Logistics(总务后勤类)
-                        </option>*@
                     </select>
                 </div>
             </div>
@@ -101,7 +97,8 @@
                 </div>
             </div>
         </div>
-    </form>
+    </form>*@
+    
     <hr><br />
     <label style="color:red;font-size:medium">
         提示：导出的EXCEL数据为当前查询条件下所能查到的数据。您也可以选择数据表格右上方三个按钮中中间的导出按钮,使用layui自带的导出方法导出。<br>    
@@ -195,7 +192,7 @@
                                 last: false,
                                 layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
                             }
-                            , height: 400
+                            , height: 750
                             , cellMinWidth: 80
                             //,skin: 'line'
                             //,size: 'lg'
@@ -213,6 +210,7 @@
                                 //{ field: 'Building', title: 'Building(大楼别)', width: 210 },
                                 //{ field: 'Loaction', title: 'Loaction(位置)', width: 210 },
                                 { field: 'Category', title: 'Category(类别)', width: 210 },
+                                { field: 'ResponseEmpname', title: 'Contacts(反应人)', width: 170 },
                                 { field: 'ChargeEmpname', title: 'Repairer(负责人姓名)', width: 170 },
                                 { field: 'ResponseContent', title: 'Description(反应内容)', width: 300 },
                                 { field: 'Status', title: 'Status(执行状态)', width: 170 },
