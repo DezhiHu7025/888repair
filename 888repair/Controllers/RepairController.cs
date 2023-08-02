@@ -596,6 +596,157 @@ namespace _888repair.Controllers
             }
         }
 
+        public List<RepairRecordModel> queryReplyProblemList(RepairRecordModel model)
+        {
+            model.ResponseEmpno = Session["EmpNo"].ToString();
+            model.EmpNo = Session["EmpNo"].ToString();
+            var list = new List<RepairRecordModel>();
+            try
+            {
+                using (RepairDb db = new RepairDb())
+                {
+                    string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
+                                               a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
+                                               a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
+                                               a.ResponseEmpname,a.FinishTime from [888_KsNorth].[dbo].[record] a 
+                                               left join [888_KsNorth].[dbo].[state] b on a.status = b.StatusValue and a.SystemCategory = b.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
+											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
+											   LEFT JOIN [888_KsNorth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo)");
+                    //系统类别
+                    if (!string.IsNullOrEmpty(model.SystemCategory))
+                    {
+                        sql += " and a.SystemCategory =@SystemCategory ";
+                    }
+                    //大楼别
+                    if (!string.IsNullOrEmpty(model.Building))
+                    {
+                        sql += " and a.Building =@Building ";
+                    }
+                    //位置
+                    if (!string.IsNullOrEmpty(model.Loaction))
+                    {
+                        sql += " and a.Loaction =@Loaction ";
+                    }
+                    //类别
+                    if (!string.IsNullOrEmpty(model.Category))
+                    {
+                        sql += " and a.Category =@Category ";
+                    }
+                    //反应人姓名
+                    if (!string.IsNullOrEmpty(model.ResponseEmpname))
+                    {
+                        sql += " and a.ResponseEmpname like '%" + model.ResponseEmpname + "%'";
+                    }
+                    //反应内容
+                    if (!string.IsNullOrEmpty(model.ResponseContent))
+                    {
+                        sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        sql += " and a.Status =@Status ";
+                    }
+                    //负责人
+                    if (!string.IsNullOrEmpty(model.ChargeEmpname))
+                    {
+                        sql += " and a.charge_empname =@ChargeEmpname ";
+                    }
+                    //填表时间
+                    if (model.startDate != null)
+                    {
+                        sql += " and a.CreatTime >= @startDate ";
+                    }
+                    if (model.endDate != null)
+                    {
+                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
+                        sql += " and a.CreatTime <=@endDate ";
+                    }
+                    var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        switch (group)
+                        {
+                            case "资讯":
+                                sql += " and a.SystemCategory = 'IT(资讯类)' ";
+                                break;
+                            case "后勤":
+                                sql += " and a.SystemCategory = 'Logistics(总务后勤类)'";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    sql += " ORDER BY repair_id desc";
+
+                    list = db.Query<RepairRecordModel>(sql, model).ToList();
+                }
+              //  return Json(new FlagTips { IsSuccess = true, code = 0, count = list.Count(), data = list }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 个人问题列表下载
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult ReplyProblemListExport(RepairRecordModel model)
+        {
+            try
+            {
+                var dt = queryReplyProblemList(model);
+
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                string templatePath = string.Format("~\\Excel\\ProblemList.xlsx");
+                FileStream fs = new FileStream(System.Web.HttpContext.Current.Server.MapPath(templatePath), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                Workbook wb = new Workbook(fs);
+                Worksheet sheet = wb.Worksheets[0];
+                sheet.Name = "回复问题";
+                Cells cells = sheet.Cells;
+                int columnCount = cells.MaxColumn;  //获取表页的最大列数
+                int rowCount = cells.MaxRow;        //获取表页的最大行数
+
+                for (int col = 0; col < columnCount; col++)
+                {
+                    sheet.AutoFitColumn(col, 0, rowCount);
+                }
+                for (int col = 0; col < columnCount; col++)
+                {
+                    cells.SetColumnWidthPixel(col, cells.GetColumnWidthPixel(col) + 30);
+                }
+
+                for (int i = 0; i < dt.Count; i++)//遍历DataTable行
+                {
+                    sheet.Cells[i + 1, 0].PutValue(dt[i].RepairId);
+                    sheet.Cells[i + 1, 1].PutValue(dt[i].SystemCategory);
+                    sheet.Cells[i + 1, 2].PutValue(dt[i].Building);
+                    sheet.Cells[i + 1, 3].PutValue(dt[i].Loaction);
+                    sheet.Cells[i + 1, 4].PutValue(dt[i].Category);
+                    sheet.Cells[i + 1, 5].PutValue(dt[i].ResponseEmpname);
+                    sheet.Cells[i + 1, 6].PutValue(dt[i].ChargeEmpname);
+                    sheet.Cells[i + 1, 7].PutValue(dt[i].ResponseContent);
+                    sheet.Cells[i + 1, 8].PutValue(dt[i].Status);
+                    sheet.Cells[i + 1, 9].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());
+                    sheet.Cells[i + 1, 10].PutValue(dt[i].FinishTime.ToString() == "0001/01/01" ? "" : dt[i].FinishTime.ToString());
+                }
+                MemoryStream bookStream = new MemoryStream();//创建文件流
+                wb.Save(bookStream, new OoxmlSaveOptions(SaveFormat.Xlsx)); //文件写入流（向流中写入字节序列）
+                bookStream.Seek(0, SeekOrigin.Begin);//输出之前调用Seek，把0位置指定为开始位置
+                return File(bookStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", string.Format("ReplyProblemList_{0}.xlsx", DateTime.Now.ToString("yyyyMMddHHmmssfff")));//最后以文件形式返回
+            }
+            catch (Exception ex)
+            {
+                return Json(new FlagTips { IsSuccess = false, Msg = ex.Message });
+            }
+        }
+
         /// <summary>
         /// 回复报修单
         /// </summary>
