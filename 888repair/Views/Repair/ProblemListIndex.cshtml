@@ -98,15 +98,14 @@
             </div>
         </div>
     </form>*@
-    <hr><br />
+    @*<hr><br />
         <label style="color:red;font-size:medium">
             提示：导出的EXCEL数据为当前查询条件下所能查到的数据。您也可以选择数据表格右上方三个按钮中中间的导出按钮,使用layui自带的导出方法导出。<br>
-        </label>
+        </label>*@
     <div class="layui-btn-group" style="margin-left:1250px">
         <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_export"><i class="layui-icon">导出&nbsp;&#xe67d;</i></button>
     </div>
-    <br />
     <table class="layui-hide" lay-filter="user" id="RersonalProblemTable"></table>
 
 </body>
@@ -303,20 +302,20 @@
                                 last: false,
                                 layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
                             }
-                            , height: 750
+                            , height: 720
                             , cellMinWidth: 80
                             //,skin: 'line'
                             //,size: 'lg'
                             , toolbar: true
-                            , lineStyle: 'height: 100px;', // 定义表格的多行样式
+                            , lineStyle: 'height: 70px;line-height: 18px;', // 定义表格的多行样式
                             css: [ // 直接给当前表格主容器重置 css 样式
                                 '.layui-table-page{text-align: center;}' // 让分页栏居中
                             ].join('')
                             , cols: [[
                                 // { type: 'checkbox', LAY_CHECKED: false},
                                 { fixed: 'left', title: '操作', width: 130, minWidth: 80, toolbar: '#barDemo' },
-                                { field: 'RepairId', title: 'RepairID', width: 180 },
-                                { field: 'username', width: 380, title: 'SystemClass(分类项目)', templet: '#ID-table-demo-css-user' },
+                                { field: 'RepairId', title: 'RepairID', width: 150 },
+                                { field: 'username', width: 360, title: 'SystemClass(分类项目)', templet: '#ID-table-demo-css-user' },
                                 //{ field: 'SystemCategory', title: '系统类别', width: 210 },
                                 //{ field: 'Building', title: '大楼别', width: 210 },
                                 //{ field: 'Loaction', title: '位置', width: 210 },
