@@ -6,6 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>问题列表维护</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <style>
         body {
             padding: 32px; /*overflow-y: scroll;*/
@@ -15,105 +17,183 @@
             color: #000000 !important;
         }
     </style>
+    <link href="~/src/css/layui.css" rel="stylesheet">
 </head>
 <body>
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>问题列表维护</legend>
-    </fieldset>
-    <form class="layui-form layui-form-pane" action="">
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">系统类别</label>
-                <div class="layui-input-inline">
-                    <select ID="OpSystemCategory" name="OpSystemCategory" lay-filter="SystemCategory">
-                        <option value=""></option>
-                        @*<option value="IT(资讯类)">IT(资讯类)</option>
-                        <option value="Logistics(总务后勤类)">
-                            Logistics(总务后勤类)
-                        </option>*@
-                    </select>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">大楼别</label>
-                <div class="layui-input-inline">
-                    <select ID="OpBuilding" name="OpBuilding" lay-filter="Building">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">位置</label>
-                <div class="layui-input-inline">
-                    <select ID="OpLocation" name="OpLocation">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">类别</label>
-                <div class="layui-input-inline">
-                    <select ID="OpCategory" name="OpCategory">
-                        <option value=""></option>
-                    </select>
-                </div>
+            <legend>问题列表维护</legend>
+        </fieldset>
+    <div class="layui-collapse" lay-accordion="">
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">展开/收缩 查询条件</h2>
+            <div class="layui-colla-content layui-hidden">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">系统类别</label>
+                            <div class="layui-input-inline">
+                                <select ID="OpSystemCategory" name="OpSystemCategory" lay-filter="SystemCategory">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">大楼别</label>
+                            <div class="layui-input-inline">
+                                <select ID="OpBuilding" name="OpBuilding" lay-filter="Building">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">位置</label>
+                            <div class="layui-input-inline">
+                                <select ID="OpLocation" name="OpLocation">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类别</label>
+                            <div class="layui-input-inline">
+                                <select ID="OpCategory" name="OpCategory">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">反应人姓名</label>
+                            <div class="layui-input-inline">
+                                <input id="ResponseEmpname" name="ResponseEmpname" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">反应内容</label>
+                            <div class="layui-input-inline">
+                                <input id="ResponseContent" name="ResponseContent" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">执行状态</label>
+                            <div class="layui-input-inline">
+                                <select ID="OpStatus" name="OpStatus">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">负责人</label>
+                            <div class="layui-input-inline">
+                                <select ID="OpChargeEmpname" name="OpChargeEmpname" lay-search="">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline" id="test6">
+                            <label class="layui-form-label">填表时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="startDate">
+                            </div>
+                            <div class="layui-form-mid">-</div>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="endDate">
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">反应人姓名</label>
-                <div class="layui-input-inline">
-                    <input id="ResponseEmpname" name="ResponseEmpname" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">反应内容</label>
-                <div class="layui-input-inline">
-                    <input id="ResponseContent" name="ResponseContent" class="layui-input" />
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">执行状态</label>
-                <div class="layui-input-inline">
-                    <select ID="OpStatus" name="OpStatus">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">负责人</label>
-                <div class="layui-input-inline">
-                    <select ID="OpChargeEmpname" name="OpChargeEmpname" lay-search="">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline" id="test6">
-                <label class="layui-form-label">填表时间</label>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="startDate">
-                </div>
-                <div class="layui-form-mid">-</div>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="endDate">
-                </div>
-            </div>
-        </div>
-    </form>
-    <hr><br />
-    <label style="color:red;font-size:medium">
-        提示：导出的EXCEL数据为当前查询条件下所能查到的数据。您也可以选择数据表格右上方三个按钮中中间的导出按钮,使用layui自带的导出方法导出。<br>
-    </label>
-    <div class="layui-btn-group" style="margin-left:1150px">
-        <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
-        <button class="layui-btn layui-btn-sm" id="btn_export"><i class="layui-icon">导出&nbsp;&#xe67d;</i></button>
-        <button class="layui-btn layui-btn-sm" id="btn_transfer" style="background-color:red"><i class="layui-icon">转派任务&nbsp;&#xe623;</i></button>
     </div>
-    <br />
-    <table class="layui-hide" lay-filter="user" id="RersonalProblemTable"></table>
+    @*<form class="layui-form layui-form-pane" action="">
 
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">系统类别</label>
+                    <div class="layui-input-inline">
+                        <select ID="OpSystemCategory" name="OpSystemCategory" lay-filter="SystemCategory">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">大楼别</label>
+                    <div class="layui-input-inline">
+                        <select ID="OpBuilding" name="OpBuilding" lay-filter="Building">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">位置</label>
+                    <div class="layui-input-inline">
+                        <select ID="OpLocation" name="OpLocation">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">类别</label>
+                    <div class="layui-input-inline">
+                        <select ID="OpCategory" name="OpCategory">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">反应人姓名</label>
+                    <div class="layui-input-inline">
+                        <input id="ResponseEmpname" name="ResponseEmpname" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">反应内容</label>
+                    <div class="layui-input-inline">
+                        <input id="ResponseContent" name="ResponseContent" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">执行状态</label>
+                    <div class="layui-input-inline">
+                        <select ID="OpStatus" name="OpStatus">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">负责人</label>
+                    <div class="layui-input-inline">
+                        <select ID="OpChargeEmpname" name="OpChargeEmpname" lay-search="">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline" id="test6">
+                    <label class="layui-form-label">填表时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="startDate">
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="endDate">
+                    </div>
+                </div>
+            </div>
+        </form>*@
+        <div class="layui-btn-group" style="margin-left:1150px">
+            <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
+            <button class="layui-btn layui-btn-sm" id="btn_export"><i class="layui-icon">导出&nbsp;&#xe67d;</i></button>
+            <button class="layui-btn layui-btn-sm" id="btn_transfer" style="background-color:red"><i class="layui-icon">转派任务&nbsp;&#xe623;</i></button>
+        </div>
+        <br />
+        <table class="layui-hide" lay-filter="user" id="RersonalProblemTable"></table>
 </body>
 <div class="layui-form" style="display:none" id="stepWindow">
     <br /><br />
@@ -236,6 +316,9 @@
         var form = layui.form;
         var laydate = layui.laydate;
         var download = layui.download;
+        var element = layui.element;
+
+        element.render();
 
         loadOption();
 
@@ -292,12 +375,12 @@
                                 last: false,
                                 layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
                             }
-                            , height: 450
+                            , height: 670
                             , cellMinWidth: 80
                             //,skin: 'line'
                             //,size: 'lg'
                             , toolbar: true
-                            , lineStyle: 'height: 100px;', // 定义表格的多行样式
+                            , lineStyle: 'height: 70px;line-height: 18px;', // 定义表格的多行样式
                             css: [ // 直接给当前表格主容器重置 css 样式
                                 '.layui-table-page{text-align: center;}' // 让分页栏居中
                             ].join('')
