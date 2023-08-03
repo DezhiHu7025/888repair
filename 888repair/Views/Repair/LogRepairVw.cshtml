@@ -342,7 +342,7 @@
 
         reloadDate();
 
-        var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHH");
+        var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHHmmss");
 
         var username = '@(Session["fullname"])';
         var empno = '@(Session["EmpNo"])';
@@ -630,6 +630,9 @@
                     element.render('progress'); //渲染新加的进度条组件
 
                 });
+            }
+            , before: function (obj) {
+                this.data = { 'datestring': datetime };
             }
             , done: function (res, index, upload) { //成功的回调
                 var that = this;

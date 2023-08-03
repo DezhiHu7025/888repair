@@ -540,7 +540,7 @@
                 Status: $('#Status').val(),
             };
 
-            fetch("@(Url.Action("RersonalProblemExport", "Repair"))", {
+            fetch("@(Url.Action("ReplyProblemExport", "Repair"))", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -560,7 +560,7 @@
                         const a = document.createElement('a');
                         var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHHmmss");
                         console.log(datetime);
-                        a.download = "RersonalProblem_" + datetime + ".xlsx";
+                        a.download = "ReplyProblemExport_" + datetime + ".xlsx";
                         a.href = blobUrl;
                         a.click();
                         //download(blobUrl);
