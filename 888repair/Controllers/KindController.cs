@@ -229,7 +229,7 @@ namespace _888repair.Controllers
                     }
                     else
                     {
-                        sql = string.Format(@" update [888_KsSouth].[dbo].[match] set SystemCategory=@SystemCategory,area_id = @AreaId,charge_emp=@EmpNo,Sort=@Sort,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where area_id = @AreaId and match_type ='KindMatch' ");
+                        sql = string.Format(@" update [888_KsSouth].[dbo].[match] set SystemCategory=@SystemCategory,area_id = @AreaId,charge_emp=@EmpNo,Sort=@Sort,UpdateUser=@UpdateUser,UpdateTime=@UpdateTime where area_id = @AreaId and match_id = @MatchId and match_type ='KindMatch' ");
                     }
                     Dictionary<string, object> trans = new Dictionary<string, object>();
                     trans.Add(sql, model);
