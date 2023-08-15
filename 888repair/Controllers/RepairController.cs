@@ -518,7 +518,7 @@ namespace _888repair.Controllers
 											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
-											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo)");
+											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo) and a.status !='complete'");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
                     {
@@ -614,7 +614,7 @@ namespace _888repair.Controllers
 											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
-											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo)");
+											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo) and a.status !='complete'");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
                     {
@@ -680,7 +680,7 @@ namespace _888repair.Controllers
                                 break;
                         }
                     }
-                    sql += " ORDER BY repair_id desc";
+                    sql += " ORDER BY a.CreatTime asc";
 
                     list = db.Query<RepairRecordModel>(sql, model).ToList();
                 }
@@ -723,17 +723,19 @@ namespace _888repair.Controllers
 
                 for (int i = 0; i < dt.Count; i++)//遍历DataTable行
                 {
-                    sheet.Cells[i + 1, 0].PutValue(dt[i].RepairId);
-                    sheet.Cells[i + 1, 1].PutValue(dt[i].SystemCategory);
-                    sheet.Cells[i + 1, 2].PutValue(dt[i].Building);
-                    sheet.Cells[i + 1, 3].PutValue(dt[i].Loaction);
-                    sheet.Cells[i + 1, 4].PutValue(dt[i].Category);
-                    sheet.Cells[i + 1, 5].PutValue(dt[i].ChargeEmpname);
-                    sheet.Cells[i + 1, 6].PutValue(dt[i].ResponseContent);
-                    sheet.Cells[i + 1, 7].PutValue(dt[i].Status);
-                    sheet.Cells[i + 1, 8].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());
-                    sheet.Cells[i + 1, 9].PutValue(dt[i].FinishTime.ToString() == "0001/01/01" ? "" : dt[i].FinishTime.ToString());
+                    sheet.Cells[i + 1, 0].PutValue(dt[i].RepairId);//请修编号
+                    sheet.Cells[i + 1, 1].PutValue(dt[i].SystemCategory);//系统类别
+                    sheet.Cells[i + 1, 2].PutValue(dt[i].Building);//大楼别
+                    sheet.Cells[i + 1, 3].PutValue(dt[i].Loaction);//位置
+                    sheet.Cells[i + 1, 4].PutValue(dt[i].RoomNum);//空间编号
+                    sheet.Cells[i + 1, 5].PutValue(dt[i].ChargeEmpname);//负责人姓名
+                    sheet.Cells[i + 1, 6].PutValue(dt[i].ResponseEmpname);//反应人姓名
+                    sheet.Cells[i + 1, 7].PutValue(dt[i].Telephone);//分机号码
+                    sheet.Cells[i + 1, 8].PutValue(dt[i].RepairTime);//维护时间
+                    sheet.Cells[i + 1, 9].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());//填表时间
 
+                    sheet.Cells[i + 1, 10].PutValue(dt[i].ResponseContent);//反应内容
+                    sheet.Cells[i + 1, 11].PutValue(dt[i].Status);//执行状态
                     //  sheet.Cells[i + 1, 24].PutValue(Convert.ToDateTime(dt[i].CreateTime).ToString("yyyy/MM/dd") == "0001/01/01" ? "" : Convert.ToDateTime(dt[i].CreateTime).ToString("yyyy-MM-dd HH:mm:ss"));
                 }
                 MemoryStream bookStream = new MemoryStream();//创建文件流
@@ -1055,7 +1057,7 @@ namespace _888repair.Controllers
 											   LEFT JOIN [888_KsSouth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
-											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1   and a.status !='complete'
 											  ");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
@@ -1159,7 +1161,7 @@ namespace _888repair.Controllers
 											   LEFT JOIN [888_KsSouth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
-											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1  and a.status !='complete'
 											  ");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
@@ -1226,7 +1228,7 @@ namespace _888repair.Controllers
                                 break;
                         }
                     }
-                    sql += " ORDER BY repair_id desc";
+                    sql += " ORDER BY a.CreatTime asc";
 
                     list = db.Query<RepairRecordModel>(sql, model).ToList();
                 }
@@ -1270,17 +1272,19 @@ namespace _888repair.Controllers
 
                 for (int i = 0; i < dt.Count; i++)//遍历DataTable行
                 {
-                    sheet.Cells[i + 1, 0].PutValue(dt[i].RepairId);
-                    sheet.Cells[i + 1, 1].PutValue(dt[i].SystemCategory);
-                    sheet.Cells[i + 1, 2].PutValue(dt[i].Building);
-                    sheet.Cells[i + 1, 3].PutValue(dt[i].Loaction);
-                    sheet.Cells[i + 1, 4].PutValue(dt[i].Category);
-                    sheet.Cells[i + 1, 5].PutValue(dt[i].ResponseEmpname);
-                    sheet.Cells[i + 1, 6].PutValue(dt[i].ChargeEmpname);
-                    sheet.Cells[i + 1, 7].PutValue(dt[i].ResponseContent);
-                    sheet.Cells[i + 1, 8].PutValue(dt[i].Status);
-                    sheet.Cells[i + 1, 9].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());
-                    sheet.Cells[i + 1, 10].PutValue(dt[i].FinishTime.ToString() == "0001/01/01" ? "" : dt[i].FinishTime.ToString());
+                    sheet.Cells[i + 1, 0].PutValue(dt[i].RepairId);//请修编号
+                    sheet.Cells[i + 1, 1].PutValue(dt[i].SystemCategory);//系统类别
+                    sheet.Cells[i + 1, 2].PutValue(dt[i].Building);//大楼别
+                    sheet.Cells[i + 1, 3].PutValue(dt[i].Loaction);//位置
+                    sheet.Cells[i + 1, 4].PutValue(dt[i].RoomNum);//空间编号
+                    sheet.Cells[i + 1, 5].PutValue(dt[i].ChargeEmpname);//负责人姓名
+                    sheet.Cells[i + 1, 6].PutValue(dt[i].ResponseEmpname);//反应人姓名
+                    sheet.Cells[i + 1, 7].PutValue(dt[i].Telephone);//分机号码
+                    sheet.Cells[i + 1, 8].PutValue(dt[i].RepairTime);//维护时间
+                    sheet.Cells[i + 1, 9].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());//填表时间
+
+                    sheet.Cells[i + 1, 10].PutValue(dt[i].ResponseContent);//反应内容
+                    sheet.Cells[i + 1, 11].PutValue(dt[i].Status);//执行状态
                 }
                 MemoryStream bookStream = new MemoryStream();//创建文件流
                 wb.Save(bookStream, new OoxmlSaveOptions(SaveFormat.Xlsx)); //文件写入流（向流中写入字节序列）

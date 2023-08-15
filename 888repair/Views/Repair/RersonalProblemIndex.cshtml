@@ -68,9 +68,9 @@
 </body>
 <script type="text/html" id="ID-table-demo-css-user">
     <ul>
-        <li><strong style="font-weight:400">【SystemCategory系统类别】: {{= d.SystemCategory }}</strong> </li>
-        <li><strong style="font-weight:400">【Building大楼别】:{{= d.Building }}</strong> </li>
-        <li><strong style="font-weight:400">【Loaction位置】:{{= d.Loaction }}</strong> </li>
+        <li><strong style="font-weight:400">【系统类别】: {{= d.SystemCategory }}</strong> </li>
+        <li><strong style="font-weight:400">【大楼别】:{{= d.Building }}</strong> </li>
+        <li><strong style="font-weight:400">【位置】:{{= d.Loaction }}</strong> </li>
     </ul>
 </script>
 <script type="text/html" id="barDemo">
@@ -149,22 +149,22 @@
                             ].join('')
                             , cols: [[
                                // { type: 'checkbox', LAY_CHECKED: false},
-                                { fixed: 'left', title: '操作', width: 80, minWidth: 80, toolbar: '#barDemo' },
-                                { field: 'RepairId', title: '请修编号(RepairID)', width: 160 },
-                                { field: 'username', width: 360, title: 'SystemClass(分类项目)', templet: '#ID-table-demo-css-user' },
+                                { fixed: 'left', title: '操作', width: '5%',  minWidth: 80, toolbar: '#barDemo' },
+                                { field: 'RepairId', width: '10%',  title: '请修编号' },
+                                { field: 'username', width: '18%',  title: '分类项目', templet: '#ID-table-demo-css-user' },
                                 //{ field: 'SystemCategory', title: 'SystemCategory(系统类别)', width: 210 },
                                 //{ field: 'Building', title: 'Building(大楼别)', width: 210 },
                                 //{ field: 'Loaction', title: 'Loaction(位置)', width: 210 },
-                                { field: 'Category', title: 'Category(类别)', width: 200 },
-                                { field: 'ChargeEmpname', title: 'Repairer(负责人姓名)', width: 170 },
-                                { field: 'ResponseContent', title: 'Description(反应内容)', width: 300 },
-                                { field: 'Status', title: 'Status(执行状态)', width: 170 },
+                                { field: 'Category', title: '类别', width: '10%'},
+                                { field: 'ChargeEmpname', title: '负责人姓名', width: '10%'},
+                                { field: 'ResponseContent', title: '反应内容', width: '15%', style: 'color:#020615'},
+                                { field: 'Status', title: '执行状态', width: '10%' },
                                 {
-                                    field: 'CreatTime', title: 'Fill-in Date(填表时间)', width: 180,
+                                    field: 'CreatTime', title: '填表时间', width: '11%',
                                     templet: "<div>{{ formatDate(d.CreatTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
                                 },
                                 {
-                                    field: 'FinishTime', title: 'Finish Time(完单时间)', width: 180,
+                                    field: 'FinishTime', title: '完单时间', width: '11%',
                                     templet: "<div>{{ formatDate(d.FinishTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
                                 }
                             ]],

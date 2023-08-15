@@ -222,9 +222,15 @@
 </div>
 <script type="text/html" id="ID-table-demo-css-user">
     <ul>
-        <li><strong style="font-weight:400">【SystemCategory系统类别】: {{= d.SystemCategory }}</strong> </li>
-        <li><strong style="font-weight:400">【Building大楼别】:{{= d.Building }}</strong> </li>
-        <li><strong style="font-weight:400">【Loaction位置】:{{= d.Loaction }}</strong> </li>
+        <li><strong style="font-weight:400">【系统类别】: {{= d.SystemCategory }}</strong> </li>
+        <li><strong style="font-weight:400">【大楼别】:{{= d.Building }}</strong> </li>
+        <li><strong style="font-weight:400">【位置】:{{= d.Loaction }}</strong> </li>
+    </ul>
+</script>
+<script type="text/html" id="ID-table-demo-css-user2">
+    <ul>
+        <li><strong style="font-weight:400;font-size:small">【反应人】: {{= d.ResponseEmpname }}</strong> </li>
+        <li><strong style="font-weight:400;font-size:small">【负责人】:{{= d.ChargeEmpname }}</strong> </li>
     </ul>
 </script>
 <script type="text/html" id="barDemo">
@@ -385,26 +391,27 @@
                                 '.layui-table-page{text-align: center;}' // 让分页栏居中
                             ].join('')
                             , cols: [[
-                                { type: 'checkbox', LAY_CHECKED: false },
-                                { field: 'RepairId', title: 'RepairID', width: 180 },
-                                { field: 'username', width: 380, title: 'SystemClass(分类项目)', templet: '#ID-table-demo-css-user' },
+                                { type: 'checkbox', LAY_CHECKED: false},
+                               // { field: 'RepairId', title: 'RepairID', width: '10%', },
+                                { field: 'username', width: '18%', title: '分类项目', templet: '#ID-table-demo-css-user' },
                                 //{ field: 'SystemCategory', title: '系统类别', width: 210 },
                                 //{ field: 'Building', title: '大楼别', width: 210 },
                                 //{ field: 'Loaction', title: '位置', width: 210 },
-                                { field: 'Category', title: '类别', width: 210 },
-                                { field: 'ResponseEmpname', title: '反应人', width: 170 },
-                                { field: 'ChargeEmpname', title: '负责人', width: 170 },
-                                { field: 'ResponseContent', title: '反应内容', width: 300 },
-                                { field: 'Status', title: '执行状态', width: 170 },
+                                { field: 'Category', title: '类别', width: '15%', },
+                               // { field: 'ResponseEmpname', title: '反应人', width: '15%',},
+                                { field: 'username', width: '15%', title: '人员名称', templet: '#ID-table-demo-css-user2' },
+                                //{ field: 'ChargeEmpname', title: '负责人', width: 170 },
+                                { field: 'ResponseContent', title: '反应内容', width: '19%', style:'color:#020615' },
+                                { field: 'Status', title: '执行状态', width: '10%',},
                                 {
-                                    field: 'CreatTime', title: '填表时间', width: 180,
+                                    field: 'CreatTime', title: '填表时间', width: '11%',
                                     templet: "<div>{{ formatDate(d.CreatTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
                                 },
-                                {
-                                    field: 'FinishTime', title: 'Finish Time(完单时间)', width: 180,
-                                    templet: "<div>{{ formatDate(d.FinishTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
-                                },
-                                { fixed: 'right', title: '操作', width: 130, minWidth: 80, toolbar: '#barDemo' },
+                                //{
+                                //    field: 'FinishTime', title: 'Finish Time(完单时间)', width: 180,
+                                //    templet: "<div>{{ formatDate(d.FinishTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
+                                //},
+                                { fixed: 'right', title: '操作', width: '8%', minWidth: 80, toolbar: '#barDemo' },
 
                             ]],
                             done: function(){
