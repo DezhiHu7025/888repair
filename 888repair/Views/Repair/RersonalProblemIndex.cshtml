@@ -35,21 +35,24 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">执行状态</label>
-                <div class="layui-input-inline">
-                    <select ID="Status" name="Status">
-                        <option value=""></option>
-                    </select>
+                <div class="layui-inline">
+                    <label class="layui-form-label">执行状态</label>
+                    <div class="layui-input-inline">
+                        <div id="statusSelect"> </div>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-inline" id="test6">
-                <label class="layui-form-label">填表时间</label>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="startDate">
-                </div>
-                <div class="layui-form-mid">-</div>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="endDate">
+                <div class="layui-inline" id="test6">
+                    <label class="layui-form-label">填表月份</label>
+                    <div class="layui-input-inline" style="width:20%">
+                        @*<input type="text" class="layui-input" id="startDate">*@
+                        <select id="queryYear" lay-filter="queryYear"></select>
+                    </div>
+                    <div class="layui-form-mid">年</div>
+                    <div class="layui-input-inline">
+                        <div id="monthsSelect"></div>
+                    </div>
+
+                    <div class="layui-form-mid">月</div>
                 </div>
             </div>
         </div>
@@ -188,9 +191,9 @@
             var model = {
                 SystemCategory: $('#SystemCategory').val(),
                 KindCategory: $('#KindCategory').val(),
-                startDate: $('#startDate').val(),
-                endDate: $('#endDate').val(),
-                Status: $('#Status').val(),
+                Status: statusString.getValue('valueStr'),
+                queryYear: $('#queryYear').val(),
+                queryMonths: monthsString.getValue('valueStr')
             }
             $.ajax({
                 url: "@(Url.Action("getRersonalProblemList", "Repair"))",   // 要提交的URL路径
@@ -216,8 +219,69 @@
             });
         }
 
+        let monthsString = {};
+        monthsString = xmSelect.render({
+            el: '#monthsSelect',
+            name: 'months',
+            // layVerify: 'required',
+            max: 12,     // 最多选择 3 个
+            data: [
+                { name: '1', value: 1 },
+                { name: '2', value: 2 },
+                { name: '3', value: 3 },
+                { name: '4', value: 4 },
+                { name: '5', value: 5 },
+                { name: '6', value: 6 },
+                { name: '7', value: 7 },
+                { name: '8', value: 8 },
+                { name: '9', value: 9 },
+                { name: '10', value: 10 },
+                { name: '11', value: 11 },
+                { name: '12', value: 12 }
+            ]
+        });
+
+
         function loadOption() {
-            $("#Status").empty();
+
+             var myDate = new Date();
+            var startYear = myDate.getFullYear() -5;//起始年份
+            var endYear = myDate.getFullYear();//结束年份
+            for (var i = startYear; i <= endYear; i++) {
+                $("#queryYear").append("<option value='" + i + "'>" + i + "</option>");
+            }
+            $("#queryYear").val(myDate.getFullYear());
+            form.render();
+
+            var data = [];
+           // $("#OpStatus").empty();
+            $.ajax({
+                url: "@(Url.Action("getStatusEvery", "DDL"))",
+                type: "POST",
+                dataType: 'json',
+                success: function (result) {
+                  //  $('#OpStatus').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                       // $("#OpStatus").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                        data.push({
+                            name: result[i]['StatusText'],
+                            value: result[i]['StatusValue']
+                        });  
+                    }
+                    statusString = xmSelect.render({
+                        el: '#statusSelect',
+                        name: 'status',
+                        // layVerify: 'required',
+                        max: 12,     // 最多选择 3 个
+                        data: data
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+
+            @*$("#Status").empty();
             $.ajax({
                 url: "@(Url.Action("getStatusEvery", "DDL"))",
                 type: "POST",
@@ -235,7 +299,7 @@
                 error: function (error) {
                     console.log(error)
                 }
-            });
+            });*@
 
         }
 
@@ -271,9 +335,9 @@
             var model = {
                 SystemCategory: $('#SystemCategory').val(),
                 KindCategory: $('#KindCategory').val(),
-                startDate: $('#startDate').val(),
-                endDate: $('#endDate').val(),
-                Status: $('#Status').val(),
+                Status: statusString.getValue('valueStr'),
+                queryYear: $('#queryYear').val(),
+                queryMonths: monthsString.getValue('valueStr')
             };
 
             fetch("@(Url.Action("RersonalProblemExport", "Repair"))", {
