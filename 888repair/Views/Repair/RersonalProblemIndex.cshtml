@@ -35,30 +35,28 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">执行状态</label>
-                <div class="layui-input-inline">
-                    <select ID="Status" name="Status">
-                        <option value=""></option>
-                    </select>
+                <div class="layui-inline">
+                    <label class="layui-form-label">执行状态</label>
+                    <div class="layui-input-inline">
+                        <div id="statusSelect"> </div>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-inline" id="test6">
-                <label class="layui-form-label">填表时间</label>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="startDate">
-                </div>
-                <div class="layui-form-mid">-</div>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="endDate">
+                <div class="layui-inline" id="test6">
+                    <label class="layui-form-label">填表月份</label>
+                    <div class="layui-input-inline" style="width:20%">
+                        @*<input type="text" class="layui-input" id="startDate">*@
+                        <select id="queryYear" lay-filter="queryYear"></select>
+                    </div>
+                    <div class="layui-form-mid">年</div>
+                    <div class="layui-input-inline">
+                        <div id="monthsSelect"></div>
+                    </div>
+
+                    <div class="layui-form-mid">月</div>
                 </div>
             </div>
         </div>
     </form>
-    @*<label style="color:red;font-size:medium">
-        导出的EXCEL数据为当前查询条件下所能查到的数据。您也可以选择数据表格右上方三个按钮中中间的导出按钮,使用layui自带的导出方法导出。<br>
-        The exported EXCEL data is the data that can be found under the current query conditions.<br />
-        You can also choose the export button in the middle of the three buttons on the top right of the data table and use the export method provided by Layui to export it
-    </label>*@
     <div class="layui-btn-group" style="margin-left:1250px">
         <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_export"><i class="layui-icon">导出&nbsp;&#xe67d;</i></button>
@@ -148,23 +146,23 @@
                                 '.layui-table-page{text-align: center;}' // 让分页栏居中
                             ].join('')
                             , cols: [[
-                               // { type: 'checkbox', LAY_CHECKED: false},
-                                { fixed: 'left', title: '操作', width: 80, minWidth: 80, toolbar: '#barDemo' },
-                                { field: 'RepairId', title: '请修编号(RepairID)', width: 160 },
-                                { field: 'username', width: 360, title: 'SystemClass(分类项目)', templet: '#ID-table-demo-css-user' },
+                                // { type: 'checkbox', LAY_CHECKED: false},
+                                { fixed: 'left', title: '操作', width: '5%', minWidth: 80, toolbar: '#barDemo' },
+                                { field: 'RepairId', width: '10%', title: '请修编号' },
+                                { field: 'username', width: '18%', title: '分类项目', templet: '#ID-table-demo-css-user' },
                                 //{ field: 'SystemCategory', title: 'SystemCategory(系统类别)', width: 210 },
                                 //{ field: 'Building', title: 'Building(大楼别)', width: 210 },
                                 //{ field: 'Loaction', title: 'Loaction(位置)', width: 210 },
-                                { field: 'Category', title: 'Category(类别)', width: 200 },
-                                { field: 'ChargeEmpname', title: 'Repairer(负责人姓名)', width: 170 },
-                                { field: 'ResponseContent', title: 'Description(反应内容)', width: 300 },
-                                { field: 'Status', title: 'Status(执行状态)', width: 170 },
+                                { field: 'Category', title: '类别', width: '10%' },
+                                { field: 'ChargeEmpname', title: '负责人姓名', width: '10%' },
+                                { field: 'ResponseContent', title: '反应内容', width: '15%', style: 'color:#020615' },
+                                { field: 'Status', title: '执行状态', width: '10%' },
                                 {
-                                    field: 'CreatTime', title: 'Fill-in Date(填表时间)', width: 180,
+                                    field: 'CreatTime', title: '填表时间', width: '11%',
                                     templet: "<div>{{ formatDate(d.CreatTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
                                 },
                                 {
-                                    field: 'FinishTime', title: 'Finish Time(完单时间)', width: 180,
+                                    field: 'FinishTime', title: '完单时间', width: '11%',
                                     templet: "<div>{{ formatDate(d.FinishTime,'yyyy-MM-dd HH:mm:ss')}}</div>"
                                 }
                             ]],
@@ -188,9 +186,9 @@
             var model = {
                 SystemCategory: $('#SystemCategory').val(),
                 KindCategory: $('#KindCategory').val(),
-                startDate: $('#startDate').val(),
-                endDate: $('#endDate').val(),
-                Status: $('#Status').val(),
+                Status: statusString.getValue('valueStr'),
+                queryYear: $('#queryYear').val(),
+                queryMonths: monthsString.getValue('valueStr')
             }
             $.ajax({
                 url: "@(Url.Action("getRersonalProblemList", "Repair"))",   // 要提交的URL路径
@@ -216,8 +214,69 @@
             });
         }
 
+        let monthsString = {};
+        monthsString = xmSelect.render({
+            el: '#monthsSelect',
+            name: 'months',
+            // layVerify: 'required',
+            max: 12,     // 最多选择 3 个
+            data: [
+                { name: '1', value: 1 },
+                { name: '2', value: 2 },
+                { name: '3', value: 3 },
+                { name: '4', value: 4 },
+                { name: '5', value: 5 },
+                { name: '6', value: 6 },
+                { name: '7', value: 7 },
+                { name: '8', value: 8 },
+                { name: '9', value: 9 },
+                { name: '10', value: 10 },
+                { name: '11', value: 11 },
+                { name: '12', value: 12 }
+            ]
+        });
+
+
         function loadOption() {
-            $("#Status").empty();
+
+            var myDate = new Date();
+            var startYear = myDate.getFullYear() -5;//起始年份
+            var endYear = myDate.getFullYear();//结束年份
+            for (var i = startYear; i <= endYear; i++) {
+                $("#queryYear").append("<option value='" + i + "'>" + i + "</option>");
+            }
+            $("#queryYear").val(myDate.getFullYear());
+            form.render();
+
+            var data = [];
+           // $("#OpStatus").empty();
+            $.ajax({
+                url: "@(Url.Action("getStatusEvery", "DDL"))",
+                type: "POST",
+                dataType: 'json',
+                success: function (result) {
+                  //  $('#OpStatus').append(new Option());
+                    for (let i = 0, len = result.length; i < len; i++) {
+                       // $("#OpStatus").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                        data.push({
+                            name: result[i]['StatusText'],
+                            value: result[i]['StatusValue']
+                        });  
+                    }
+                    statusString = xmSelect.render({
+                        el: '#statusSelect',
+                        name: 'status',
+                        // layVerify: 'required',
+                        max: 12,     // 最多选择 3 个
+                        data: data
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+
+            @*$("#Status").empty();
             $.ajax({
                 url: "@(Url.Action("getStatusEvery", "DDL"))",
                 type: "POST",
@@ -235,7 +294,7 @@
                 error: function (error) {
                     console.log(error)
                 }
-            });
+            });*@
 
         }
 
@@ -271,9 +330,9 @@
             var model = {
                 SystemCategory: $('#SystemCategory').val(),
                 KindCategory: $('#KindCategory').val(),
-                startDate: $('#startDate').val(),
-                endDate: $('#endDate').val(),
-                Status: $('#Status').val(),
+                Status: statusString.getValue('valueStr'),
+                queryYear: $('#queryYear').val(),
+                queryMonths: monthsString.getValue('valueStr')
             };
 
             fetch("@(Url.Action("RersonalProblemExport", "Repair"))", {

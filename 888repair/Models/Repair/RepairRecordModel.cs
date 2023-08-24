@@ -151,5 +151,18 @@ namespace _888repair.Models.Repair
         /// 完修图片
         /// </summary>
         public string ReplyPhoto { get; set; }
+        
+        /// <summary>
+        /// 查询年份
+        /// </summary>
+        public string queryYear { get; set; }
+
+        public string queryMonths { get; set; }
+
+        public string[] queryDates { get; set; }
+
+        public string[] queryStatus { get; set; }
+
+        public string[] queryCharge { get; set; }
     }
 }
