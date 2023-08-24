@@ -187,7 +187,7 @@
             $("#OpStatus").empty();
             var SystemCategory = localStorage.getItem("SystemCategory");
             if (SystemCategory == null || SystemCategory == "") {
-                loadOption();
+                layer.alert('请求失败,刷新重试');
             } else {
                 $.ajax({
                     type: "post",

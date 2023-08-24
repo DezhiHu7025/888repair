@@ -315,6 +315,9 @@
                  $("#CreatTime").html(formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
                  $("#ReplyContent").html(localStorage.getItem("ReplyContent") == "null" ? '' : localStorage.getItem("ReplyContent"));
                  $("#FinishTime").html(localStorage.getItem("FinishTime") == "null" ? '' : formatDate(localStorage.getItem("CreatTime"), 'yyyy-MM-dd HH:mm:ss'));
+
+                 loadOption();
+
                  layer.close(loading);
              },
              error: function () {
@@ -362,9 +365,6 @@
             }
         }
 
-
-        loadOption();
-
         var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHHmmss");
         var empno = '@(Session["EmpNo"])';
 
@@ -376,7 +376,7 @@
             $("#OpStatus").empty();
             var SystemCategory = localStorage.getItem("SystemCategory");
             if (SystemCategory == null || SystemCategory == "") {
-                loadOption();
+                layer.alert('请求失败,刷新重试');
             } else {
                 $.ajax({
                     type: "post",
@@ -404,7 +404,7 @@
             $("#OpEmpNo").empty();
             var SystemCategory = localStorage.getItem("SystemCategory");
             if (SystemCategory == null || SystemCategory == "") {
-                loadOption();
+                layer.alert('请求失败,刷新重试');
             } else {
                 $.ajax({
                     type: "post",
@@ -428,8 +428,7 @@
                 });
             }
         }
-
-
+        
         //隐藏div
         //$("#DamageText1").hide();
         //$("#DamageText2").hide();
