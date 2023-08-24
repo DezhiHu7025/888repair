@@ -162,5 +162,7 @@ namespace _888repair.Models.Repair
         public string[] queryDates { get; set; }
 
         public string[] queryStatus { get; set; }
+
+        public string[] queryCharge { get; set; }
     }
 }

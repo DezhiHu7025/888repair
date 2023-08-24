@@ -518,56 +518,32 @@ namespace _888repair.Controllers
 											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
-											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo) and a.status !='complete'");
-                    //系统类别
-                    if (!string.IsNullOrEmpty(model.SystemCategory))
-                    {
-                        sql += " and a.SystemCategory =@SystemCategory ";
-                    }
-                    //大楼别
-                    if (!string.IsNullOrEmpty(model.Building))
-                    {
-                        sql += " and a.Building =@Building ";
-                    }
-                    //位置
-                    if (!string.IsNullOrEmpty(model.Loaction))
-                    {
-                        sql += " and a.Loaction =@Loaction ";
-                    }
-                    //类别
-                    if (!string.IsNullOrEmpty(model.Category))
-                    {
-                        sql += " and a.Category =@Category ";
-                    }
-                    //反应人姓名
-                    if (!string.IsNullOrEmpty(model.ResponseEmpname))
-                    {
-                        sql += " and a.ResponseEmpname like '%" + model.ResponseEmpname + "%'";
-                    }
-                    //反应内容
-                    if (!string.IsNullOrEmpty(model.ResponseContent))
-                    {
-                        sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
-                    }
+											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo)");
                     //执行状态
                     if (!string.IsNullOrEmpty(model.Status))
                     {
-                        sql += " and a.Status =@Status ";
+                        model.queryStatus = model.Status.Split(',');
+                        sql += " and a.status in @queryStatus ";
                     }
-                    //负责人
-                    if (!string.IsNullOrEmpty(model.ChargeEmpname))
+                    else
                     {
-                        sql += " and a.charge_empname =@ChargeEmpname ";
+                        sql += " and a.status != 'complete' ";
                     }
                     //填表时间
-                    if (model.startDate != null)
+                    if (model.queryYear != null && model.queryMonths != null)
                     {
-                        sql += " and a.CreatTime >= @startDate ";
+                        string[] monthsString = model.queryMonths.Split(',');
+                        List<string> queryDate = new List<string>();
+                        foreach (var item in monthsString)
+                        {
+                            queryDate.Add(model.queryYear + item);
+                        }
+                        model.queryDates = queryDate.ToArray();
+                        sql += " and CONCAT(YEAR(a.CreatTime),MONTH(a.CreatTime)) in  @queryDates";
                     }
-                    if (model.endDate != null)
+                    if (model.queryYear != null && model.queryMonths == null)
                     {
-                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
-                        sql += " and a.CreatTime <=@endDate ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
@@ -614,56 +590,32 @@ namespace _888repair.Controllers
 											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
-											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo) and a.status !='complete'");
-                    //系统类别
-                    if (!string.IsNullOrEmpty(model.SystemCategory))
-                    {
-                        sql += " and a.SystemCategory =@SystemCategory ";
-                    }
-                    //大楼别
-                    if (!string.IsNullOrEmpty(model.Building))
-                    {
-                        sql += " and a.Building =@Building ";
-                    }
-                    //位置
-                    if (!string.IsNullOrEmpty(model.Loaction))
-                    {
-                        sql += " and a.Loaction =@Loaction ";
-                    }
-                    //类别
-                    if (!string.IsNullOrEmpty(model.Category))
-                    {
-                        sql += " and a.Category =@Category ";
-                    }
-                    //反应人姓名
-                    if (!string.IsNullOrEmpty(model.ResponseEmpname))
-                    {
-                        sql += " and a.ResponseEmpname like '%" + model.ResponseEmpname + "%'";
-                    }
-                    //反应内容
-                    if (!string.IsNullOrEmpty(model.ResponseContent))
-                    {
-                        sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
-                    }
+											   AND (area.charge_emp = @EmpNo OR kind.charge_emp = @EmpNo OR a.charge_empno = @EmpNo)");
                     //执行状态
                     if (!string.IsNullOrEmpty(model.Status))
                     {
-                        sql += " and a.Status =@Status ";
+                        model.queryStatus = model.Status.Split(',');
+                        sql += " and a.status in @queryStatus ";
                     }
-                    //负责人
-                    if (!string.IsNullOrEmpty(model.ChargeEmpname))
+                    else
                     {
-                        sql += " and a.charge_empname =@ChargeEmpname ";
+                        sql += " and a.status != 'complete' ";
                     }
                     //填表时间
-                    if (model.startDate != null)
+                    if (model.queryYear != null && model.queryMonths != null)
                     {
-                        sql += " and a.CreatTime >= @startDate ";
+                        string[] monthsString = model.queryMonths.Split(',');
+                        List<string> queryDate = new List<string>();
+                        foreach (var item in monthsString)
+                        {
+                            queryDate.Add(model.queryYear + item);
+                        }
+                        model.queryDates = queryDate.ToArray();
+                        sql += " and CONCAT(YEAR(a.CreatTime),MONTH(a.CreatTime)) in  @queryDates";
                     }
-                    if (model.endDate != null)
+                    if (model.queryYear != null && model.queryMonths == null)
                     {
-                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
-                        sql += " and a.CreatTime <=@endDate ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
@@ -1057,7 +1009,7 @@ namespace _888repair.Controllers
 											   LEFT JOIN [888_KsSouth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
-											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1   and a.status !='complete'
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
 											  ");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
@@ -1089,25 +1041,33 @@ namespace _888repair.Controllers
                     {
                         sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
                     }
-                    //执行状态
-                    if (!string.IsNullOrEmpty(model.Status))
-                    {
-                        sql += " and a.Status =@Status ";
-                    }
                     //负责人
                     if (!string.IsNullOrEmpty(model.ChargeEmpname))
                     {
-                        sql += " and a.charge_empname =@ChargeEmpname ";
+                        model.queryCharge = model.ChargeEmpname.Split(',');
+                        sql += " and a.charge_empname in @queryCharge ";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        model.queryStatus = model.Status.Split(',');
+                        sql += " and a.status in @queryStatus ";
                     }
                     //填表时间
-                    if (model.startDate != null)
+                    if (model.queryYear != null && model.queryMonths != null)
                     {
-                        sql += " and a.CreatTime >= @startDate ";
+                        string[] monthsString = model.queryMonths.Split(',');
+                        List<string> queryDate = new List<string>();
+                        foreach (var item in monthsString)
+                        {
+                            queryDate.Add(model.queryYear + item);
+                        }
+                        model.queryDates = queryDate.ToArray();
+                        sql += " and CONCAT(YEAR(a.CreatTime),MONTH(a.CreatTime)) in  @queryDates";
                     }
-                    if (model.endDate != null)
+                    if (model.queryYear != null && model.queryMonths == null)
                     {
-                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
-                        sql += " and a.CreatTime <=@endDate ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
@@ -1161,7 +1121,7 @@ namespace _888repair.Controllers
 											   LEFT JOIN [888_KsSouth].[dbo].[match] area  ON a.area_id = area.area_id AND area.match_type = 'AreaMatch' AND a.SystemCategory = area.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[match] kind  ON a.kind_id = kind.area_id AND kind.match_type = 'KindMatch' AND a.SystemCategory = kind.SystemCategory
 											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch1  ON area.charge_emp = ch1.EmpNo AND a.SystemCategory = ch1.SystemCategory 
-											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1  and a.status !='complete'
+											   LEFT JOIN [888_KsSouth].[dbo].[charge] ch2  ON area.charge_emp = ch2.EmpNo AND a.SystemCategory = ch2.SystemCategory WHERE 1= 1
 											  ");
                     //系统类别
                     if (!string.IsNullOrEmpty(model.SystemCategory))
@@ -1193,25 +1153,33 @@ namespace _888repair.Controllers
                     {
                         sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
                     }
-                    //执行状态
-                    if (!string.IsNullOrEmpty(model.Status))
-                    {
-                        sql += " and a.Status =@Status ";
-                    }
                     //负责人
                     if (!string.IsNullOrEmpty(model.ChargeEmpname))
                     {
-                        sql += " and a.charge_empname =@ChargeEmpname ";
+                        model.queryCharge = model.ChargeEmpname.Split(',');
+                        sql += " and a.charge_empname in @queryCharge ";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        model.queryStatus = model.Status.Split(',');
+                        sql += " and a.status in @queryStatus ";
                     }
                     //填表时间
-                    if (model.startDate != null)
+                    if (model.queryYear != null && model.queryMonths != null)
                     {
-                        sql += " and a.CreatTime >= @startDate ";
+                        string[] monthsString = model.queryMonths.Split(',');
+                        List<string> queryDate = new List<string>();
+                        foreach (var item in monthsString)
+                        {
+                            queryDate.Add(model.queryYear + item);
+                        }
+                        model.queryDates = queryDate.ToArray();
+                        sql += " and CONCAT(YEAR(a.CreatTime),MONTH(a.CreatTime)) in  @queryDates";
                     }
-                    if (model.endDate != null)
+                    if (model.queryYear != null && model.queryMonths == null)
                     {
-                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
-                        sql += " and a.CreatTime <=@endDate ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
@@ -1309,8 +1277,9 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@" select a.*,b.StatusText status,a.repair_id RepairId,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname  from [888_KsSouth].[dbo].[steprecord]  a
-											      LEFT JOIN [888_KsSouth].[dbo].[state]	b ON a.status = b.StatusValue	
+                    string sql = string.Format(@" select a.*,s.StatusText status,a.repair_id RepairId,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname  from [888_KsSouth].[dbo].[steprecord]  a
+											     LEFT JOIN [888_KsSouth].[dbo].[record]	b ON a.repair_id = b.repair_id	
+                                                  LEFT JOIN [888_KsSouth].[dbo].[state]	s ON a.status = s.StatusValue AND b.SystemCategory = s.SystemCategory	
                                                    WHERE a.repair_id= @RepairId ORDER BY a.sort asc");                   
                     
                     list = db.Query<StepRecordModel>(sql, new { RepairId }).ToList();
@@ -1386,25 +1355,33 @@ namespace _888repair.Controllers
                     {
                         sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
                     }
-                    //执行状态
-                    if (!string.IsNullOrEmpty(model.Status))
-                    {
-                        sql += " and a.Status =@Status ";
-                    }
                     //负责人
                     if (!string.IsNullOrEmpty(model.ChargeEmpname))
                     {
-                        sql += " and a.charge_empname =@ChargeEmpname ";
+                        model.queryCharge = model.ChargeEmpname.Split(',');
+                        sql += " and a.charge_empname in @queryCharge ";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        model.queryStatus = model.Status.Split(',');
+                        sql += " and a.status in @queryStatus ";
                     }
                     //填表时间
-                    if (model.startDate != null)
+                    if (model.queryYear != null && model.queryMonths != null)
                     {
-                        sql += " and a.CreatTime >= @startDate ";
+                        string[] monthsString = model.queryMonths.Split(',');
+                        List<string> queryDate = new List<string>();
+                        foreach (var item in monthsString)
+                        {
+                            queryDate.Add(model.queryYear + item);
+                        }
+                        model.queryDates = queryDate.ToArray();
+                        sql += " and CONCAT(YEAR(a.CreatTime),MONTH(a.CreatTime)) in  @queryDates";
                     }
-                    if (model.endDate != null)
+                    if (model.queryYear != null && model.queryMonths == null)
                     {
-                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
-                        sql += " and a.CreatTime <=@endDate ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
@@ -1511,7 +1488,7 @@ namespace _888repair.Controllers
                     }
                     if (model.queryYear != null && model.queryMonths == null)
                     {
-                        sql += " and YEAR(a.CreatTime) <=@queryYear ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
@@ -1592,7 +1569,7 @@ namespace _888repair.Controllers
                     }
                     if (model.queryYear != null && model.queryMonths == null)
                     {
-                        sql += " and YEAR(a.CreatTime) <=@queryYear ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
