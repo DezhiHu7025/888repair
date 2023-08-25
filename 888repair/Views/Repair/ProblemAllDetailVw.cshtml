@@ -33,103 +33,102 @@
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>问题列表维护</legend>
     </fieldset>
-    <br />
-    <hr />
-    <form class="layui-form" id="fillQuestion">
-        <table width="70%" align="center" border="2">
-            <tr height="30px">
-                <td align="right" width="35%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">请修编号：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="RepairId"></label> </td>
+    <form class="layui-form" id="fillQuestion" style="padding-left:2%">
+        <table width="60%" border="2">
+            <tr height="25px">
+                <td align="right" width="30%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">请修编号：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="RepairId"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">系统类别：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="SystemCategory"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">系统类别：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="SystemCategory"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">大楼别：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Building"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">大楼别：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="Building"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">位置：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Loaction"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">位置：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="Loaction"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">空间编号：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="RoomNum"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">空间编号：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="RoomNum"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">负责人：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="ChargeEmpname"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">负责人：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="ChargeEmpname"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">反应人：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="ResponseEmpname"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">反应人：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="ResponseEmpname"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">联络分机：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Telephone"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">联络分机：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="Telephone"></label> </td>
             </tr>
-            <tr height="100px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">维护时间：</label></td>
-                <td width="60%">
+            <tr height="80px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">维护时间：</label></td>
+                <td>
                     <div class="layui-input-inline">
-                        <textarea id="RepairTime" style="font-size:large;width:300%;height:80px" readonly />
+                        <textarea id="RepairTime" style="font-size:16px;width:290%;height:80px" readonly />
                     </div>
                 </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">类别：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="Category"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">类别：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="Category"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">损坏原因：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="DamageReason"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">损坏原因：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="DamageReason"></label> </td>
             </tr>
-            <tr height="30px" id="DamageText1" hidden="hidden">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">班级/单位：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="DamageClass"></label> </td>
+            <tr height="25px" id="DamageText1" hidden="hidden">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">班级/单位：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="DamageClass"></label> </td>
             </tr>
-            <tr height="30px" id="DamageText2" hidden="hidden">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">姓名：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="DamageName"></label> </td>
+            <tr height="25px" id="DamageText2" hidden="hidden">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">姓名：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="DamageName"></label> </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">填表时间：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="CreatTime"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">填表时间：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="CreatTime"></label> </td>
             </tr>
-            <tr height="200px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">反应内容：</label></td>
-                <td width="60%">
+            <tr height="160px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">反应内容：</label></td>
+                <td>
                     <div class="layui-input-inline">
-                        <textarea id="ResponseContent" style="font-size:large;width:300%;height:170px" readonly />
+                        <textarea id="ResponseContent" style="font-size:16px;width:290%;height:160px" readonly />
                     </div>
                     <div id="imgId">
                     </div>
                 </td>
             </tr>
-            <tr height="200px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:purple;">过去回应内容：</label></td>
-                <td width="60%">
+            <tr height="160px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">过去回应内容：</label></td>
+                <td>
                     <div class="layui-input-inline">
-                        <textarea id="ReplyContent" style="font-size:large;width:300%;height:170px" readonly />
+                        <textarea id="ReplyContent" style="font-size:16px;width:290%;height:170px" readonly />
                     </div>
                     <div id="imgId2">
                     </div>
                 </td>
             </tr>
-            <tr height="200px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="color:red">*</label>&nbsp;&nbsp;<label style="font-size:large;color:orangered;">新增回应内容：</label></td>
-                <td width="60%">
+            <tr height="160px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="color:red">*</label>&nbsp;&nbsp;<label style="font-size:16px;color:orangered;">新增回应内容：</label></td>
+                <td>
                     <div class="layui-input-inline">
-                        <textarea id="NewReplyContent" style="font-size:large;width:300%;height:170px" lay-verify="required" />
+                        <textarea id="NewReplyContent" style="font-size:16px;width:290%;height:170px" lay-verify="required" />
                     </div>
                 </td>
             </tr>
             <tr>
-                <td align="right" width="40%" style="background-color:lightgrey">
-                    <label style="color:red">*</label>&nbsp;&nbsp;<label style="font-size:large;color:orangered;">执行状态：</label>
+                <td align="right" width="20%" style="background-color:#f9f6f6">
+                    <label style="color:red">*</label>&nbsp;&nbsp;<label style="font-size:16px;color:orangered;">执行状态：</label>
+
                 </td>
-                <td width="60%">
+                <td>
                     <br />
                     <div class="layui-form layui-form-pane" style="margin-left:20px">
                         <div class="layui-input-inline">
@@ -137,6 +136,12 @@
                                 <option value=""></option>
                             </select>
                         </div>
+                    </div>
+                    <br />
+                    <div id="btngroup" hidden="hidden">
+                        <button type="button" id="TransferProblem" class="layui-btn layui-btn-primary layui-border-green" style="margin-left:20px">转派任务</button>
+                        <button type="button" id="RejectTask" class="layui-btn layui-btn-primary layui-border-green" style="margin-left:20px">驳回任务</button>
+                        <button type="button" id="RejectEnd" class="layui-btn layui-btn-primary layui-border-green" style="margin-left:20px">驳回至使用者</button>
                     </div>
                     <br />
                     <div class="layui-form-item" id="replyPic" hidden="hidden">
@@ -177,14 +182,14 @@
                     </div>
                 </td>
             </tr>
-            <tr height="30px">
-                <td align="right" width="40%" style="background-color:lightgrey"><label style="font-size:large;color:orangered;">完单时间：</label></td>
-                <td width="60%"> <label style="font-size:large;margin-left:20px" id="FinishTime"></label> </td>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:orangered;">完单时间：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="FinishTime"></label> </td>
             </tr>
         </table>
         <br /><br />
         <div class="layui-form-item">
-            <div class="layui-input-block" style="margin-left:45%">
+            <div class="layui-input-block" style="margin-left:25%">
                 <button class="layui-btn" id="btn_submit" lay-submit lay-filter="demo1">送出</button>
                 <button type="button" id="btn_back" class="layui-btn">返回</button>
             </div>
@@ -371,7 +376,7 @@
             $("#OpStatus").empty();
             var SystemCategory = localStorage.getItem("SystemCategory");
             if (SystemCategory == null || SystemCategory == "") {
-                loadOption();
+                layer.alert('请求失败,刷新重试');
             } else {
                 $.ajax({
                     type: "post",
@@ -399,7 +404,7 @@
             $("#OpEmpNo").empty();
             var SystemCategory = localStorage.getItem("SystemCategory");
             if (SystemCategory == null || SystemCategory == "") {
-                loadOption();
+                layer.alert('请求失败,刷新重试');
             } else {
                 $.ajax({
                     type: "post",

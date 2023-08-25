@@ -1365,25 +1365,33 @@ namespace _888repair.Controllers
                     {
                         sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
                     }
-                    //执行状态
-                    if (!string.IsNullOrEmpty(model.Status))
-                    {
-                        sql += " and a.Status =@Status ";
-                    }
                     //负责人
                     if (!string.IsNullOrEmpty(model.ChargeEmpname))
                     {
-                        sql += " and a.charge_empname =@ChargeEmpname ";
+                        model.queryCharge = model.ChargeEmpname.Split(',');
+                        sql += " and a.charge_empname in @queryCharge ";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        model.queryStatus = model.Status.Split(',');
+                        sql += " and a.status in @queryStatus ";
                     }
                     //填表时间
-                    if (model.startDate != null)
+                    if (model.queryYear != null && model.queryMonths != null)
                     {
-                        sql += " and a.CreatTime >= @startDate ";
+                        string[] monthsString = model.queryMonths.Split(',');
+                        List<string> queryDate = new List<string>();
+                        foreach (var item in monthsString)
+                        {
+                            queryDate.Add(model.queryYear + item);
+                        }
+                        model.queryDates = queryDate.ToArray();
+                        sql += " and CONCAT(YEAR(a.CreatTime),MONTH(a.CreatTime)) in  @queryDates";
                     }
-                    if (model.endDate != null)
+                    if (model.queryYear != null && model.queryMonths == null)
                     {
-                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
-                        sql += " and a.CreatTime <=@endDate ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
