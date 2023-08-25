@@ -1050,25 +1050,33 @@ namespace _888repair.Controllers
                     {
                         sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
                     }
-                    //执行状态
-                    if (!string.IsNullOrEmpty(model.Status))
-                    {
-                        sql += " and a.Status =@Status ";
-                    }
                     //负责人
                     if (!string.IsNullOrEmpty(model.ChargeEmpname))
                     {
-                        sql += " and a.charge_empname =@ChargeEmpname ";
+                        model.queryCharge = model.ChargeEmpname.Split(',');
+                        sql += " and a.charge_empname in @queryCharge ";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        model.queryStatus = model.Status.Split(',');
+                        sql += " and a.status in @queryStatus ";
                     }
                     //填表时间
-                    if (model.startDate != null)
+                    if (model.queryYear != null && model.queryMonths != null)
                     {
-                        sql += " and a.CreatTime >= @startDate ";
+                        string[] monthsString = model.queryMonths.Split(',');
+                        List<string> queryDate = new List<string>();
+                        foreach (var item in monthsString)
+                        {
+                            queryDate.Add(model.queryYear + item);
+                        }
+                        model.queryDates = queryDate.ToArray();
+                        sql += " and CONCAT(YEAR(a.CreatTime),MONTH(a.CreatTime)) in  @queryDates";
                     }
-                    if (model.endDate != null)
+                    if (model.queryYear != null && model.queryMonths == null)
                     {
-                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
-                        sql += " and a.CreatTime <=@endDate ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
@@ -1154,25 +1162,33 @@ namespace _888repair.Controllers
                     {
                         sql += " and a.ResponseContent like '%" + model.ResponseContent + "%'";
                     }
-                    //执行状态
-                    if (!string.IsNullOrEmpty(model.Status))
-                    {
-                        sql += " and a.Status =@Status ";
-                    }
                     //负责人
                     if (!string.IsNullOrEmpty(model.ChargeEmpname))
                     {
-                        sql += " and a.charge_empname =@ChargeEmpname ";
+                        model.queryCharge = model.ChargeEmpname.Split(',');
+                        sql += " and a.charge_empname in @queryCharge ";
+                    }
+                    //执行状态
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        model.queryStatus = model.Status.Split(',');
+                        sql += " and a.status in @queryStatus ";
                     }
                     //填表时间
-                    if (model.startDate != null)
+                    if (model.queryYear != null && model.queryMonths != null)
                     {
-                        sql += " and a.CreatTime >= @startDate ";
+                        string[] monthsString = model.queryMonths.Split(',');
+                        List<string> queryDate = new List<string>();
+                        foreach (var item in monthsString)
+                        {
+                            queryDate.Add(model.queryYear + item);
+                        }
+                        model.queryDates = queryDate.ToArray();
+                        sql += " and CONCAT(YEAR(a.CreatTime),MONTH(a.CreatTime)) in  @queryDates";
                     }
-                    if (model.endDate != null)
+                    if (model.queryYear != null && model.queryMonths == null)
                     {
-                        model.endDate = Convert.ToDateTime(model.endDate).AddDays(1);
-                        sql += " and a.CreatTime <=@endDate ";
+                        sql += " and YEAR(a.CreatTime) =@queryYear ";
                     }
                     var group = Session["GroupName"] == null ? Session["OPGroup"].ToString() : Session["GroupName"].ToString();
                     if (!string.IsNullOrEmpty(group))
@@ -1189,7 +1205,7 @@ namespace _888repair.Controllers
                                 break;
                         }
                     }
-                    sql += " ORDER BY repair_id desc";
+                    sql += " ORDER BY a.CreatTime asc";
 
                     list = db.Query<RepairRecordModel>(sql, model).ToList();
                 }
@@ -1233,17 +1249,19 @@ namespace _888repair.Controllers
 
                 for (int i = 0; i < dt.Count; i++)//遍历DataTable行
                 {
-                    sheet.Cells[i + 1, 0].PutValue(dt[i].RepairId);
-                    sheet.Cells[i + 1, 1].PutValue(dt[i].SystemCategory);
-                    sheet.Cells[i + 1, 2].PutValue(dt[i].Building);
-                    sheet.Cells[i + 1, 3].PutValue(dt[i].Loaction);
-                    sheet.Cells[i + 1, 4].PutValue(dt[i].Category);
-                    sheet.Cells[i + 1, 5].PutValue(dt[i].ResponseEmpname);
-                    sheet.Cells[i + 1, 6].PutValue(dt[i].ChargeEmpname);
-                    sheet.Cells[i + 1, 7].PutValue(dt[i].ResponseContent);
-                    sheet.Cells[i + 1, 8].PutValue(dt[i].Status);
-                    sheet.Cells[i + 1, 9].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());
-                    sheet.Cells[i + 1, 10].PutValue(dt[i].FinishTime.ToString() == "0001/01/01" ? "" : dt[i].FinishTime.ToString());
+                    sheet.Cells[i + 1, 0].PutValue(dt[i].RepairId);//请修编号
+                    sheet.Cells[i + 1, 1].PutValue(dt[i].SystemCategory);//系统类别
+                    sheet.Cells[i + 1, 2].PutValue(dt[i].Building);//大楼别
+                    sheet.Cells[i + 1, 3].PutValue(dt[i].Loaction);//位置
+                    sheet.Cells[i + 1, 4].PutValue(dt[i].RoomNum);//空间编号
+                    sheet.Cells[i + 1, 5].PutValue(dt[i].ChargeEmpname);//负责人姓名
+                    sheet.Cells[i + 1, 6].PutValue(dt[i].ResponseEmpname);//反应人姓名
+                    sheet.Cells[i + 1, 7].PutValue(dt[i].Telephone);//分机号码
+                    sheet.Cells[i + 1, 8].PutValue(dt[i].RepairTime);//维护时间
+                    sheet.Cells[i + 1, 9].PutValue(dt[i].CreatTime.ToString() == "0001/01/01" ? "" : dt[i].CreatTime.ToString());//填表时间
+
+                    sheet.Cells[i + 1, 10].PutValue(dt[i].ResponseContent);//反应内容
+                    sheet.Cells[i + 1, 11].PutValue(dt[i].Status);//执行状态
                 }
                 MemoryStream bookStream = new MemoryStream();//创建文件流
                 wb.Save(bookStream, new OoxmlSaveOptions(SaveFormat.Xlsx)); //文件写入流（向流中写入字节序列）
@@ -1268,8 +1286,11 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@" select a.*,a.repair_id RepairId,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname  from [888_KsNorth].[dbo].[steprecord]  a
-											       WHERE a.repair_id= @RepairId ORDER BY a.sort asc");
+                    string sql = string.Format(@" select a.*,s.StatusText status,a.repair_id RepairId,a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname  from [888_KsNorth].[dbo].[steprecord]  a
+											        LEFT JOIN [888_KsNorth].[dbo].[record]	b ON a.repair_id = b.repair_id	
+                                                  LEFT JOIN [888_KsNorth].[dbo].[state]	s ON a.status = s.StatusValue AND b.SystemCategory = s.SystemCategory	
+                                                   WHERE a.repair_id= @RepairId ORDER BY a.sort asc");
+
 
                     list = db.Query<StepRecordModel>(sql, new { RepairId }).ToList();
                 }
