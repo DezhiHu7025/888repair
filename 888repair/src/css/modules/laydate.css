@@ -136,7 +136,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-day-mark::after{background-color: #5FB878;}
 .layui-laydate-content td.layui-this .laydate-day-mark::after{display: none;}
 .layui-laydate-footer span[lay-type="date"]{color: #5FB878;}
-.layui-laydate .layui-this,.layui-laydate .layui-this>div{background-color: #009688 !important; color: #fff !important;}
+.layui-laydate .layui-this,.layui-laydate .layui-this>div{background-color: #cc6699 !important; color: #fff !important;}
 .layui-laydate .laydate-disabled,
 .layui-laydate .laydate-disabled:hover{background:none !important; color: #d2d2d2 !important; cursor: not-allowed !important; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
 .layui-laydate-content td>div{padding: 7px 0;height: 100%;}
@@ -145,7 +145,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-theme-molv{border: none;}
 .laydate-theme-molv.layui-laydate-range{width: 548px}
 .laydate-theme-molv .layui-laydate-main{width: 274px;}
-.laydate-theme-molv .layui-laydate-header{border: none; background-color: #009688;}
+.laydate-theme-molv .layui-laydate-header{border: none; background-color: #cc6699;}
 .laydate-theme-molv .layui-laydate-header i,
 .laydate-theme-molv .layui-laydate-header span{color: #f6f6f6;}
 .laydate-theme-molv .layui-laydate-header i:hover,
