@@ -55,6 +55,8 @@
                     <li><a>&nbsp;</a></li>
                     <li id="replyProblem" class="layui-nav-item current" data-id="replyProblem"><a class="layui-nav-item ">回复问题</a></li>
                     <li id="listProblem" class="layui-nav-item current" data-id="listProblem"><a class="layui-nav-item ">问题列表</a></li>
+                    <li id="listProblemPC" class="layui-nav-item current" data-id="listProblemPC"><a class="layui-nav-item ">问题列表个人</a></li>
+
                     <li><a>&nbsp;</a></li>
                     <li id="ProblemRepair" class="layui-nav-item current" data-id="ProblemRepair"><a class="layui-nav-item ">问题列表维护</a></li>
                     <li id="areaMatch" class="layui-nav-item" data-id="areaMatch"><a class="layui-nav-item ">辖区配对维护</a></li>
@@ -145,6 +147,7 @@
         $('#listProblem').hide();
         $('#replyProblem').hide();
         $('#ProblemRepair').hide();
+        $('#listProblemPC').hide();
         
         var logusername = '@(Session["fullname"])';
         var logempno = '@(Session["EmpNo"])';
@@ -178,6 +181,7 @@
 
         if (logviewer == "1") {
             $('#listProblem').show();
+            $('#listProblemPC').show();
         }
 
         if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
@@ -201,6 +205,7 @@
                     {
                         $('#replyProblem').show();
                         $('#listProblem').show();
+                        $('#listProblemPC').show();
                     }
                 }
                 else {
@@ -234,7 +239,7 @@
                 sId = "#" + dd1;
                 var newId = sId.substring(0, 9);
                 var repairID = null;
-                if (newId == "#RPDetail" || newId == "#PPDetail" || newId == "#APDetail") {
+                if (newId == "#RPDetail" || newId == "#PPDetail" || newId == "#APDetail" || newId == "PCDetail") {
                     var ss = sId.split('-');
                     repairID = ss[1];
                     sId = newId;
@@ -289,6 +294,10 @@
                     break; 
                 case "#listProblem":
                     pathn = "@(Url.Action("ProblemListIndex", "Repair"))",
+                        i = 0;
+                    break; 
+                  case "#listProblemPC":
+                    pathn = "@(Url.Action("ProblemListPCIndex", "Repair"))",
                         i = 0;
                     break; 
                 case "#ProblemRepair":

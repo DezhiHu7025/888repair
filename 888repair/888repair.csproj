@@ -254,6 +254,8 @@
     <Content Include="Views\Repair\RPMobileIndex.cshtml" />
     <Content Include="Views\Repair\RepairDetailMobileVw.cshtml" />
     <Content Include="Views\Count\CountIndex.cshtml" />
+    <Content Include="Views\Repair\ProblemListPCIndex.cshtml" />
+    <Content Include="Views\Repair\ReplyRepairPCDetailVw.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

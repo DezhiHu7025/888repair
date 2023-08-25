@@ -1,0 +1,867 @@
+﻿
+@{
+    ViewBag.Title = "ReplyRepairPCDetailVw";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>问题列表个人</title>
+    <style>
+        body {
+            padding: 32px; /*overflow-y: scroll;*/
+        }
+
+        .layui-select-disabled .layui-disabled {
+            color: #000000 !important;
+        }
+
+        .layui-form-select dl {
+            max-height: 1000%;
+            max-width: 60%;
+        }
+
+            .layui-form-select dl dd, .layui-form-select dl dt {
+                white-space: pre-wrap;
+                overflow: visible;
+                text-overflow: ellipsis;
+            }
+    </style>
+</head>
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>问题列表个人</legend>
+    </fieldset>
+    <form class="layui-form" id="fillQuestion" style="padding-left:2%">
+        <table width="60%"  border="2">
+            <tr height="25px">
+                <td align="right" width="30%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">请修编号：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="RepairId"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">系统类别：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="SystemCategory"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">大楼别：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="Building"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">位置：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="Loaction"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">空间编号：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="RoomNum"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">负责人：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="ChargeEmpname"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">反应人：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="ResponseEmpname"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">联络分机：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="Telephone"></label> </td>
+            </tr>
+            <tr height="80px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">维护时间：</label></td>
+                <td>
+                    <div class="layui-input-inline">
+                        <textarea id="RepairTime" style="font-size:16px;width:290%;height:80px" readonly />
+                    </div>
+                </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">类别：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="Category"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">损坏原因：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="DamageReason"></label> </td>
+            </tr>
+            <tr height="25px" id="DamageText1" hidden="hidden">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">班级/单位：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="DamageClass"></label> </td>
+            </tr>
+            <tr height="25px" id="DamageText2" hidden="hidden">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">姓名：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="DamageName"></label> </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">填表时间：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="CreatTime"></label> </td>
+            </tr>
+            <tr height="160px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">反应内容：</label></td>
+                <td>
+                    <div class="layui-input-inline">
+                        <textarea id="ResponseContent" style="font-size:16px;width:290%;height:160px" readonly />
+                    </div>
+                    <div id="imgId">
+                    </div>
+                </td>
+            </tr>
+            <tr height="160px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:purple;">过去回应内容：</label></td>
+                <td>
+                    <div class="layui-input-inline">
+                        <textarea id="ReplyContent" style="font-size:16px;width:290%;height:170px" readonly />
+                    </div>
+                    <div id="imgId2">
+                    </div>
+                </td>
+            </tr>
+            <tr height="160px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="color:red">*</label>&nbsp;&nbsp;<label style="font-size:16px;color:orangered;">新增回应内容：</label></td>
+                <td>
+                    <div class="layui-input-inline">
+                        <textarea id="NewReplyContent" style="font-size:16px;width:290%;height:170px" lay-verify="required" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" width="20%" style="background-color:#f9f6f6">
+                    <label style="color:red">*</label>&nbsp;&nbsp;<label style="font-size:16px;color:orangered;">执行状态：</label>
+                    
+                </td>
+                <td>
+                    <br />
+                    <div class="layui-form layui-form-pane" style="margin-left:20px">
+                        <div class="layui-input-inline">
+                            <select ID="OpStatus" name="OpStatus" lay-verify="required" lay-filter="OpStatus">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="btngroup" hidden="hidden">
+                        <button type="button" id="TransferProblem" class="layui-btn layui-btn-primary layui-border-green" style="margin-left:20px">转派任务</button>
+                        <button type="button" id="RejectTask" class="layui-btn layui-btn-primary layui-border-green" style="margin-left:20px">驳回任务</button>
+                        <button type="button" id="RejectEnd" class="layui-btn layui-btn-primary layui-border-green" style="margin-left:20px">驳回至使用者</button>
+                    </div>
+                    <br />
+                    <div class="layui-form-item" id="replyPic" hidden="hidden">
+                        <div class="layui-input-inline" style="width:100%">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn" id="testList">选择多文件</button>
+                                <div class="layui-upload-list" style="max-width: 1000px;">
+                                    <table class="layui-table">
+                                        <colgroup>
+                                            <col>
+                                            <col width="150">
+                                            <col width="150">
+                                            <col width="150">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th field="fileName">文件名</th>
+                                                <th>预览图</th>
+                                                <th>大小</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="demoList"></tbody>
+                                    </table>
+                                </div>
+                                <div id="buttonDiv" hidden="hidden">
+                                    <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <label style="color:red">
+                                Do not upload photos with the same name, or they will be overwritten,The file name should not be too long
+                                <br />
+                                ※上传照片请勿有相同名称，不然会覆盖之前的上传照片,文件名不宜过长
+                            </label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr height="25px">
+                <td align="right" width="20%" style="background-color:#f9f6f6"><label style="font-size:16px;color:orangered;">完单时间：</label></td>
+                <td> <label style="font-size:16px;margin-left:20px" id="FinishTime"></label> </td>
+            </tr>
+        </table>
+        <br /><br />
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="margin-left:25%">
+                <button class="layui-btn" id="btn_submit" lay-submit lay-filter="demo1">送出</button>
+                <button type="button" id="btn_back" class="layui-btn">返回</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+    </div>
+</body>
+
+<div class="layui-form" style="display:none" id="transferWindow">
+    <br /><br />
+    <form class="layui-form-item">
+         <div class="layui-inline">
+            <label class="layui-form-label">转派人&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline" style="width:300px">
+                <select ID="OpEmpNo" name="OpEmpNo" lay-verify="required"  lay-search="">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <br /> <br />
+        <div class="layui-inline">
+            <label class="layui-form-label">转派意见&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline">
+                <textarea type="text" name="opinion" id="opinion" autocomplete="off" class="layui-input" style="height:100px;width:530px" lay-verify="required"/>
+            </div>
+        </div>
+        <button class="layui-layer-btn0" id="btn_transfer" style="display:none" lay-submit lay-filter="demo2"></button>
+    </form>
+</div>
+
+<div class="layui-form" style="display:none" id="rejecttaskWindow">
+    <br /><br />
+    <form class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">驳回意见&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline">
+                <textarea type="text" name="opiniontask" id="opiniontask" autocomplete="off" class="layui-input" style="height:100px;width:530px" lay-verify="required" />
+            </div>
+        </div>
+        <button class="layui-layer-btn0" id="btn_rejecttask" style="display:none" lay-submit lay-filter="demo3"></button>
+    </form>
+</div>
+
+<div class="layui-form" style="display:none" id="rejectendWindow">
+    <br /><br />
+    <form class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">驳回意见&nbsp;&nbsp;<label style="color:red">*</label></label>
+            <div class="layui-input-inline">
+                <textarea type="text" name="opinionend" id="opinionend" autocomplete="off" class="layui-input" style="height:100px;width:530px" lay-verify="required" />
+            </div>
+        </div>
+        <button class="layui-layer-btn0" id="btn_rejectend" style="display:none" lay-submit lay-filter="demo4"></button>
+    </form>
+</div>
+<script>
+    
+
+    layui.use(['table', 'upload', 'dropdown', 'form'], function () {
+        var $ = layui.$;
+        var table = layui.table;
+        var form = layui.form;
+        var layer = layui.layer;
+        var upload = layui.upload;
+
+        
+        var newURL = '@(Session["URL"])';
+        var dd = newURL.split('?');
+        var dd1 = dd[1];
+        queryDetailVw(dd1);
+
+        function queryDetailVw(RepairId) {
+        var loading = layer.msg('页面加载中......');
+         $.ajax({
+             url: "@(Url.Action("getRepairDetail", "Repair"))",   // 要提交的URL路径
+             type: "post",    // 发送请求的方式
+             data: { RepairId: RepairId },
+             dataType: "JSON",     // 指定传输的数据格式
+             success: function (res) {
+                 localStorage.clear();
+                 $("#RepairId").html(res.RepairId);
+                 $("#ResponseContent").html(res.ResponseContent == "null" ? '' : res.ResponseContent);
+                 $("#SystemCategory").html(res.SystemCategory);
+                 $("#Building").html(res.Building);
+                 $("#Loaction").html(res.Loaction);
+                 $("#ChargeEmpname").html(res.ChargeEmpname);
+                 $("#RoomNum").html(res.RoomNum);
+                 $("#ResponseEmpname").html(res.ResponseEmpname);
+                 $("#Telephone").html(res.Telephone);
+                 $("#RepairTime").html(res.RepairTime == "null" ? '' : res.RepairTime);
+                 $("#Category").html(res.Category);
+                 $("#DamageReason").html(res.DamageReason);
+                 $("#DamageClass").html(res.DamageClass);
+                 $("#DamageName").html(res.DamageName);
+                 $("#CreatTime").html(formatDate(res.CreatTime, 'yyyy-MM-dd HH:mm:ss'));
+                 $("#ReplyContent").html(res.ReplyContent == "null" ? '' : res.ReplyContent);
+                 $("#FinishTime").html(res.FinishTime == "null" ? '' : formatDate(res.FinishTime, 'yyyy-MM-dd HH:mm:ss'));
+                 //  console.log(localStorage);
+
+                 localStorage.setItem("RepairId", res.RepairId);
+                 localStorage.setItem("ChargeEmpname", res.ChargeEmpname);
+                 localStorage.setItem("ChargeEmpno", res.ChargeEmpno);
+                 localStorage.setItem("Status", res.Status);
+                 localStorage.setItem("ResponseEmpname", res.ResponseEmpname);
+
+                 if (res.Status == "complete" || res.Status == "rejectend") {
+                     $('#OpStatus').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#TransferProblem').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#RejectTask').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#RejectEnd').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#btn_submit').addClass("layui-disabled").attr("disabled", "disabled");
+                     $('#NewReplyContent').addClass("layui-disabled").attr("readonly", "readonly");
+                 } else {
+                     $('#OpStatus').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#TransferProblem').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#RejectTask').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#RejectEnd').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#btn_submit').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                     $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+                 }
+
+                 //隐藏div
+                 $("#DamageText1").hide();
+                 $("#DamageText2").hide();
+
+                 if (res.DamageReason == "natural cause(自然)") {
+                     $("#DamageText1").hide();
+                     $("#DamageTex2").hide();
+                 } else {
+                     $("#DamageText1").show();
+                     $("#DamageText2").show();
+                 }
+
+                 //当前用户为负责人 则显示按钮组
+                 var logusername = '@(Session["fullname"])';
+                 if (logusername == res.ChargeEmpname) {
+                     $("#btngroup").show();
+                 } else
+                 {
+                     $("#btngroup").hide();
+                 }
+        
+
+                 loadImg(res.PhotoPath, res.ReplyPhoto);
+                 loadOption(res.SystemCategory, res.Status, res.ChargeEmpname);
+
+                 layer.close(loading);
+             },
+             error: function () {
+                 console.log("失败");
+                 alert(res.Msg);
+             }
+
+         });
+     }
+
+    function loadImg(PhotoPath, ReplyPhoto) {
+        //遍历图片 PhotoPath
+        if (PhotoPath != null && PhotoPath != '' && PhotoPath != 'null') {
+            //  var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
+            var PhotoPathS = PhotoPath;
+            PhotoPathS = PhotoPathS.substring(0, PhotoPathS.length - 1);
+            var files = PhotoPathS.split(";");
+            var imgId = document.getElementById("imgId");
+           // var url = root;
+            for (var i = 0; i < files.length; i++) {
+                var name = files[i];
+                var img = document.createElement("img");
+                img.style = "width:120px;height:120px;";
+                img.className = "imgview";
+                img.src = "../" + name;
+                imgId.appendChild(img);
+            }
+        }
+
+        if (ReplyPhoto != null && ReplyPhoto != '' && ReplyPhoto != 'null') {
+            // var root = window.location.pathname == "/" ? '' : window.location.pathname;//兼容本地测试
+            var ReplyPhotoS = ReplyPhoto;
+            ReplyPhotoS = ReplyPhotoS.substring(0, ReplyPhotoS.length - 1);
+            var files2 = ReplyPhotoS.split(";");
+            var imgId2 = document.getElementById("imgId2");
+            // var url = root;
+            for (var i = 0; i < files2.length; i++) {
+                var name2 = files2[i];
+                var img2 = document.createElement("img");
+                img2.style = "width:120px;height:120px;";
+                img2.className = "imgview";
+                img2.src = "../" + name2;
+                imgId2.appendChild(img2);
+            }
+        }
+    }
+
+        var datetime = layui.util.toDateString(new Date().getTime(), "yyyyMMddHHmmss");
+        var empno = '@(Session["EmpNo"])';
+
+        
+        $("body").on("click", ".imgview", function (e) {
+            layer.photos({ photos: { "data": [{ "src": e.target.src }] } });
+        });
+
+        function loadOption(SystemCategory, Status, ChargeEmpname) {  
+            $("#OpStatus").empty();
+            if (SystemCategory == null || SystemCategory == "") {
+                alert("执行状态请求异常");
+            } else {
+                $.ajax({
+                    type: "post",
+                     url: "@(Url.Action("getStatus", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpStatus').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++)
+                        {
+                            if (result[i].StatusValue == "rejectend") {
+                                $("#OpStatus").append(`<option value="${result[i].StatusValue}" disabled="">${result[i].StatusText}</option>`);
+                            } else {
+                                $("#OpStatus").append(`<option value="${result[i].StatusValue}">${result[i].StatusText}</option>`);
+                            }
+                        }
+                        $('select[name=OpStatus]').val(Status);
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+
+            $("#OpEmpNo").empty();
+            if (SystemCategory == null || SystemCategory == "") {
+                alert("请求异常");
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "@(Url.Action("getChargePersonBySystemCategory", "DDL"))",
+                    data: { "keyWord": SystemCategory },
+                    dataType: "json",
+                    success: function (result) {
+                        $('#OpEmpNo').append(new Option());
+                        for (let i = 0, len = result.length; i < len; i++)
+                        {
+                            if (result[i].FullName == ChargeEmpname) {
+                                $("#OpEmpNo").append(`<option value="${result[i].EmpNo}" disabled="">${result[i].FullName}</option>`);
+                            } else {
+                                $("#OpEmpNo").append(`<option value="${result[i].EmpNo}">${result[i].FullName}</option>`);
+                            }
+                        }
+                        form.render();
+                    }, error: function () {
+                        layer.alert('请求失败');
+                    }
+                });
+            }
+        }
+
+
+        
+
+        //隐藏上传完修图片的div
+        form.on('select(OpStatus)', function (data) {
+            var status = data.value;
+            if (status == "complete") {
+                $("#replyPic").show();
+            } else {
+                $("#replyPic").hide();
+            }
+        })
+        
+        //if (localStorage.getItem("Status") == "complete" || localStorage.getItem("Status") == "rejectend" ) {
+        //    $('#OpStatus').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#TransferProblem').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#RejectTask').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#RejectEnd').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#btn_submit').addClass("layui-disabled").attr("disabled", "disabled");
+        //    $('#NewReplyContent').addClass("layui-disabled").attr("readonly", "readonly");
+        //} else {
+        //    $('#OpStatus').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#TransferProblem').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#RejectTask').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#RejectEnd').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#btn_submit').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //    $('#NewReplyContent').removeClass("layui-disabled").removeAttr("disabled", "disabled");
+        //}
+        
+        
+        form.on('submit(demo1)', function () {
+            var filesUpload = $("#buttonDiv");
+            var filesUploadBtn = filesUpload.find('button')[0];
+            filesUploadBtn.click();
+
+            var data = form.val('example');
+            var filesUploadDemo = $("#demoList");
+            var fileNames = '';
+            if (filesUploadDemo != null && filesUploadDemo != undefined) {
+                var str = filesUploadDemo[0].innerText;
+                if (str != null && str != '') {
+                    var files = str.split("\n");
+                    for (var i = 0; i < files.length; i++) {
+                        var names = files[i].split("\t");
+                        var fileName = names[0];
+                        fileNames += fileName + ";";
+                    }
+                }
+            }
+            var model = {
+                "NewReplyContent": $("#NewReplyContent").val(),
+                "ReplyContent": $("#ReplyContent").val(),
+                "Status": $("#OpStatus").val(),
+                "RepairId": localStorage.getItem("RepairId"),
+                "ChargeEmpname": localStorage.getItem("ChargeEmpname"),
+                "ChargeEmpno": localStorage.getItem("ChargeEmpno"),
+                "ReplyPhoto": fileNames,
+            };
+            if ($("#OpStatus").val() == localStorage.getItem("Status"))
+            {
+                layer.open({
+                    title: "确认状态",
+                    type: 0,
+                    btn: ["确定", "取消"],
+                    area: ['320px', '200px'],
+                    content: '<div>状态未做出更改，是否确定送出？</div>',
+                    btn1: function () {
+                        layer.closeAll();
+                        $.ajax({
+                            type: 'post',
+                            url: "@(Url.Action("ReplyProblemSave", "Repair"))",
+                            data: JSON.stringify(model),
+                            async: false,
+                            dataType: "json",
+                            processData: false,
+                            contentType: 'application/json',
+                            beforeSend: function () {
+                                $('#btn1').addClass("layui-btn-disabled").attr("disabled", true);
+                            },
+                            success: function (result) {
+                                if (result.IsSuccess) {
+                                    alert("送出成功");
+                                    var url = "@(Url.Action("ReplyRepairIndex", "Repair"))";
+                                    $("#content").load(url);
+                                }
+                                else {
+                                    alert(result.Msg);
+                                }
+                            }
+                        });
+                    },
+                    btn2: function () {
+                        layer.closeAll();
+                    }
+                })
+            } else{
+                $.ajax({
+                type: 'post',
+                url: "@(Url.Action("ReplyProblemSave", "Repair"))",
+                data: JSON.stringify(model),
+                async: false,
+                dataType: "json",
+                processData: false,
+                contentType: 'application/json',
+                beforeSend: function () {
+                    $('#btn_submit').addClass("layui-btn-disabled").attr("disabled", true);
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        alert("送出成功");
+                         var url = "@(Url.Action("ReplyRepairIndex", "Repair"))";
+                        $("#content").load(url);
+                    }
+                    else {
+                        alert(result.Msg);
+                    }
+                }
+
+                });
+            }
+
+            return false;
+        });
+
+        form.on('submit(demo2)', function () {
+            var model = {
+                "NewReplyContent": $("#opinion").val(),
+                "Status": $("#OpStatus").val(),
+                "RepairId": localStorage.getItem("RepairId"),
+                "ChargeEmpname": document.getElementById("OpEmpNo").options[document.getElementById("OpEmpNo").selectedIndex].text,
+                "ChargeEmpno": $("#OpEmpNo").val(),
+            };
+                $.ajax({
+                type: 'post',
+                url: "@(Url.Action("TransferProblem", "Repair"))",
+                data: JSON.stringify(model),
+                async: false,
+                dataType: "json",
+                processData: false,
+                contentType: 'application/json',
+                beforeSend: function () {
+                    $('#btn_submit').addClass("layui-btn-disabled").attr("disabled", true);
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        alert("转派成功");
+                         var url = "@(Url.Action("ReplyRepairIndex", "Repair"))";
+                        $("#content").load(url);
+                    }
+                    else {
+                        alert(result.Msg);
+                    }
+                }
+
+                });
+
+            return false;
+        });
+
+        form.on('submit(demo3)', function () {
+            var model = {
+                "NewReplyContent": $("#opiniontask").val(),
+                "Status": $("#OpStatus").val(),
+                "RepairId": localStorage.getItem("RepairId"),
+                "ChargeEmpno": localStorage.getItem("ChargeEmpno"),
+            };
+                $.ajax({
+                type: 'post',
+                url: "@(Url.Action("RejectTask", "Repair"))",
+                data: JSON.stringify(model),
+                async: false,
+                dataType: "json",
+                processData: false,
+                contentType: 'application/json',
+                beforeSend: function () {
+                    $('#btn_submit').addClass("layui-btn-disabled").attr("disabled", true);
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        alert("成功驳回任务");
+                         var url = "@(Url.Action("ReplyRepairIndex", "Repair"))";
+                        $("#content").load(url);
+                    }
+                    else {
+                        alert(result.Msg);
+                    }
+                }
+
+                });
+
+            return false;
+        });
+
+        form.on('submit(demo4)', function () {
+            var model = {
+                "NewReplyContent": $("#opinionend").val(),
+                "Status": $("#OpStatus").val(),
+                "RepairId": localStorage.getItem("RepairId"),
+                "ChargeEmpno": localStorage.getItem("ChargeEmpno"),
+                "ChargeEmpname": localStorage.getItem("ChargeEmpname"),
+                "ResponseEmpname": localStorage.getItem("ResponseEmpname"),
+            };
+                $.ajax({
+                type: 'post',
+                url: "@(Url.Action("RejectEnd", "Repair"))",
+                data: JSON.stringify(model),
+                async: false,
+                dataType: "json",
+                processData: false,
+                contentType: 'application/json',
+                beforeSend: function () {
+                    $('#btn_submit').addClass("layui-btn-disabled").attr("disabled", true);
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        alert("成功驳回至使用者");
+                         var url = "@(Url.Action("ReplyRepairIndex", "Repair"))";
+                        $("#content").load(url);
+                    }
+                    else {
+                        alert(result.Msg);
+                    }
+                }
+
+                });
+
+            return false;
+        });
+
+        function render() {
+            // 封装函数-表单更新渲染
+            layui.use('form', function () {
+                var form = layui.form;
+                form.render('select');
+            })
+        }
+
+        $('#TransferProblem').click(function () {
+            layer.open({
+                title: '转派任务',
+                area: ['40%', '35%'],
+                content: $("#transferWindow"),
+                shade: 0.0,
+                type: 1,
+                btn: ['确定', '重置'],
+                btn1: function (index, layero) {
+                    var formSubmit = $("#transferWindow");
+                    var submited = formSubmit.find('button')[0];
+                    submited.click();
+                },
+                btn2: function (index, layero) {
+                    $('select[name=OpEmpNo]').val("");
+                    $("#opinion").val("");
+                    render();
+                    return false;
+                    loadoption();
+                },
+                cancel: function (layero, index) {
+                    layer.closeAll();
+                }
+            });
+        });
+
+        $('#RejectTask').click(function () {
+            layer.open({
+                title: '驳回任务',
+                area: ['40%', '35%'],
+                content: $("#rejecttaskWindow"),
+                shade: 0.0,
+                type: 1,
+                btn: ['确定', '重置'],
+                btn1: function (index, layero) {
+                    var formSubmit = $("#rejecttaskWindow");
+                    var submited = formSubmit.find('button')[0];
+                    submited.click();
+                },
+                btn2: function (index, layero) {
+                    $("#opiniontask").val("");
+                    return false;
+                },
+                cancel: function (layero, index) {
+                    layer.closeAll();
+                }
+            });
+        });
+
+        $('#RejectEnd').click(function () {
+            layer.open({
+                title: '驳回至使用者',
+                area: ['40%', '35%'],
+                content: $("#rejectendWindow"),
+                shade: 0.0,
+                type: 1,
+                btn: ['确定', '重置'],
+                btn1: function (index, layero) {
+                    var formSubmit = $("#rejectendWindow");
+                    var submited = formSubmit.find('button')[0];
+                    submited.click();
+                },
+                btn2: function (index, layero) {
+                    $("#opinionend").val("");
+                    return false;
+                },
+                cancel: function (layero, index) {
+                    layer.closeAll();
+                }
+            });
+        });
+
+         //演示多文件列表
+        var uploadListIns = upload.render({
+            elem: '#testList'
+            , elemList: $('#demoList') //列表元素对象
+            , url: "@(Url.Action("ReplyPicUpload", "Repair"))"
+            , accept: 'file'
+            , exts: 'JPG|JPEG|PNG|GIF' //只允许上传压缩文件
+            , multiple: true
+           // , number: 3
+          //  , size: 1024 //限制文件大小，单位 KB
+            , auto: false
+            , bindAction: '#testListAction'
+            , choose: function (obj) {
+                var that = this;
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function (index, file, result) {
+                    
+                    var tr = $(['<tr id="upload-' + index + '">'
+                        , '<td>' + datetime + '_' + empno + "_" + file.name + '</td>'
+                       // , '<td>' + file.name + '</td>'
+                        , '<td>' + '<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">' + '</td>'
+                        , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
+                        , '<td>'
+                        , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                        , '</td>'
+                        , '</tr>'].join(''));
+
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function () {
+                        obj.upload(index, file);
+                    });
+
+                    //判断上传每个图片大小
+                    if (file.size > 1024 * 1024) {       
+                        delete files[index];             //过大删除指定图片    
+                        layer.msg('文件大小不得超过1M', { icon: 2, shift: 6 });
+                         var id = "upload-" + index;
+                        var tr = $("tr[id=" + id + "]");
+                        tr.remove();
+                    }
+
+                    var trMumber = $("#demoList").find("tr").length + 1;
+                    if (trMumber > 3) {
+                        delete files[index];      
+                        var id = "upload-" + index;
+                        var tr = $("tr[id=" + id + "]");
+                        tr.remove();
+                        layer.msg('文件个数不得超过3个', { icon: 2, shift: 6 });
+                    }
+
+                    //删除
+                    tr.find('.demo-delete').on('click', function () {
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    that.elemList.append(tr);
+                   // element.render('progress'); //渲染新加的进度条组件
+
+                });
+            }
+            , before: function (obj) {
+                this.data = { 'datestring': datetime };
+            }
+            , done: function (res, index, upload) { //成功的回调
+                var that = this;
+                var tr = that.elemList.find('tr#upload-' + index)
+                    , tds = tr.children();
+                tds.eq(3).html(''); //清空操作
+                delete this.files[index]; //删除文件队列已经上传成功的文件
+                return;
+                this.error(index, upload);
+            }
+            , allDone: function (obj) { //多文件上传完毕后的状态回调
+            }
+            , error: function (index, upload) { //错误回调
+                var that = this;
+                var tr = that.elemList.find('tr#upload-' + index)
+                    , tds = tr.children();
+                //tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+        $("#btn_back").on("click", function () {
+            var url = "@(Url.Action("ProblemListPCIndex", "Repair"))";
+            var sId2 = window.location.href;
+            var dd = sId2.split('?');
+            var dd1 = dd[0];
+            history.replaceState(null, null, dd1);
+            $("#content").load(url);
+        });
+    });
+</script>
+
