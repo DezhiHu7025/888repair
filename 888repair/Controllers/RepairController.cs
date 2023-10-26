@@ -543,7 +543,7 @@ namespace _888repair.Controllers
                     }
                     else
                     {
-                        sql += " and a.status != 'complete' ";
+                        sql += " and a.status not in ('complete','rejectend') ";
                     }
                     //填表时间
                     if (model.queryYear != null && model.queryMonths != null)
@@ -1488,7 +1488,7 @@ namespace _888repair.Controllers
                     }
                     else
                     {
-                        sql += " and a.status != 'complete' ";
+                        sql += " and a.status not in ('complete','rejectend') ";
                     }
                     //填表时间
                     if (model.queryYear != null && model.queryMonths != null)

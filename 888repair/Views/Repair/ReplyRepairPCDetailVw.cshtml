@@ -541,7 +541,7 @@
                             success: function (result) {
                                 if (result.IsSuccess) {
                                     alert("送出成功");
-                                    var url = "@(Url.Action("ReplyRepairIndex", "Repair"))";
+                                    var url = "@(Url.Action("ProblemListPCIndex", "Repair"))";
                                     $("#content").load(url);
                                 }
                                 else {
@@ -569,7 +569,7 @@
                 success: function (result) {
                     if (result.IsSuccess) {
                         alert("送出成功");
-                         var url = "@(Url.Action("ReplyRepairIndex", "Repair"))";
+                         var url = "@(Url.Action("ProblemListPCIndex", "Repair"))";
                         $("#content").load(url);
                     }
                     else {
