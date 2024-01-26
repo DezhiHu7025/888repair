@@ -80,7 +80,30 @@
         var form = layui.form;
         var laydate = layui.laydate;
         var download = layui.download;
+
+        //d读取缓存搜索条件以及页码
+        var currPage2 = sessionStorage.getItem('currPage2');//读取缓存的页码
+        var Status2 = sessionStorage.getItem('Status2');
+        var queryYear2 = sessionStorage.getItem('queryYear2');
+        var queryMonths2 = sessionStorage.getItem('queryMonths2');
+
+        sessionStorage.removeItem('currPage2');
+        sessionStorage.removeItem('Status2');
+        sessionStorage.removeItem('queryYear2');
+        sessionStorage.removeItem('queryMonths2');
         
+        if (Status2 != null && Status2 !='') {
+            var StatusString = Status2.split(',');
+        }
+        if (queryMonths2 != null && queryMonths2 != '') {
+            var queryMonthsString = queryMonths2.split(',');
+        }
+        if (queryYear2 == null || queryYear2 == '') {
+            queryYear2 = new Date().getFullYear();
+        }
+        if (currPage2 == null || currPage2 == '') {
+            currPage2 = "1";
+        }
         //墨绿主题
         laydate.render({
             elem: '#startDate'
@@ -106,9 +129,18 @@
             $("#OpSystemCategory").append(`<option value="Logistics(总务后勤类)">Logistics(总务后勤类)</option>`);
         }
 
+        var model2 = {
+            Status: Status2,
+            queryYear: queryYear2,
+            queryMonths: queryMonths2
+        }
+        sessionStorage.setItem('Status', model2.Status);
+        sessionStorage.setItem('queryYear', model2.queryYear);
+        sessionStorage.setItem('queryMonths', model2.queryMonths);
         $.ajax({
             url: "@(Url.Action("getReplyProblemList", "Repair"))",  // 要提交的URL路径
             type: "post",    // 发送请求的方式
+            data: model2,
             dataType: "JSON",     // 指定传输的数据格式
             beforeSend: function () {     //请求之前的方法
             },
@@ -128,12 +160,15 @@
                             id: "RersonalProblemTableID",
                             toolbar: '#user',
                             contentType: 'application/json', // 参数为 json 格式传递
-                            page: !0 || { //详细参数可参考 laypage 组件文档
-                                curr: 5,
-                                groups: 1,
-                                first: false,
-                                last: false,
-                                layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                            //page: !0 || { //详细参数可参考 laypage 组件文档
+                            //    curr: 5,
+                            //    groups: 1,
+                            //    first: false,
+                            //    last: false,
+                            //    layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                            //}
+                            page: {
+                                curr:currPage2
                             }
                             , height: 720
                             , cellMinWidth: 80
@@ -169,6 +204,11 @@
                                 //}
                             ]],
                             done: function () {
+                                let currPage = $(".layui-laypage-skip").find("input").val();
+                                if (currPage == null || currPage == '') {
+                                    currPage = "1";
+                                }
+                                sessionStorage.setItem('currPage', currPage); //存下当前页面
                                 layer.close(loading);
                             }
                         });
@@ -185,6 +225,10 @@
         });
 
         function reloadDate() {
+            sessionStorage.setItem('Status', statusString.getValue('valueStr'));
+            sessionStorage.setItem('queryYear', $('#queryYear').val());
+            sessionStorage.setItem('queryMonths', monthsString.getValue('valueStr'));
+           // console.log(sessionStorage);
             var model = {
                 Status: statusString.getValue('valueStr'),
                 queryYear: $('#queryYear').val(),
@@ -230,6 +274,7 @@
                   statusString = xmSelect.render({
                       el: '#statusSelect',
                       name: 'status',
+                      initValue: StatusString,
                       max: 12,     // 最多选择 3 个
                       data: data
                   });
@@ -244,6 +289,7 @@
             el: '#monthsSelect',
             name: 'months',
             // layVerify: 'required',
+            initValue: queryMonthsString,
             max: 12,     // 最多选择 3 个
             data: [
                 { name: '1', value: 1 },
@@ -267,7 +313,11 @@
         for (var i = startYear; i <= endYear; i++) {
             $("#queryYear").append("<option value='" + i + "'>" + i + "</option>");
         }
-        $("#queryYear").val(myDate.getFullYear());
+        if (queryYear2 == null || queryYear2 == '') {
+            $("#queryYear").val(myDate.getFullYear());
+        } else {
+            $("#queryYear").val(queryYear2);
+        }
         form.render();
         
         $('#btn_search').click(function () {

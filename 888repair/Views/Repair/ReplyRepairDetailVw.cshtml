@@ -268,7 +268,22 @@
         var layer = layui.layer;
         var upload = layui.upload;
 
-        
+        sessionStorage.removeItem('currPage2');
+        sessionStorage.removeItem('Status2');
+        sessionStorage.removeItem('queryYear2');
+        sessionStorage.removeItem('queryMonths2');
+
+        //读取从 问题回复页 面存储的sessionStorage
+        var currPage2 = sessionStorage.getItem('currPage');
+        var Status2 = sessionStorage.getItem('Status');
+        var queryYear2 = sessionStorage.getItem('queryYear');
+        var queryMonths2 = sessionStorage.getItem('queryMonths');
+        if (queryYear2 == null || queryYear2 == '') {
+            queryYear2 = new Date().getFullYear();
+        }
+        if (currPage2 == null || currPage2 == '') {
+            currPage2 = 1;
+        }
         var newURL = '@(Session["URL"])';
         var dd = newURL.split('?');
         var dd1 = dd[1];
@@ -855,6 +870,11 @@
         });
 
         $("#btn_back").on("click", function () {
+            sessionStorage.setItem('currPage2', currPage2); 
+            sessionStorage.setItem('Status2', Status2); 
+            sessionStorage.setItem('queryYear2', queryYear2); 
+            sessionStorage.setItem('queryMonths2', queryMonths2); 
+            console.log(sessionStorage);
             var url = "@(Url.Action("ReplyRepairIndex", "Repair"))";
             var sId2 = window.location.href;
             var dd = sId2.split('?');
