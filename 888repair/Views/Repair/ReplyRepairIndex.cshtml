@@ -44,7 +44,7 @@
         </div>
     </form>
     <div class="layui-btn-group" style="margin-left:1250px">
-        <button class="layui-btn layui-btn-sm" id="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
+        <button class="layui-btn layui-btn-sm" id="btn_search" name="btn_search"><i class="layui-icon">查询&nbsp;&#xe615;</i></button>
         <button class="layui-btn layui-btn-sm" id="btn_export"><i class="layui-icon">导出&nbsp;&#xe67d;</i></button>
     </div>
     <table class="layui-hide" lay-filter="user" id="RersonalProblemTable"></table>
@@ -67,12 +67,15 @@
     <a class="layui-btn layui-btn-xs" onclick=queryDetail('{{d.RepairId}}')>查看</a>
 </script>
 <script>
-     function queryDetail(RepairId) {
+    function queryDetail(RepairId) {
+        sessionStorage.setItem('Status', sessionStorage.getItem('Status') == 'null' ? '' : sessionStorage.getItem('Status') );
+        sessionStorage.setItem('queryYear', $('#queryYear').val());
+        sessionStorage.setItem('queryMonths', sessionStorage.getItem('queryMonths') == 'null' ? '' : sessionStorage.getItem('queryMonths'));
          //原窗口打开新页面
          var url = "@(Url.Action("ReplyRepairDetailVw", "Repair"))" + "?" + RepairId;;
          $("#content").load(url);
      }
-
+    
     layui.use(['table', 'dropdown', 'form', 'laydate'], function () {
         var loading = layer.msg('页面加载中......');
         var $ = layui.$;
@@ -137,6 +140,7 @@
         sessionStorage.setItem('Status', model2.Status);
         sessionStorage.setItem('queryYear', model2.queryYear);
         sessionStorage.setItem('queryMonths', model2.queryMonths);
+       // console.log("1111" + sessionStorage)
         $.ajax({
             url: "@(Url.Action("getReplyProblemList", "Repair"))",  // 要提交的URL路径
             type: "post",    // 发送请求的方式
@@ -210,6 +214,7 @@
                                 }
                                 sessionStorage.setItem('currPage', currPage); //存下当前页面
                                 layer.close(loading);
+                              //  console.log(sessionStorage);
                             }
                         });
                     });
@@ -223,12 +228,13 @@
                 alert(result.Msg);
             }
         });
-
+        
         function reloadDate() {
             sessionStorage.setItem('Status', statusString.getValue('valueStr'));
             sessionStorage.setItem('queryYear', $('#queryYear').val());
             sessionStorage.setItem('queryMonths', monthsString.getValue('valueStr'));
-           // console.log(sessionStorage);
+            console.log("1111");
+            console.log(sessionStorage);
             var model = {
                 Status: statusString.getValue('valueStr'),
                 queryYear: $('#queryYear').val(),
@@ -323,7 +329,7 @@
         $('#btn_search').click(function () {
             reloadDate();
         });
-
+        
         function request() {
             var model = {
                 Status: statusString.getValue('valueStr'),
