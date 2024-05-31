@@ -798,7 +798,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-selected .layui-edge{margin-top: -9px; -webkit-transform:rotate(180deg); transform: rotate(180deg);}
 .layui-form-selected .layui-edge{margin-top: -3px\0; }
 :root .layui-form-selected .layui-edge{margin-top: -9px\0/IE9;}
-.layui-form-selectup dl{top: auto; bottom: 42px;}
+/*.layui-form-selectup dl{top: auto; bottom: 42px;}*/
+.layui-form-selectup dl{bottom: auto;}
 .layui-select-none{margin: 5px 0; text-align: center; color: #999;}
 
 .layui-select-disabled .layui-disabled{border-color: #eee !important;}

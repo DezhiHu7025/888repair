@@ -1017,7 +1017,7 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
+                    string sql = string.Format(@"SELECT DISTINCT  TOP(1000)  a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
                                                a.ResponseEmpname,a.FinishTime from [888_KsSouth].[dbo].[record] a 
@@ -1331,7 +1331,7 @@ namespace _888repair.Controllers
             {
                 using (RepairDb db = new RepairDb())
                 {
-                    string sql = string.Format(@"SELECT DISTINCT a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
+                    string sql = string.Format(@"SELECT DISTINCT  TOP(1000) a.repair_id RepairId,a.area_id AreaId,a.kind_id KindId,a.SystemCategory,a.Building Building,a.Loaction,
                                                a.charge_empno ChargeEmpno,a.charge_empname ChargeEmpname,a.Category,a.ResponseContent,a.ReplyContent,b.StatusText Status,a.CreatTime,
                                                a.PhotoPath,RoomNum,a.repairTime RepairTime,a.Telephone,a.DamageReason,a.DamageClass,a.DamageName,a.ResponseEmpno,
                                                a.ResponseEmpname,a.FinishTime from [888_KsSouth].[dbo].[record] a 
@@ -1414,7 +1414,7 @@ namespace _888repair.Controllers
                                 break;
                         }
                     }
-                    sql += " ORDER BY repair_id desc";
+                    sql += "  ORDER BY repair_id desc";
 
                     list = db.Query<RepairRecordModel>(sql, model).ToList();
                 }
