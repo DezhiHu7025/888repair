@@ -273,7 +273,7 @@
         }
 
         $.ajax({
-            url: "@(Url.Action("getProblemList", "Repair"))",  // 要提交的URL路径
+            url: "@(Url.Action("getProblemAllList", "Repair"))",  // 要提交的URL路径
             type: "post",    // 发送请求的方式
             dataType: "JSON",     // 指定传输的数据格式
             beforeSend: function () {     //请求之前的方法
@@ -363,7 +363,7 @@
                 queryMonths: monthsString.getValue('valueStr')
             }
             $.ajax({
-                url: "@(Url.Action("getProblemList", "Repair"))",   // 要提交的URL路径
+                url: "@(Url.Action("getProblemAllList", "Repair"))",   // 要提交的URL路径
                 type: "post",    // 发送请求的方式
                 data: model,
                 dataType: "JSON",     // 指定传输的数据格式
