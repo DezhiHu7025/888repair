@@ -223,7 +223,7 @@ namespace _888repair.Controllers
                         {
                             return Json(new FlagTips { IsSuccess = false, Msg = "该辖区已维护负责人，请勿重复维护" }, JsonRequestBehavior.AllowGet);
                         }
-                        Int32 seq = db.Query<Int32>("SELECT MAX(sortno) FROM [888_tznew].[dbo].[match] WHERE match_type = 'KindMatch' and  SystemCategory = @SystemCategory ", new { model.SystemCategory }).FirstOrDefault();
+                        Int32 seq = db.Query<Int32>("SELECT ISNULL(MAX(sortno),'1') FROM [888_tznew].[dbo].[match] WHERE match_type = 'KindMatch' and  SystemCategory = @SystemCategory ", new { model.SystemCategory }).FirstOrDefault();
                         model.SortNo = seq + 1;
                         sql = string.Format(@" INSERT INTO  [888_tznew].[dbo].[match] (SystemCategory,match_type,area_id,charge_emp,Sort,SortNo,UpdateUser,UpdateTime)VALUES(@SystemCategory,@MatchType,@AreaId,@EmpNo,@Sort,@SortNo,@UpdateUser,@UpdateTime)");
                     }
