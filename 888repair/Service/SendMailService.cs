@@ -19,7 +19,7 @@ namespace _888repair.Service
                 using (RepairDb db = new RepairDb())
                 {
                     string findPerson = @"SELECT DISTINCT b.fullname,b.email
-FROM [888_KsSouth].dbo.match a
+FROM [888_tznew].dbo.match a
     LEFT JOIN Common.dbo.kcis_account b
         ON a.charge_emp = b.EmpNo
 WHERE (
@@ -75,15 +75,15 @@ WHERE (
                     string findPerson = @"SELECT a.*,
        b.fullname,
        b.email
-FROM [888_KsSouth].dbo.record a
+FROM [888_tznew].dbo.record a
     LEFT JOIN Common.dbo.kcis_account b
         ON a.ResponseEmpno = b.EmpNo
 WHERE a.repair_id = @RepairId ";
                     var pModel = db.Query<UserModel>(findPerson, new { RepairId }).FirstOrDefault();
 
                     string findStatus = @"SELECT b.StatusText
-FROM [888_KsSouth].dbo.record a
-    LEFT JOIN [888_KsSouth].dbo.state b
+FROM [888_tznew].dbo.record a
+    LEFT JOIN [888_tznew].dbo.state b
         ON a.SystemCategory = b.SystemCategory
 		AND b.StatusValue = @Status
 WHERE a.repair_id =@RepairId";
@@ -271,7 +271,7 @@ WHERE b.EmpNo = @ChargeEmpno ";
                     string findPerson = @"SELECT a.*,
        b.fullname,
        b.email
-FROM [888_KsSouth].dbo.record a
+FROM [888_tznew].dbo.record a
     LEFT JOIN Common.dbo.kcis_account b
         ON a.ResponseEmpno = b.EmpNo
 WHERE a.repair_id = @RepairId ";
