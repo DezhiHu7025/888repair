@@ -51,7 +51,7 @@ namespace _888repair.Controllers
                     model.EmpNo = user.EmpNo;
 
                     LoginController login = new LoginController();
-                    if (login.checkAccount("192.168.80.222", model.Account, model.Password))
+                    if (login.checkAccount("172.29.1.241", model.Account, model.Password))
                     {
                         Session["fullname"] = model.fullname;
                         Session["GroupName"] = model.GroupName;

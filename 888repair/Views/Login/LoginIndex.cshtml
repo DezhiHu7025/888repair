@@ -62,7 +62,7 @@
                 <form style="margin-left:150px">
                     <div style="color:purple">
                         <span>Domain Name:	&nbsp;&nbsp;&nbsp;</span>
-                        <input type="email" id="Domain" placeholder="kcis" readonly disabled>
+                        <input type="email" id="Domain" placeholder="kcistz" readonly disabled>
                     </div>
                     <br />
                     <div style="color:purple">
@@ -227,6 +227,54 @@
         var logusername = '@(Session["fullname"])';
         // alert(logusername);
         $("#username").html(logusername == "" ? "未登录" : logusername);
+    });
+
+    $("body").keyup(function (e) {
+        if (e.keyCode == 13) {
+            var model = {
+                Account: $.trim($("#Account").val()),
+                Password: $.trim($("#Password").val())
+            }
+            // if (Object.keys(Account).length == 0 || Object.keys(Password).length == 0) {
+            if (Account == '' || Password == '') {
+                alert("请输入账号以及密码 Please enter your account and password");
+                return false;
+            } else {
+                $.ajax({
+                    url: "@(Url.Action("doLogin", "Login"))",
+                    type: "post",
+                    dataType: "json",
+                    data: model,
+                    success: function (result) {
+
+                        if (result.IsSuccess) {
+                            var url = '@Url.Action("Index", "Home")';
+                            var newURL = '@(Session["URL"])';
+                            // alert("1111newURL" + newURL);
+                            if (!(navigator.userAgent.match(/(phone|pad|pod|mobile|ios|android|BlackBerry|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|symbian|transcoder)/i))) {
+                                if (newURL != null && newURL != '') {
+                                    var dd = newURL.split('?');
+                                    var dd1 = dd[1];
+                                    url = "@(Url.Action("Index", "Home"))?" + dd1;
+                                    window.location.href = url;
+                                } else {
+                                    //  alert("url"+url);
+                                    // url = '@Url.Action("MobileIndex", "Home")';
+                                    window.location.href = url;
+                                }
+                            }
+                            else {
+                                // alert("移动端开发中,请PC端登录");
+                                url = '@Url.Action("MobileIndex", "Home")';
+                                window.location.href = url;
+                            }
+                        } else {
+                            alert(result.Msg);
+                        }
+                    }
+                });
+            }
+        }
     });
 
     //确定 登录
