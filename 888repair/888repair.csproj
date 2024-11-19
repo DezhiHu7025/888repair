@@ -163,6 +163,7 @@
     <Compile Include="Controllers\RepairController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Db\IDbOperation.cs" />
+    <Compile Include="Db\EmailDb.cs" />
     <Compile Include="Db\RepairDb.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

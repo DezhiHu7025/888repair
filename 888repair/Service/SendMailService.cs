@@ -19,7 +19,7 @@ namespace _888repair.Service
                 using (RepairDb db = new RepairDb())
                 {
                     string findPerson = @"SELECT DISTINCT b.fullname,b.email
-FROM [888_KsNorth].dbo.match a
+FROM [888_CsNew].dbo.match a
     LEFT JOIN Common.dbo.kcis_account b
         ON a.charge_emp = b.EmpNo
 WHERE (
@@ -41,17 +41,21 @@ WHERE (
                         emailModel.actiontype = "email";
                         emailModel.toaddr = p.email;
                         emailModel.toname = p.fullname;
-                        emailModel.strSystem = "888报修系统(北)";
-                        emailModel.subject = "888报修系统(北)--您收到一条报修单";
-                        emailModel.body = string.Format(@"You have received a repair order:{0}. Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?RPDetail-{0}' target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
-                         您收到一条报修单：{0}。请您进入<a href='http://192.168.80.148/888repair_ksnorth/Home/Index?RPDetail-{0}' target='_blank' >[888报修系统(北)]</a> 尽快处理，谢谢！", RepairId);
+                        emailModel.strSystem = "888报修系统(常熟)";
+                        emailModel.subject = "888报修系统(常熟)--您收到一条报修单";
+                        emailModel.body = string.Format(@"You have received a repair order:{0}. Please access to the website <a href='http://172.27.100.106/888_CsNew/Home/Index?RPDetail-{0}' target='_blank' >[888Repair System(CS)]</a>, and fill in it soon. Thank you! <br /><br />
+                         您收到一条报修单：{0}。请您进入<a href='http://172.27.100.106/888_CsNew/Home/Index?RPDetail-{0}' target='_blank' >[888报修系统(常熟)]</a> 尽快处理，谢谢！", RepairId);
                         string mailSql = string.Format(@"Insert into [Common].[dbo].[oa_emaillog](pid,emailid ,actiontype ,toaddr,toname ,fromaddr ,fromname,subject,body
                                   , attch , remark ,createdate ) 
                                    values(@pid, @emailid , @actiontype , @toaddr, @toname , 'automail@kcisec.com' , @strSystem, @subject, @body
                                   , @attch , @remark, getdate())");
-                        Dictionary<string, object> trans = new Dictionary<string, object>();
-                        trans.Add(mailSql, emailModel);
-                        db.DoExtremeSpeedTransaction(trans);
+                        using (EmailDb db2 = new EmailDb())
+                        {
+                            Dictionary<string, object> trans = new Dictionary<string, object>();
+                            trans.Add(mailSql, emailModel);
+                            db2.DoExtremeSpeedTransaction(trans);
+                        }
+                           
                     }
                     
                 }
@@ -75,15 +79,15 @@ WHERE (
                     string findPerson = @"SELECT a.*,
        b.fullname,
        b.email
-FROM [888_KsNorth].dbo.record a
+FROM [888_CsNew].dbo.record a
     LEFT JOIN Common.dbo.kcis_account b
         ON a.ResponseEmpno = b.EmpNo
 WHERE a.repair_id = @RepairId ";
                     var pModel = db.Query<UserModel>(findPerson, new { RepairId }).FirstOrDefault();
 
                     string findStatus = @"SELECT b.StatusText
-FROM [888_KsNorth].dbo.record a
-    LEFT JOIN [888_KsNorth].dbo.state b
+FROM [888_CsNew].dbo.record a
+    LEFT JOIN [888_CsNew].dbo.state b
         ON a.SystemCategory = b.SystemCategory
 		AND b.StatusValue = @Status
 WHERE a.repair_id =@RepairId";
@@ -94,18 +98,21 @@ WHERE a.repair_id =@RepairId";
                     emailModel.actiontype = "email";
                     emailModel.toaddr = pModel.email;
                     emailModel.toname = pModel.fullname;
-                    emailModel.strSystem = "888报修系统(北)";
-                    emailModel.subject = "888报修系统(北)--管理者回应了您的问题";
+                    emailModel.strSystem = "888报修系统(常熟)";
+                    emailModel.subject = "888报修系统(常熟)--管理者回应了您的问题";
                     emailModel.body = string.Format(@"The repair report:{0} you sent has been responded to with a status of {1}.
-                     Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?PPDetail-{0}' target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
-                     您送出的报修单:{0},已被回应，状态为{1}。请您进入<a href='http://192.168.80.148/888repair_ksnorth/Home/Index?PPDetail-{0}' target='_blank' >[888报修系统(北)]</a> 尽快处理，谢谢！", RepairId, StatusText);
+                     Please access to the website <a href='http://172.27.100.106/888_CsNew/Home/Index?PPDetail-{0}' target='_blank' >[888Repair System(CS)]</a>, and fill in it soon. Thank you! <br /><br />
+                     您送出的报修单:{0},已被回应，状态为{1}。请您进入<a href='http://172.27.100.106/888_CsNew/Home/Index?PPDetail-{0}' target='_blank' >[888报修系统(常熟)]</a> 尽快处理，谢谢！", RepairId, StatusText);
                     string mailSql = string.Format(@"Insert into [Common].[dbo].[oa_emaillog](pid,emailid ,actiontype ,toaddr,toname ,fromaddr ,fromname,subject,body
                                   , attch , remark ,createdate ) 
                                    values(@pid, @emailid , @actiontype , @toaddr, @toname , 'automail@kcisec.com' , @strSystem, @subject, @body
                                   , @attch , @remark, getdate())");
-                    Dictionary<string, object> trans = new Dictionary<string, object>();
-                    trans.Add(mailSql, emailModel);
-                    db.DoExtremeSpeedTransaction(trans);
+                    using (EmailDb db2 = new EmailDb())
+                    {
+                        Dictionary<string, object> trans = new Dictionary<string, object>();
+                        trans.Add(mailSql, emailModel);
+                        db2.DoExtremeSpeedTransaction(trans);
+                    }
 
                 }
                 result = true;
@@ -135,17 +142,20 @@ WHERE b.EmpNo = @ChargeEmpno ";
                     emailModel.actiontype = "email";
                     emailModel.toaddr = pModel.email;
                     emailModel.toname = pModel.fullname;
-                    emailModel.strSystem = "888报修系统(北)";
-                    emailModel.subject = "888报修系统(北)--有一条报修单被转派给你";
-                    emailModel.body = string.Format(@"A repair order:{0} has been transferred to you.Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?RPDetail-{0}' onclick=queryDetail('{0}') target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
-                      有一条报修单:{0}被转派给您。请您进入<a href='http://192.168.80.148/888repair_ksnorth/Home/Index?RPDetail-{0}' target='_blank' >[888报修系统(北)]</a> 尽快处理，谢谢！", RepairId);
+                    emailModel.strSystem = "888报修系统(常熟)";
+                    emailModel.subject = "888报修系统(常熟)--有一条报修单被转派给你";
+                    emailModel.body = string.Format(@"A repair order:{0} has been transferred to you.Please access to the website <a href='http://172.27.100.106/888_CsNew/Home/Index?RPDetail-{0}' onclick=queryDetail('{0}') target='_blank' >[888Repair System(CS)]</a>, and fill in it soon. Thank you! <br /><br />
+                      有一条报修单:{0}被转派给您。请您进入<a href='http://172.27.100.106/888_CsNew/Home/Index?RPDetail-{0}' target='_blank' >[888报修系统(常熟)]</a> 尽快处理，谢谢！", RepairId);
                     string mailSql = string.Format(@"Insert into [Common].[dbo].[oa_emaillog](pid,emailid ,actiontype ,toaddr,toname ,fromaddr ,fromname,subject,body
                                   , attch , remark ,createdate ) 
                                    values(@pid, @emailid , @actiontype , @toaddr, @toname , 'automail@kcisec.com' , @strSystem, @subject, @body
                                   , @attch , @remark, getdate())");
-                    Dictionary<string, object> trans = new Dictionary<string, object>();
-                    trans.Add(mailSql, emailModel);
-                    db.DoExtremeSpeedTransaction(trans);
+                    using (EmailDb db2 = new EmailDb())
+                    {
+                        Dictionary<string, object> trans = new Dictionary<string, object>();
+                        trans.Add(mailSql, emailModel);
+                        db2.DoExtremeSpeedTransaction(trans);
+                    }
 
                 }
                 result = true;
@@ -185,17 +195,20 @@ WHERE b.EmpNo = @ChargeEmpno ";
                         emailModel.actiontype = "email";
                         emailModel.toaddr = pModel.email;
                         emailModel.toname = pModel.fullname;
-                        emailModel.strSystem = "888报修系统(北)";
-                        emailModel.subject = "888报修系统(北)--有一条报修单被驳回给您";
-                        emailModel.body = string.Format(@"A repair order:{0} has been rejected by {1} for you.Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?RPDetail-{0}' target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
-                          有一条报修单:{0}被驳{1}回给您。请您进入<a href='http://192.168.80.148/888repair_ksnorth/Home/Index?RPDetail-{0}' target='_blank' >[888报修系统(北)]</a> 尽快处理，谢谢！", RepairId, FullName);
+                        emailModel.strSystem = "888报修系统(常熟)";
+                        emailModel.subject = "888报修系统(常熟)--有一条报修单被驳回给您";
+                        emailModel.body = string.Format(@"A repair order:{0} has been rejected by {1} for you.Please access to the website <a href='http://172.27.100.106/888_CsNew/Home/Index?RPDetail-{0}' target='_blank' >[888Repair System(CS)]</a>, and fill in it soon. Thank you! <br /><br />
+                          有一条报修单:{0}被驳{1}回给您。请您进入<a href='http://172.27.100.106/888_CsNew/Home/Index?RPDetail-{0}' target='_blank' >[888报修系统(常熟)]</a> 尽快处理，谢谢！", RepairId, FullName);
                         string mailSql = string.Format(@"Insert into [Common].[dbo].[oa_emaillog](pid,emailid ,actiontype ,toaddr,toname ,fromaddr ,fromname,subject,body
                                   , attch , remark ,createdate ) 
                                    values(@pid, @emailid , @actiontype , @toaddr, @toname , 'automail@kcisec.com' , @strSystem, @subject, @body
                                   , @attch , @remark, getdate())");
-                        Dictionary<string, object> trans = new Dictionary<string, object>();
-                        trans.Add(mailSql, emailModel);
-                        db.DoExtremeSpeedTransaction(trans);
+                        using (EmailDb db2 = new EmailDb())
+                        {
+                            Dictionary<string, object> trans = new Dictionary<string, object>();
+                            trans.Add(mailSql, emailModel);
+                            db2.DoExtremeSpeedTransaction(trans);
+                        }
                     }
                     //给驳回的负责人发通知邮件，给转派任务的人发通知邮件
                     else
@@ -217,10 +230,10 @@ WHERE b.EmpNo = @ChargeEmpno ";
                         emailModel.actiontype = "email";
                         emailModel.toaddr = pModel.email;
                         emailModel.toname = pModel.fullname;
-                        emailModel.strSystem = "888报修系统(北)";
-                        emailModel.subject = "888报修系统(北)--您转派的报修单被驳回给上一任负责人";
-                        emailModel.body = string.Format(@"The repair report:{0} you transferred has been rejected by the previous person in charge.Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?APDetail-{0}' target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
-                          您转派的报修单:{0}被{1}驳回给上一任负责人{2}。请您进入<a href='http://192.168.80.148/888repair_ksnorth/Home/Index?APDetail-{0}' target='_blank' >[888报修系统(北)]</a> 尽快处理，谢谢！", RepairId, FullName, pModel2.fullname);
+                        emailModel.strSystem = "888报修系统(常熟)";
+                        emailModel.subject = "888报修系统(常熟)--您转派的报修单被驳回给上一任负责人";
+                        emailModel.body = string.Format(@"The repair report:{0} you transferred has been rejected by the previous person in charge.Please access to the website <a href='http://172.27.100.106/888_CsNew/Home/Index?APDetail-{0}' target='_blank' >[888Repair System(CS)]</a>, and fill in it soon. Thank you! <br /><br />
+                          您转派的报修单:{0}被{1}驳回给上一任负责人{2}。请您进入<a href='http://172.27.100.106/888_CsNew/Home/Index?APDetail-{0}' target='_blank' >[888报修系统(常熟)]</a> 尽快处理，谢谢！", RepairId, FullName, pModel2.fullname);
                         string mailSql = string.Format(@"Insert into [Common].[dbo].[oa_emaillog](pid,emailid ,actiontype ,toaddr,toname ,fromaddr ,fromname,subject,body
                                   , attch , remark ,createdate ) 
                                    values(@pid, @emailid , @actiontype , @toaddr, @toname , 'automail@kcisec.com' , @strSystem, @subject, @body
@@ -234,21 +247,24 @@ WHERE b.EmpNo = @ChargeEmpno ";
                         emailModel2.actiontype = "email";
                         emailModel2.toaddr = pModel2.email;
                         emailModel2.toname = pModel2.fullname;
-                        emailModel2.strSystem = "888报修系统(北)";
-                        emailModel2.subject = "888报修系统(北)--有一条报修单被驳回给您";
-                        emailModel2.body = string.Format(@"A repair order:{0} has been rejected by {1} for you.Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?RPDetail-{0}' target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
-                           有一条报修单:{0}被驳{1}回给您。 请您进入<a href='http://192.168.80.148/888repair_ksnorth/Home/Index?RPDetail-{0}' target='_blank' >[888报修系统(北)]</a> 尽快处理，谢谢！", RepairId, FullName);
+                        emailModel2.strSystem = "888报修系统(常熟)";
+                        emailModel2.subject = "888报修系统(常熟)--有一条报修单被驳回给您";
+                        emailModel2.body = string.Format(@"A repair order:{0} has been rejected by {1} for you.Please access to the website <a href='http://172.27.100.106/888_CsNew/Home/Index?RPDetail-{0}' target='_blank' >[888Repair System(CS)]</a>, and fill in it soon. Thank you! <br /><br />
+                           有一条报修单:{0}被驳{1}回给您。 请您进入<a href='http://172.27.100.106/888_CsNew/Home/Index?RPDetail-{0}' target='_blank' >[888报修系统(常熟)]</a> 尽快处理，谢谢！", RepairId, FullName);
                         string mailSql2 = string.Format(@"Insert into [Common].[dbo].[oa_emaillog](pid,emailid ,actiontype ,toaddr,toname ,fromaddr ,fromname,subject,body
                                   , attch , remark ,createdate ) 
                                    values(@pid, @emailid , @actiontype , @toaddr, @toname , 'automail@kcisec.com' , @strSystem, @subject, @body
                                   , @attch , @remark, getdate())");
-                        Dictionary<string, object> trans = new Dictionary<string, object>();
-                        trans.Add(mailSql, emailModel);
-                        db.DoExtremeSpeedTransaction(trans);
+                        using (EmailDb db2 = new EmailDb())
+                        {
+                            Dictionary<string, object> trans = new Dictionary<string, object>();
+                            trans.Add(mailSql, emailModel);
+                            db2.DoExtremeSpeedTransaction(trans);
 
-                        Dictionary<string, object> trans2 = new Dictionary<string, object>();
-                        trans2.Add(mailSql2, emailModel2);
-                        db.DoExtremeSpeedTransaction(trans2);
+                            Dictionary<string, object> trans2 = new Dictionary<string, object>();
+                            trans2.Add(mailSql2, emailModel2);
+                            db2.DoExtremeSpeedTransaction(trans2);
+                        }
                     }
                    
                 }
@@ -271,7 +287,7 @@ WHERE b.EmpNo = @ChargeEmpno ";
                     string findPerson = @"SELECT a.*,
        b.fullname,
        b.email
-FROM [888_KsNorth].dbo.record a
+FROM [888_CsNew].dbo.record a
     LEFT JOIN Common.dbo.kcis_account b
         ON a.ResponseEmpno = b.EmpNo
 WHERE a.repair_id = @RepairId ";
@@ -282,17 +298,20 @@ WHERE a.repair_id = @RepairId ";
                     emailModel.actiontype = "email";
                     emailModel.toaddr = pModel.email;
                     emailModel.toname = pModel.fullname;
-                    emailModel.strSystem = "888报修系统(北)";
-                    emailModel.subject = "888报修系统(北)--您的报修单被驳回";
-                    emailModel.body = string.Format(@"The repair report:{0} you sent has been rejected.Please access to the website <a href='http://192.168.80.148/888repair_ksnorth/Home/Index?PPDetail-{0}' target='_blank' >[888Repair System(North)]</a>, and fill in it soon. Thank you! <br /><br />
-                       您送出的报修单:{0},已被驳回。请您进入<a href='http://192.168.80.148/888repair_ksnorth/Home/Index?PPDetail-{0}' target='_blank' >[888报修系统(北)]</a> 尽快处理，谢谢！", RepairId);
+                    emailModel.strSystem = "888报修系统(常熟)";
+                    emailModel.subject = "888报修系统(常熟)--您的报修单被驳回";
+                    emailModel.body = string.Format(@"The repair report:{0} you sent has been rejected.Please access to the website <a href='http://172.27.100.106/888_CsNew/Home/Index?PPDetail-{0}' target='_blank' >[888Repair System(CS)]</a>, and fill in it soon. Thank you! <br /><br />
+                       您送出的报修单:{0},已被驳回。请您进入<a href='http://172.27.100.106/888_CsNew/Home/Index?PPDetail-{0}' target='_blank' >[888报修系统(常熟)]</a> 尽快处理，谢谢！", RepairId);
                     string mailSql = string.Format(@"Insert into [Common].[dbo].[oa_emaillog](pid,emailid ,actiontype ,toaddr,toname ,fromaddr ,fromname,subject,body
                                   , attch , remark ,createdate ) 
                                    values(@pid, @emailid , @actiontype , @toaddr, @toname , 'automail@kcisec.com' , @strSystem, @subject, @body
                                   , @attch , @remark, getdate())");
-                    Dictionary<string, object> trans = new Dictionary<string, object>();
-                    trans.Add(mailSql, emailModel);
-                    db.DoExtremeSpeedTransaction(trans);
+                    using (EmailDb db2 = new EmailDb())
+                    {
+                        Dictionary<string, object> trans = new Dictionary<string, object>();
+                        trans.Add(mailSql, emailModel);
+                        db2.DoExtremeSpeedTransaction(trans);
+                    }
 
                 }
                 result = true;

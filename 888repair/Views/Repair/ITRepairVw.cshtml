@@ -407,7 +407,7 @@
                 DamageClass: data.ClassUnit,
                 DamageName: data.EmpName,
             }
-
+            
             $.ajax({
                 type: 'post',
                 url: "@(Url.Action("ITRepairSave", "Repair"))",
@@ -430,6 +430,11 @@
                     else {
                         alert(result.Msg);
                     }
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        $('#sendout').removeClass("layui-btn-disabled").attr("disabled", false);
+                    }, 2000);
                 }
             });
             return false;
